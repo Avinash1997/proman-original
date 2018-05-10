@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="674b99c6-5494-4830-b556-f4e868424ae5" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/UserErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/UserErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../proman-db/src/main/sql/db-seed-data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../proman-db/src/main/sql/db-seed-data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../proman-db/src/main/sql/db-setup-roles.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../proman-db/src/main/sql/db-setup-roles.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../proman-db/src/main/sql/db-setup-users.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../proman-db/src/main/sql/db-setup-users.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../proman-db/src/main/sql/db-setup.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../proman-db/src/main/sql/db-setup.sql" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/target/" />
+    <ignored path="$PROJECT_DIR$/../proman-db/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>current_user()</find>
+      <find>Redux</find>
+      <find>IPADDRESS</find>
+      <find>GetUsersResponse</find>
+      <find>UUsed</find>
+      <find>ErrorResponse</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>CURRENT_USER</replace>
+      <replace>Used</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/dao/BaseDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/dao/BaseDaoImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/data/DateTimeProvider.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/data/DateTimeSerializer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/data/RequestContext.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/ext/EntityEqualsBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/ext/EntityHashCodeBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/Entity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/ExternalIdentifier.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/Identifier.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/ImmutableEntity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/MutableEntity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/AuthenticationFailedException.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/AuthorizationFailedException.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/EntityNotFoundException.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/ErrorCode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/GenericErrorCode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/ServiceException.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/UnexpectedException.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/model/AuthorizedUser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/model/LogoutAction.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/model/UserStatus.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/AuthenticationService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/AuthenticationServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/AuthorizationService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/AuthorizationServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/UserService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/UserServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserAuthDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserAuthDaoImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserBaseDaoImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserDaoImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/entity/UserAuthTokenEntity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/entity/UserEntity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/manager/AuthorizationManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/manager/AuthorizationManagerImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/manager/UserAuthTokenStatus.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/manager/UserAuthTokenVerifier.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/token/JwtTokenProvider.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/token/SimpleTokenProvider.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/token/Token.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/token/TokenProvider.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/PasswordCryptographyProvider.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/TokenCryptographyProvider.java" />
+        <option value="$PROJECT_DIR$/src/test/java/io/beingtechie/proman/api/user/service/provider/PasswordCryptographyProviderTest.java" />
+        <option value="$PROJECT_DIR$/../proman-db/src/main/sql/db-setup-users.sql" />
+        <option value="$PROJECT_DIR$/../proman-db/src/main/sql/db-seed-data.sql" />
+        <option value="$PROJECT_DIR$/../proman-db/src/main/sql/db-setup-roles.sql" />
+        <option value="$PROJECT_DIR$/../proman-db/src/main/sql/db-setup.sql" />
+        <option value="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/UserErrorCode.java" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="260" />
+    <option name="y" value="52" />
+    <option name="width" value="1400" />
+    <option name="height" value="1000" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <flattenPackages ProjectPane="false" />
+      <hideEmptyPackages ProjectPane="true" />
+      <autoscrollFromSource ProjectPane="true" />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="proman-api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proman-api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proman-api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proman-api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proman-api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proman-api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proman-api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proman-api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proman-api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proman-api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proman-api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proman-db" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proman-api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proman-db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proman-api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proman-db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="proman-api" type="b2602c69:ProjectViewProjectNode" />
+              <item name="proman-db" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="sql" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../proman-db" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="io.beingtechie.proman.api.user.service" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider" />
+      <recent name="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common" />
+      <recent name="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/model" />
+      <recent name="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/dao" />
+      <recent name="$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    </configuration>
+    <configuration name="PasswordCryptographyProviderTest.test1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="proman-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="io.beingtechie.proman.api.provider.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="io.beingtechie.proman.api.provider" />
+      <option name="MAIN_CLASS_NAME" value="io.beingtechie.proman.api.provider.PasswordCryptographyProviderTest" />
+      <option name="METHOD_NAME" value="test1" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <module name="proman-api" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <properties />
+      <listeners />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.PasswordCryptographyProviderTest.test1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="674b99c6-5494-4830-b556-f4e868424ae5" name="Default" comment="" />
+      <created>1525005235382</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1525005235382</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="PasswordCryptographyProviderTest_test1 - 2018.05.05 at 21h 27m 32s.xml">
+      <configuration name="PasswordCryptographyProviderTest.test1" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PasswordCryptographyProviderTest_test1 - 2018.05.05 at 21h 28m 34s.xml">
+      <configuration name="PasswordCryptographyProviderTest.test1" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PasswordCryptographyProviderTest_test1 - 2018.05.05 at 22h 12m 13s.xml">
+      <configuration name="PasswordCryptographyProviderTest.test1" configurationId="JUnit" />
+    </history-entry>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-1" y="25" width="1922" height="1055" extended-state="6" />
+    <layout>
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="TODO" order="7" />
+      <window_info anchor="right" id="Palette&#9;" order="5" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5005208" side_tool="true" weight="0.32790446" />
+      <window_info anchor="right" id="Maven Projects" order="4" />
+      <window_info anchor="bottom" id="Run" order="3" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49947917" visible="true" weight="0.32790446" />
+      <window_info id="Designer" order="2" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info id="UI Designer" order="4" />
+      <window_info anchor="bottom" id="Debug" order="4" weight="0.41061756" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="bottom" id="Messages" order="0" />
+      <window_info anchor="bottom" id="Message" order="1" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="2" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/io/beingtechie/proman/api/user/service/provider/PasswordCryptographyProviderTest.java</url>
+          <line>26</line>
+          <properties />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/io/beingtechie/proman/api/user/service/provider/PasswordCryptographyProviderTest.java</url>
+          <line>29</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="2" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/dao/BaseDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/data/DateTimeProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/data/DateTimeSerializer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/data/RequestContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/ext/EntityEqualsBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/ext/EntityHashCodeBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/Entity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/Identifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/ExternalIdentifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/ImmutableEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/entity/MutableEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/AuthenticationFailedException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/AuthorizationFailedException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/EntityNotFoundException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/ErrorCode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/GenericErrorCode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/ServiceException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3">
+          <caret lean-forward="true" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/common/exception/UnexpectedException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/model/AuthorizedUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/model/LogoutAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/model/UserStatus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/AuthenticationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/AuthenticationServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#4790#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/AuthorizationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2">
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/AuthorizationServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/UserService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/bus/UserServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#1308#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserAuthDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserAuthDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserBaseDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/dao/UserDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/entity/UserAuthTokenEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/entity/UserEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/manager/AuthorizationManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/manager/AuthorizationManagerImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2">
+          <caret selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#1370#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/manager/UserAuthTokenStatus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/manager/UserAuthTokenVerifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/token/JwtTokenProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#2330#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/token/SimpleTokenProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3">
+          <caret selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#1950#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/token/Token.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#2860#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/beingtechie/proman/api/user/service/provider/PasswordCryptographyProviderTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proman-db/src/main/sql/db-seed-data.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="46" selection-start-column="46" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proman-db/src/main/sql/db-setup-roles.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="46" selection-start-column="46" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proman-db/src/main/sql/db-setup-users.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="25" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../proman-db/src/main/sql/db-setup.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="46" selection-start-column="46" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/UserErrorCode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="12" column="60" lean-forward="true" selection-start-line="12" selection-start-column="60" selection-end-line="12" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#1360#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/TokenCryptographyProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/PasswordCryptographyProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/beingtechie/proman/api/user/service/provider/token/TokenProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>jdk1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

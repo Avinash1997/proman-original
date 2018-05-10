@@ -1,20 +1,20 @@
 openapi: 3.0.0
 info:
-  title: User Administration API
+  title: Board Management API
   version: 1.0.0
   description: >
-    ## API of User Administration Services
+    ## API of Board Management Services
 
 
-    This specification describes the endpoints, request/response model of the User Administration API.
-    This API provides REST resources to manage users of Proman application.
+    This specification describes the endpoints, request/response model of the Board Management API.
+    This API provides REST resources to manage project boards of Proman application.
 
 
     The resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:
 
 
     ```
-      https://proman.io/api/v1/users
+      https://proman.io/api/v1/boards
     ```
 
 
@@ -35,9 +35,9 @@ info:
 
     ## Business definitions
 
-    User Administration APIs can only be called by authorized users who have administrator rights. These APIs can be used to create new user, modify an
-    existing user, deactivate an active user, activate registered or inactive user and lock user. The users once created will have an access to Proman
-    application provided they are being permitted so through proper access-level permissions.
+    Board Management APIs can only be called by authorized users who has rights with required permissions to manage boards. These APIs can be used to create new board,
+    modify an existing board, map team to the board, add members (users) to the board, remove members (users) from the board, map workflow, mark board as completed, .
+    The users once mapped to the board will have an access to board and tasks assigned to them.
 
     ## Release Notes 
 
@@ -46,37 +46,36 @@ info:
     * Initial version
 
 servers:
-  - url: https://proman.io/api/v1/users
+  - url: https://proman.io/api/v1/boards
 tags:
-  - name: 'API#003 Users'
+  - name: 'API#004 Boards'
     description: >-
-      All operations marked with 'API#003 Users' are relevant to user administration use case
+      All operations marked with 'API#004 Boards' are relevant to board management use case
 
 paths:
   /users:
     post:
-      operationId: createUser
+      operationId: createBoard
       tags:
-        - 'API#003 Users'
+        - 'API#004 Boards'
       security:
         - Authorization: []
-      summary: User Administration - Create new User
+      summary: Board Management - Create new User
       description: >
-        API to create new user in Proman application
+        API to create new board in Proman application
       parameters:
-        - $ref: '#/components/parameters/ApiVersion'
         - $ref: '#/components/parameters/ClientId'
         - $ref: '#/components/parameters/Authorization'
       requestBody:
-        description: Request containing new user details
+        description: Request containing new board details
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: '#/components/schemas/CreateBoardRequest'
       responses:
         '200':
-          description: OK - User has been created successfully
+          description: OK - Board has been created successfully
           headers:
             request-id:
               schema:
@@ -85,7 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateUserResponse'
+                $ref: '#/components/schemas/CreateBoardResponse'
         '400':
           description: >-
             BAD REQUEST - server cannot or will not process the request due to
@@ -137,13 +136,15 @@ paths:
     get:
        operationId: getUsers
        tags:
-         - 'API#003 Users'
+         - 'API#004 Boards'
        security:
          - Authorization: []
-       summary: User Administration - Get all Users
+       summary: Board Management - Get all Users
        description: >
          API to get all users of Proman application
        parameters:
+         - $ref: '#/components/parameters/ClientId'
+         - $ref: '#/components/parameters/Authorization'
          - in: query
            name: offset
            schema:
@@ -169,9 +170,6 @@ paths:
              enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
            required: false
            description: query to filter the results based on specified status
-         - $ref: '#/components/parameters/ApiVersion'
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
        responses:
          '200':
            description: OK - Fetched all users
@@ -241,15 +239,14 @@ paths:
      get:
         operationId: getUser
         tags:
-          - 'API#003 Users'
+          - 'API#004 Boards'
         security:
           - Authorization: []
-        summary: User Administration - Get an existing User
+        summary: Board Management - Get an existing User
         description: >
             API to get an existing user of Proman application
         parameters:
          - $ref: '#/components/parameters/UserId'
-         - $ref: '#/components/parameters/ApiVersion'
          - $ref: '#/components/parameters/ClientId'
          - $ref: '#/components/parameters/Authorization'
         responses:
@@ -310,15 +307,14 @@ paths:
      put:
         operationId: updateUser
         tags:
-          - 'API#003 Users'
+          - 'API#004 Boards'
         security:
           - Authorization: []
-        summary: User Administration - Update an existing User
+        summary: Board Management - Update an existing User
         description: >
             API to update an existing user in Proman application
         parameters:
           - $ref: '#/components/parameters/UserId'
-          - $ref: '#/components/parameters/ApiVersion'
           - $ref: '#/components/parameters/ClientId'
           - $ref: '#/components/parameters/Authorization'
         requestBody:
@@ -386,15 +382,14 @@ paths:
      patch:
         operationId: updateUserStatus
         tags:
-          - 'API#003 Users'
+          - 'API#004 Boards'
         security:
           - Authorization: []
-        summary: User Administration - Update status of an existing User
+        summary: Board Management - Update status of an existing User
         description: >
             API to update status of an existing user in Proman application
         parameters:
           - $ref: '#/components/parameters/UserId'
-          - $ref: '#/components/parameters/ApiVersion'
           - $ref: '#/components/parameters/ClientId'
           - $ref: '#/components/parameters/Authorization'
         requestBody:
@@ -481,16 +476,6 @@ components:
         Read https://jwt.io/introduction/ for more information on JWT standard.
 
   parameters:
-    ApiVersion:
-      name: api-version
-      schema:
-        type: string
-      in: header
-      required: true
-      description: >-
-        Mandatory request header about the underlying API version that the client is trying to access. API backend will
-        route and validate the request, and generate response accordingly. Proman provides the right to deprecate and
-        at the end to decommission an API version.
     ClientId:
       name: client-id
       schema:
@@ -667,38 +652,33 @@ components:
         - id
         - name
 
-    CreateUserRequest:
+    CreateBoardRequest:
       type: object
       properties:
-        first_name:
+        name:
           type: string
-          description: First name of the new user
-        last_name:
+          description: Name of the new board
+        start_date:
           type: string
-          description: Last name of the new user
-        email_address:
+          format: date
+          description: Start date of the board
+        end_date:
           type: string
-          description: Email address of the new user
-        mobile_number:
+          format: date
+          description: End date of the board
+        workflow_id:
           type: string
-          description: Mobile number of the new user
-        role:
-          type: object
-          description: Role to be mapped to the user
-          $ref: '#/components/schemas/RoleRequest'
+          description: Workflow reference identifier
       required:
-        - first_name
-        - last_name
-        - email_address
-        - role
+        - name
+        - start_date
+        - end_date
+        - workflow_id
       example:
-        first_name: Proman
-        last_name: Administrator
-        email_address: proman.admin@proman.io
-        mobile_number: +91 1234567890
-        role:
-          id: 100
-          permissions: [121,122,142]
+        name: Build Prototype
+        start_date: 1995-09-07
+        end_date: proman.admin@proman.io
+        workflow_id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
 
     RoleRequest:
       type: object
@@ -714,7 +694,7 @@ components:
       required:
         - role_id
 
-    CreateUserResponse:
+    CreateBoardResponse:
       type: object
       properties:
         id:

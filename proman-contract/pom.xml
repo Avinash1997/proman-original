@@ -108,12 +108,12 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>useradmin-v1</id>
+                        <id>usermanagement-v1</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${contracts.dir}/v1/useradmin.yaml</inputSpec>
+                            <inputSpec>${contracts.dir}/v1/usermanagement.yaml</inputSpec>
                             <language>java</language>
                         </configuration>
                     </execution>

@@ -11,10 +11,10 @@
 	</appender>
 
   	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>/work/upgrad/logs/survey-api.log</File>
+		<File>/work/upgrad/logs/proman-api.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 		    <!-- daily rollover -->
-			<FileNamePattern>survey-api.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>proman-api.%d{yyyy-MM-dd}.log</FileNamePattern>
 
 			<!-- keep 30 days' worth of history -->
 			<maxHistory>30</maxHistory>			
@@ -26,10 +26,10 @@
   	</appender>
   	
   	<appender name="errorRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>/work/upgrad/logs/survey-api-error.log</File>
+		<File>/work/upgrad/logs/proman-api-error.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 		    <!-- daily rollover -->
-			<FileNamePattern>survey-api-error.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>proman-api-error.%d{yyyy-MM-dd}.log</FileNamePattern>
 
 			<!-- keep 30 days' worth of history -->
 			<maxHistory>30</maxHistory>			
@@ -40,8 +40,10 @@
 		</encoder>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>ERROR</level>
+			<!--
 			<onMatch>ACCEPT</onMatch>
         	<onMismatch>DENY</onMismatch>
+        	-->
 		</filter>  
   	</appender>
 

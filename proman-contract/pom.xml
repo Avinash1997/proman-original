@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.beingtechie</groupId>
+        <artifactId>proman</artifactId>
+        <relativePath>../pom.xml</relativePath>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+
+    <groupId>io.beingtechie.proman</groupId>
+    <artifactId>proman-contract</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <name>Project Management Application - API Contracts</name>
+    <description>Project Management Application - API Contract Specification</description>
+
+    <properties>
+        <io.swagger.version>1.5.13</io.swagger.version>
+        <application.package>io.beingtechie.proman.api.contract</application.package>
+        <contracts.dir>${project.basedir}/src/main/resources</contracts.dir>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.18</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.swagger</groupId>
+                    <artifactId>swagger-codegen-maven-plugin</artifactId>
+                    <version>2.2.3</version>
+                    <configuration>
+                        <output>${project.build.directory}/generated-sources</output>
+                        <language>spring</language>
+                        <library>resttemplate</library>
+                        <verbose>true</verbose>
+                        <generateModels>true</generateModels>
+                        <generateApis>false</generateApis>
+                        <modelPackage>${application.package}.model</modelPackage>
+                        <apiPackage>${application.package}.rest</apiPackage>
+                        <configOptions>
+                            <sourceFolder>.</sourceFolder>
+                            <java8>true</java8>
+                            <dateLibrary>java8</dateLibrary>
+                            <interfaceOnly>true</interfaceOnly>
+                        </configOptions>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>3.0.0-rc0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-codegen-generators</artifactId>
+                        <version>1.0.0-rc0</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>authentication-v1</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${contracts.dir}/v1/authentication.yaml</inputSpec>
+                            <language>java</language>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>registeruser-v1</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${contracts.dir}/v1/registeruser.yaml</inputSpec>
+                            <language>java</language>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>useradmin-v1</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${contracts.dir}/v1/useradmin.yaml</inputSpec>
+                            <language>java</language>
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

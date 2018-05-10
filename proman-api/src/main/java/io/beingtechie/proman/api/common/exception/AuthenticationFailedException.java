@@ -10,7 +10,7 @@ package io.beingtechie.proman.api.common.exception;
 /**
  * User defined exception for unauthenticated access.
  */
-public class AuthenticationFailedException extends ServiceException {
+public class AuthenticationFailedException extends ApplicationException {
 
     private static final long serialVersionUID = 7660768556081121813L;
 

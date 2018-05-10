@@ -1,4 +1,4 @@
--- Copyright 2018-2019, https://beingtechie.io.
+-- Copyright 2018-2019, https://beingtechie.io
 
 -- Script: db-setup-users.sql
 -- Description: Create user specific tables and grant privileges
@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS proman.USERS (
     SALT VARCHAR(200) NOT NULL,
     FIRST_NAME VARCHAR(50) NOT NULL,
     LAST_NAME VARCHAR(50) NOT NULL,
-    OFFICE_PHONE VARCHAR(50) NULL,
     MOBILE_PHONE VARCHAR(50) NULL,
     STATUS BOOLEAN NOT NULL,
     FAILED_LOGIN_COUNT SMALLSERIAL,
@@ -38,7 +37,6 @@ COMMENT ON COLUMN proman.USERS.PASSWORD IS 'Encrypted password of the user';
 COMMENT ON COLUMN proman.USERS.SALT IS 'Generated salt for strong encryption of password of user';
 COMMENT ON COLUMN proman.USERS.FIRST_NAME IS 'First name of the user';
 COMMENT ON COLUMN proman.USERS.LAST_NAME IS 'Last name of the user';
-COMMENT ON COLUMN proman.USERS.OFFICE_PHONE IS 'Office phone coordinates of the user';
 COMMENT ON COLUMN proman.USERS.MOBILE_PHONE IS 'Mobile phone coordinates of the user';
 COMMENT ON COLUMN proman.USERS.STATUS IS 'Status of the user - INACTIVE(0), ACTIVE (1), LOCKED(2)';
 COMMENT ON COLUMN proman.USERS.FAILED_LOGIN_COUNT IS 'Count to keep track of failed login attempts by the user';

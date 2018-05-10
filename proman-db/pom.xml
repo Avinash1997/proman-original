@@ -14,15 +14,14 @@
 	<groupId>io.beingtechie.proman</groupId>
 	<artifactId>proman-db</artifactId>
 	<packaging>jar</packaging>
+	<version>1.0.0-SNAPSHOT</version>
+
 	<name>Project Management Application - DB Scripts</name>
 	<description>Project Management Application - Database Scripts</description>
-	<version>1.0.0-SNAPSHOT</version>
+
 	
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
 		<sql-maven-plugin.version>1.5</sql-maven-plugin.version>
-		
 		<postgresql.driver.version>42.2.2</postgresql.driver.version>
 		<postgresql.driver.name>org.postgresql.Driver</postgresql.driver.name>
 		<sql.path>${basedir}/src/main/sql</sql.path>

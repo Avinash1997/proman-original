@@ -1,4 +1,4 @@
--- Copyright 2018-2019, https://beingtechie.io.
+-- Copyright 2018-2019, https://beingtechie.io
 
 -- Script: db-seed.sql
 -- Description: Setup seed data that is essential to bring up applications in running state.
@@ -53,9 +53,9 @@ INSERT INTO proman.ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID, CREATED_BY)
 -- ********** Begin of Users setup **********
 
 INSERT INTO proman.USERS (ROLE_ID, UUID, EMAIL, PASSWORD, SALT, FIRST_NAME, LAST_NAME,
-					OFFICE_PHONE, MOBILE_PHONE, STATUS, FAILED_LOGIN_COUNT, LAST_LOGIN_AT, LAST_PASSWORD_CHANGE_AT, CREATED_BY)
+					MOBILE_PHONE, STATUS, FAILED_LOGIN_COUNT, LAST_LOGIN_AT, LAST_PASSWORD_CHANGE_AT, CREATED_BY)
 		VALUES 
 		(1, '7d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'admin@proman.io', '9Iq6DK91fqoDL3CEkokuXGT+TJsGifvADnXiw3yBD4I=', 'D29DC89B3A7CB404', 'Proman', 'Administrator',
-		'(111) 111-1111', '(111) 111-1111',  true, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_USER);
+		'(111) 111-1111', true, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_USER);
 		
 -- ********** End of Users setup **********	

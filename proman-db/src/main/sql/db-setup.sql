@@ -1,4 +1,4 @@
--- Copyright 2018-2019, https://beingtechie.io.
+-- Copyright 2018-2019, https://beingtechie.io
 
 -- Script: db-setup.sql
 -- Description: Setup database and users

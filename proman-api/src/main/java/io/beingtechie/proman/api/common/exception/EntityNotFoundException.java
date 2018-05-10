@@ -10,7 +10,7 @@ package io.beingtechie.proman.api.common.exception;
 /**
  * User defined exception for all services that does a lookup of entity.
  */
-public class EntityNotFoundException extends ServiceException {
+public class EntityNotFoundException extends ApplicationException {
 
     private static final long serialVersionUID = 2848416716183340588L;
 

@@ -53,14 +53,14 @@ tags:
       All operations marked with 'API#004 Boards' are relevant to board management use case
 
 paths:
-  /users:
+  /boards:
     post:
       operationId: createBoard
       tags:
         - 'API#004 Boards'
       security:
         - Authorization: []
-      summary: Board Management - Create new User
+      summary: Board Management - Create new Board
       description: >
         API to create new board in Proman application
       parameters:
@@ -134,14 +134,14 @@ paths:
               description: Used as correlation id while tracing for the request in the backend
 
     get:
-       operationId: getUsers
+       operationId: getBoards
        tags:
          - 'API#004 Boards'
        security:
          - Authorization: []
-       summary: Board Management - Get all Users
+       summary: Board Management - Get all Boards
        description: >
-         API to get all users of Proman application
+         API to get all boards of Proman application
        parameters:
          - $ref: '#/components/parameters/ClientId'
          - $ref: '#/components/parameters/Authorization'
@@ -167,12 +167,12 @@ paths:
            name: status
            schema:
              type: string
-             enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
+             enum: [OPEN, IN PROGRESS, COMPLETED]
            required: false
            description: query to filter the results based on specified status
        responses:
          '200':
-           description: OK - Fetched all users
+           description: OK - Fetched all boards
            headers:
              request-id:
                schema:
@@ -181,7 +181,7 @@ paths:
            content:
              application/json:
                schema:
-                 $ref: '#/components/schemas/GetUsersResponse'
+                 $ref: '#/components/schemas/BoardsResponse'
          '400':
             description: >-
               BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a
@@ -208,7 +208,7 @@ paths:
                 description: Used as correlation id while tracing for the request in the backend
          '404':
             description: >-
-              NOT FOUND - Non existing endpoint
+              NOT FOUND -  Board (resource) does not exist
             headers:
               request-id:
                 schema:
@@ -235,23 +235,23 @@ paths:
                   type: string
                 description: Used as correlation id while tracing for the request in the backend
 
-  /users/{id}:
+  /boards/{id}:
      get:
-        operationId: getUser
+        operationId: getBoard
         tags:
           - 'API#004 Boards'
         security:
           - Authorization: []
-        summary: Board Management - Get an existing User
+        summary: Board Management - Get an existing Board
         description: >
-            API to get an existing user of Proman application
+            API to get an existing Board detalis of Proman application
         parameters:
-         - $ref: '#/components/parameters/UserId'
+         - $ref: '#/components/parameters/BoardId'
          - $ref: '#/components/parameters/ClientId'
          - $ref: '#/components/parameters/Authorization'
         responses:
          '200':
-           description: OK - Fetched user details
+           description: OK - Fetched board details
            headers:
              request-id:
                schema:
@@ -260,7 +260,7 @@ paths:
            content:
              application/json:
                schema:
-                 $ref: '#/components/schemas/GetUserDetailsResponse'
+                 $ref: '#/components/schemas/BoardDetailsResponse'
          '400':
            description: >-
              BAD REQUEST - server cannot or will not process the request due to
@@ -289,7 +289,7 @@ paths:
                description: Used as correlation id while tracing for the request in the backend
          '404':
            description: >-
-             NOT FOUND - Non existing endpoint or User with specified identifier is not found
+             NOT FOUND - Board (resource) does not exist
            headers:
              request-id:
                schema:
@@ -305,28 +305,28 @@ paths:
                  type: string
                description: Used as correlation id while tracing for the request in the backend
      put:
-        operationId: updateUser
+        operationId: updateBoard
         tags:
           - 'API#004 Boards'
         security:
           - Authorization: []
-        summary: Board Management - Update an existing User
+        summary: Board Management - Update an existing Board
         description: >
-            API to update an existing user in Proman application
+            API to update an existing board details in Proman application
         parameters:
-          - $ref: '#/components/parameters/UserId'
+          - $ref: '#/components/parameters/BoardId'
           - $ref: '#/components/parameters/ClientId'
           - $ref: '#/components/parameters/Authorization'
         requestBody:
-          description: Request containing modified user details
+          description: Request containing modified board details
           required: true
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateUserRequest'
+                $ref: '#/components/schemas/UpdateBoardRequest'
         responses:
           '200':
-            description: OK - User has been updated successfully
+            description: OK - Board has been updated successfully
             headers:
               request-id:
                 schema:
@@ -353,6 +353,14 @@ paths:
             description: >-
               FORBIDDEN - request has not been applied because client application
               has no permission to perform action
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '404':
+            description: >-
+              NOT FOUND - Board (resource) does not exist
             headers:
               request-id:
                 schema:
@@ -380,16 +388,16 @@ paths:
                   type: string
                 description: Used as correlation id while tracing for the request in the backend
      patch:
-        operationId: updateUserStatus
+        operationId: updateBoardStatus
         tags:
           - 'API#004 Boards'
         security:
           - Authorization: []
-        summary: Board Management - Update status of an existing User
+        summary: Board Management - Update status of an existing Board
         description: >
-            API to update status of an existing user in Proman application
+            API to update status of an existing board in Proman application
         parameters:
-          - $ref: '#/components/parameters/UserId'
+          - $ref: '#/components/parameters/BoardId'
           - $ref: '#/components/parameters/ClientId'
           - $ref: '#/components/parameters/Authorization'
         requestBody:
@@ -398,10 +406,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateUserStatusRequest'
+                $ref: '#/components/schemas/UpdateBoardStatusRequest'
         responses:
           '200':
-            description: OK - User status has been updated successfully
+            description: OK - Board status has been updated successfully
             headers:
               request-id:
                 schema:
@@ -428,6 +436,14 @@ paths:
             description: >-
               FORBIDDEN - request has not been applied because client application
               has no permission to perform action
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '404':
+            description: >-
+              NOT FOUND - Board (resource) does not exist
             headers:
               request-id:
                 schema:
@@ -493,161 +509,253 @@ components:
       description: >-
         Mandatory user credentials in bearer http authentication scheme format. Refer to the #/components/securitySchemes
         for more information on this header.
-    UserId:
+    BoardId:
       name: id
       schema:
         type: string
+        format: uuid
       in: path
       required: true
       description: >-
-        Unique identifier of User in a standard UUID format
+        Unique identifier of Board in a standard UUID format
 
   schemas:
 
-    GetUsersResponse:
+    BoardsResponse:
       type: object
       properties:
-        totalCount:
+        offset:
           type: integer
-          description: total number of users for the specified input
-        users:
+          description: offset or position of the fetched boards
+        limit:
+          type: integer
+          description: number of boards fetched per this request
+        total_count:
+          type: integer
+          description: total number of boards for the specified input
+        boards:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/GetUserSummaryResponse'
-          description: List of users
+            $ref: '#/components/schemas/BoardSummaryResponse'
+          description: List of boards
+      required:
+        - offset
+        - limit
+        - total_count
+        - boards
+      example:
+        offset: 1
+        limit: 10
+        total_count: 33
+        boards:
+          - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+            name: Build Prototype
+            owner:
+              id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+              first_name: Project
+              last_name: Manager
+            start_date: 2018-05-07
+            end_date: 2018-05-10
+            workflow:
+              id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+              name: Kanban
+            status: ACTIVE
 
-    GetUserSummaryResponse:
+          - id: 8d174a25-da31-55a8-85b4-c06ffc9d5f8f
+            name: Implement API
+            owner:
+              id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+              first_name: Project
+              last_name: Manager
+            start_date: 2018-07-01
+            end_date: 2018-10-12
+            workflow:
+              id: 2d174a25-fa31-45a8-85b4-b07ffc9d5f8d
+              name: Custom Scrum
+            status: ACTIVE
+
+    BoardSummaryResponse:
       type: object
       properties:
         id:
           type: string
-          description: Unique identifier of the user in a standard UUID format
-        first_name:
+          format: uuid
+          description: Unique identifier of the board in a standard UUID format
+        name:
           type: string
-          description: First name of the user
-        last_name:
-          type: string
-          description: Last name of the user
-        email_address:
-          type: string
-          description: Email address of the user
+          description: Name of the board
+        owner:
+          type: object
+          description: Name of the board owner
+          $ref: '#/components/schemas/BoardOwnerSummaryResponse'
+        start_date:
+          type: object
+          description: Start date of the board
+          $ref: '#/components/schemas/FullDateType'
+        end_date:
+          type: object
+          description: End date of the board
+          $ref: '#/components/schemas/FullDateType'
+        workflow:
+          type: object
+          description: Workflow of the Board
+          $ref: '#/components/schemas/BoardWorkflowSummaryResponse'
         status:
           type: string
-          enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
-          description: Status of the user
+          description: Status of the board
+          $ref: '#/components/schemas/BoardStatusType'
+      required:
+        - id
+        - name
+        - owner
+        - start_date
+        - end_date
+        - workflow
+        - status
+      example:
+        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+        name: Build Prototype
+        owner:
+          id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+          first_name: Project
+          last_name: Manager
+        start_date: 2018-05-07
+        end_date: 2018-05-10
+        workflow:
+          id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+          name: Kanban
+        status: ACTIVE
+
+    BoardDetailsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the board in a standard UUID format
+        name:
+          type: string
+          description: Name of the board
+        owner:
+          type: object
+          description: Details of the board owner
+          $ref: '#/components/schemas/BoardOwnerDetailsResponse'
+        start_date:
+          type: object
+          description: Start date of the board
+          $ref: '#/components/schemas/FullDateType'
+        end_date:
+          type: object
+          description: End date of the board
+          $ref: '#/components/schemas/FullDateType'
+        workflow:
+          type: object
+          description: Workflow of the Board
+          $ref: '#/components/schemas/BoardWorkflowSummaryResponse'
+        status:
+          type: object
+          description: Status of the board
+          $ref: '#/components/schemas/BoardStatusType'
+        total_members:
+          type: integer
+          description: Total number of members (users) in the board
+      required:
+        - id
+        - name
+        - owner
+        - start_date
+        - end_date
+        - workflow
+        - status
+        - total_members
+      example:
+        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+        name: Build Prototype
+        owner:
+          id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+          first_name: Project
+          last_name: Manager
+          email_address: project.manager@proman.io
+          role:
+            id: 200
+            name: Project Manager
+        start_date: 2018-05-07
+        end_date: 2018-05-10
+        workflow:
+          id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+          name: Kanban
+        status: ACTIVE
+        total_members: 8
+
+    BoardOwnerSummaryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
+        first_name:
+          type: string
+          description: First name of the owner (user)
+        last_name:
+          type: string
+          description: Last name of the owner (user)
+      required:
+        - id
+        - first_name
+        - last_name
+
+    BoardOwnerDetailsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
+        first_name:
+          type: string
+          description: First name of the owner (user)
+        last_name:
+          type: string
+          description: Last name of the owner (user)
+        email_address:
+          type: string
+          description: Email address of the owner (user)
         role:
           type: object
-          description: Role mapped to the user
+          description: Role mapped to the owner (user)
           $ref: '#/components/schemas/RoleSummaryResponse'
       required:
         - id
         - first_name
         - last_name
         - email_address
-        - status
         - role
-      example:
-        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        first_name: Proman
-        last_name: Administrator
-        email_address: proman.admin@proman.io
-        status: ACTIVE
-        role:
-          id: 100
-          name: Administrator
-
-    GetUserDetailsResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the user in a standard UUID format
-        first_name:
-          type: string
-          description: First name of the user
-        last_name:
-          type: string
-          description: Last name of the user
-        email_address:
-          type: string
-          description: Email address of the user
-        mobile_number:
-          type: string
-          description: Mobile number of the user
-        status:
-          type: string
-          enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
-          description: Status of the user
-        role:
-          type: object
-          description: Role to be mapped to the user
-          $ref: '#/components/schemas/RoleDetailsResponse'
-      required:
-        - id
-        - first_name
-        - last_name
-        - email_address
-        - status
-        - role
-      example:
-        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        first_name: Proman
-        last_name: Administrator
-        email_address: proman.admin@proman.io
-        mobile_number: +91 1234567890
-        status: ACTIVE
-        role:
-          id: 100
-          name: Administrator
-          permissions:
-            - id: 121
-              name: Create User
-            - id: 122
-              name: Update User
 
     RoleSummaryResponse:
       type: object
       properties:
         id:
           type: integer
-          description: Role id of the user
+          description: Role id of the owner (user)
         name:
           type: string
-          description: Role name of the user
+          description: Role name of the owner (user)
       required:
         - id
         - name
 
-    RoleDetailsResponse:
+    BoardWorkflowSummaryResponse:
       type: object
       properties:
         id:
-          type: integer
-          description: Role id of the user
+          type: string
+          format: uuid
+          description: Unique identifier of the workflow in a standard UUID format generated by API backend
         name:
           type: string
-          description: Role name of the user
-        permissions:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/PermissionsResponse'
-          description: Permissions assigned to the user
-      required:
-        - id
-        - name
-        - permissions
-
-    PermissionsResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Permission id of the user
-        name:
-          type: string
-          description: Permission name of the user
+          description: Name of the workflow
       required:
         - id
         - name
@@ -659,13 +767,13 @@ components:
           type: string
           description: Name of the new board
         start_date:
-          type: string
-          format: date
+          type: object
           description: Start date of the board
+          $ref: '#/components/schemas/FullDateType'
         end_date:
-          type: string
-          format: date
+          type: object
           description: End date of the board
+          $ref: '#/components/schemas/FullDateType'
         workflow_id:
           type: string
           description: Workflow reference identifier
@@ -676,82 +784,75 @@ components:
         - workflow_id
       example:
         name: Build Prototype
-        start_date: 1995-09-07
-        end_date: proman.admin@proman.io
+        start_date: 2018-05-07
+        end_date: 2018-05-10
         workflow_id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-
-    RoleRequest:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Role id to be mapped to the user
-        permissions:
-          type: array
-          items:
-            type: integer
-          description: List of permission ids to be mapped to the new user
-      required:
-        - role_id
 
     CreateBoardResponse:
       type: object
       properties:
         id:
           type: string
+          format: uuid
           description: Unique identifier in a standard UUID format generated by API backend
         status:
-          type: string
-          enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
-          description: Status of registered user
+          type: object
+          description: Status of the board
+          $ref: '#/components/schemas/BoardStatusType'
       required:
         - id
         - status
       example:
         id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        status: ACTIVE
+        status: OPEN
 
-    UpdateUserRequest:
+    UpdateBoardRequest:
       type: object
       properties:
-        first_name:
+        name:
           type: string
-          description: Modified first name of an existing user
-        last_name:
-          type: string
-          description: Modified last name of an existing user
-        email_address:
-          type: string
-          description: Modified email address of an existing user
-        mobile_number:
-          type: string
-          description: Modified mobile number of an existing user
-        role:
+          description: Name of the new board
+        start_date:
           type: object
-          description: Modified role of an existing user
-          $ref: '#/components/schemas/RoleRequest'
+          description: Start date of the board
+          $ref: '#/components/schemas/FullDateType'
+        end_date:
+          type: object
+          description: End date of the board
+          $ref: '#/components/schemas/FullDateType'
+        workflow_id:
+          type: string
+          description: Workflow reference identifier
       required:
-        - first_name
-        - last_name
-        - email_address
-        - mobile_number
-        - role
+        - name
+        - start_date
+        - end_date
+        - workflow_id
       example:
-        first_name: Proman
-        last_name: Administrator
-        email_address: proman.admin@proman.io
-        mobile_number: +91 1234567890
-        role:
-          id: 100
-          permissions: [121,122,142]
+        name: Build Prototype
+        start_date: 2018-05-07
+        end_date: 2018-06-10
+        workflow_id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
 
-    UpdateUserStatusRequest:
+    UpdateBoardStatusRequest:
       type: object
       properties:
         status:
-          type: string
-          enum: [ACTIVE, INACTIVE, LOCKED]
-          description: Status of registered user
+          type: object
+          description: Updated status of the board
+          $ref: '#/components/schemas/BoardStatusType'
+      example:
+        status: COMPLETED
+
+    BoardStatusType:
+      type: string
+      enum: [OPEN, IN PROGRESS, COMPLETED]
+      description: Status of the board
+
+    FullDateType:
+      type: string
+      format: full-date
+      description: Full date format
 
     ErrorResponse:
       type: object
@@ -766,5 +867,5 @@ components:
         - code
         - message
       example:
-        code: USR-001
-        message: Email address already exists
+        code: BRD-001
+        message: Board with name already exist

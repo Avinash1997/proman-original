@@ -1,93 +1,136 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>io.beingtechie</groupId>
-		<artifactId>proman</artifactId>
-		<relativePath>../pom.xml</relativePath>
-		<version>1.0.0-SNAPSHOT</version>
-	</parent>
+        <groupId>apps</groupId>
+        <artifactId>proman</artifactId>
+        <relativePath>../pom.xml</relativePath>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
 
-	<groupId>io.beingtechie.proman</groupId>
-	<artifactId>proman-api</artifactId>
-	<packaging>jar</packaging>
-	<version>1.0.0-SNAPSHOT</version>
 
-	<name>Project Management Application - API Backend</name>
-	<description>Project Management Application - API</description>
+    <groupId>apps.proman</groupId>
+    <artifactId>proman-api</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
 
-	<properties>
-		<auth0.jwt.version>3.2.0</auth0.jwt.version>
+    <name>Project Management Application - API Contracts</name>
+    <description>Project Management Application - API Contract Specification</description>
 
-		<apache.commons.version>3.6</apache.commons.version>
-		<jackson.version>2.8.6</jackson.version>
-		<slf4j.version>1.7.25</slf4j.version>
-		<logback.version>1.1.7</logback.version>
+    <properties>
+        <io.swagger.version>1.5.13</io.swagger.version>
+        <application.package>apps.proman.api</application.package>
+        <contracts.dir>${project.basedir}/src/main/resources</contracts.dir>
+    </properties>
 
-		<junit.version>4.12</junit.version>
-	</properties>
+    <dependencies>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.18</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.auth0</groupId>
-			<artifactId>java-jwt</artifactId>
-			<version>${auth0.jwt.version}</version>
-		</dependency>
+    </dependencies>
 
-		<!-- apache commons framework -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${apache.commons.version}</version>
-		</dependency>
-
-		<!-- logging framework -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
-
-	<build>
-		<resources>
+    <build>
+        <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
             </resource>
         </resources>
-	</build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.swagger</groupId>
+                    <artifactId>swagger-codegen-maven-plugin</artifactId>
+                    <version>2.2.3</version>
+                    <configuration>
+                        <output>${project.build.directory}/generated-sources</output>
+                        <language>spring</language>
+                        <library>resttemplate</library>
+                        <verbose>true</verbose>
+                        <generateModels>true</generateModels>
+                        <generateApis>false</generateApis>
+                        <modelPackage>${application.package}.model</modelPackage>
+                        <apiPackage>${application.package}.rest</apiPackage>
+                        <configOptions>
+                            <sourceFolder>.</sourceFolder>
+                            <java8>true</java8>
+                            <dateLibrary>java8</dateLibrary>
+                            <interfaceOnly>true</interfaceOnly>
+                        </configOptions>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>3.0.0-rc0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-codegen-generators</artifactId>
+                        <version>1.0.0-rc0</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>authentication-v1</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${contracts.dir}/v1/authentication.yaml</inputSpec>
+                            <language>java</language>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>registeruser-v1</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${contracts.dir}/v1/registeruser.yaml</inputSpec>
+                            <language>java</language>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>usermanagement-v1</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${contracts.dir}/v1/usermanagement.yaml</inputSpec>
+                            <language>java</language>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>boardmanagement-v1</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${contracts.dir}/v1/boardmanagement.yaml</inputSpec>
+                            <language>java</language>
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

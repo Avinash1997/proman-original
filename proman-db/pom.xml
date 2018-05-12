@@ -5,13 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>io.beingtechie</groupId>
+		<groupId>apps</groupId>
 		<artifactId>proman</artifactId>
 		<relativePath>../pom.xml</relativePath>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>io.beingtechie.proman</groupId>
+	<groupId>apps.proman</groupId>
 	<artifactId>proman-db</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.0-SNAPSHOT</version>

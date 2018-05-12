@@ -181,7 +181,7 @@ paths:
            content:
              application/json:
                schema:
-                 $ref: '#/components/schemas/UsersResponse'
+                 $ref: '#/components/schemas/UsersSummaryResponse'
          '400':
             description: >-
               BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a
@@ -520,7 +520,7 @@ components:
 
   schemas:
 
-    UsersResponse:
+    UsersSummaryResponse:
       type: object
       properties:
         offset:
@@ -536,7 +536,7 @@ components:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/UserSummaryResponse'
+            $ref: '#/components/schemas/UsersSummaryType'
           description: List of users
       required:
         - offset
@@ -545,7 +545,7 @@ components:
         - users
       example:
 
-    UserSummaryResponse:
+    UsersSummaryType:
       type: object
       properties:
         id:
@@ -567,7 +567,7 @@ components:
         role:
           type: object
           description: Role mapped to the user
-          $ref: '#/components/schemas/RoleSummaryResponse'
+          $ref: '#/components/schemas/RoleSummaryType'
       required:
         - id
         - first_name
@@ -610,7 +610,7 @@ components:
         role:
           type: object
           description: Role to be mapped to the user
-          $ref: '#/components/schemas/RoleDetailsResponse'
+          $ref: '#/components/schemas/RoleDetailsType'
       required:
         - id
         - first_name
@@ -634,7 +634,7 @@ components:
             - id: 122
               name: Update User
 
-    RoleSummaryResponse:
+    RoleSummaryType:
       type: object
       properties:
         id:
@@ -647,7 +647,7 @@ components:
         - id
         - name
 
-    RoleDetailsResponse:
+    RoleDetailsType:
       type: object
       properties:
         id:
@@ -660,14 +660,14 @@ components:
           type: array
           items:
             type: object
-            $ref: '#/components/schemas/PermissionsResponse'
+            $ref: '#/components/schemas/PermissionsType'
           description: Permissions assigned to the user
       required:
         - id
         - name
         - permissions
 
-    PermissionsResponse:
+    PermissionsType:
       type: object
       properties:
         id:

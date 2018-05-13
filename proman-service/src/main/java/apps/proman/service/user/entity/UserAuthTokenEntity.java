@@ -7,6 +7,8 @@
  */
 package apps.proman.service.user.entity;
 
+import static apps.proman.service.common.entity.Entity.SCHEMA;
+
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import javax.persistence.Column;
@@ -34,16 +36,16 @@ import apps.proman.service.common.entity.ext.EntityHashCodeBuilder;
  * User Entity JPA mapping class.
  */
 @Entity
-@Table(name = "USER_AUTH_TOKENS")
+@Table(name = "USER_AUTH_TOKENS", schema = SCHEMA)
 @NamedQueries({ //
         @NamedQuery(name = UserAuthTokenEntity.TOKEN_BY_USER_AND_CLIENT, //
-                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.clientId = :clientId AND uat.clientIpAddress = :clientIpAddress ORDER BY uat.createdAt DESC"), //
+                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.clientId = :clientId AND uat.originIpAddress = :originIpAddress ORDER BY uat.createdAt DESC"), //
         @NamedQuery(name = UserAuthTokenEntity.TOKEN_BY_ACCESS_TOKEN, //
                 query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.accessToken = :accessToken"), //
         @NamedQuery(name = UserAuthTokenEntity.VALID_TOKEN_BY_USER, //
-                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.expiryAt > :currentTime AND uat.logoutAt is null"), //
+                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.expiresAt > :currentTime AND uat.logoutAt is null"), //
         @NamedQuery(name = UserAuthTokenEntity.EXPIRED_TOKEN_BY_USER, //
-                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.expiryAt <= :currentTime AND uat.logoutAt is null") //
+                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.expiresAt <= :currentTime AND uat.logoutAt is null") //
 })
 public class UserAuthTokenEntity extends MutableEntity implements Identifier<Long>, Serializable {
 
@@ -71,27 +73,27 @@ public class UserAuthTokenEntity extends MutableEntity implements Identifier<Lon
     @Size(max = 20)
     private String clientId;
 
-    @Column(name = "CLIENT_IPADDRESS")
+    @Column(name = "ORIGIN_IPADDRESS")
     @NotNull
     @Size(max = 20)
-    private String clientIpAddress;
+    private String originIpAddress;
 
     @Column(name = "ACCESS_TOKEN")
     @NotNull
-    @Size(max = 300)
+    @Size(max = 500)
     private String accessToken;
 
     @Column(name = "REFRESH_TOKEN")
-    @Size(max = 300)
+    @Size(max = 500)
     private String refreshToken;
 
     @Column(name = "LOGIN_AT")
     @NotNull
     private ZonedDateTime loginAt;
 
-    @Column(name = "EXPIRY_AT")
+    @Column(name = "EXPIRES_AT")
     @NotNull
-    private ZonedDateTime expiryAt;
+    private ZonedDateTime expiresAt;
 
     @Column(name = "LOGOUT_AT")
     private ZonedDateTime logoutAt;
@@ -120,12 +122,12 @@ public class UserAuthTokenEntity extends MutableEntity implements Identifier<Lon
         this.clientId = clientId;
     }
 
-    public String getClientIpAddress() {
-        return clientIpAddress;
+    public String getOriginIpAddress() {
+        return originIpAddress;
     }
 
-    public void setClientIpAddress(String ipAddress) {
-        this.clientIpAddress = ipAddress;
+    public void setOriginIpAddress(String ipAddress) {
+        this.originIpAddress = ipAddress;
     }
 
     public String getAccessToken() {
@@ -144,12 +146,12 @@ public class UserAuthTokenEntity extends MutableEntity implements Identifier<Lon
         this.loginAt = loginTime;
     }
 
-    public ZonedDateTime getExpiryAt() {
-        return expiryAt;
+    public ZonedDateTime getExpiresAt() {
+        return expiresAt;
     }
 
-    public void setExpiryAt(ZonedDateTime expiryTime) {
-        this.expiryAt = expiryTime;
+    public void setExpiresAt(ZonedDateTime expiryTime) {
+        this.expiresAt = expiryTime;
     }
 
     public ZonedDateTime getLogoutAt() {

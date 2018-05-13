@@ -27,9 +27,9 @@ public interface RequestContext extends Serializable {
 
     String getClientId();
 
-    void setClientIpAddress(String ipAddress);
+    void setOriginIpAddress(String ipAddress);
 
-    String getClientIpAddress();
+    String getOriginIpAddress();
 
     void setUserId(String userId);
 

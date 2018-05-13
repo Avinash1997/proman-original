@@ -58,9 +58,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public String authorizeAccessToken(RequestContext requestContext, UserEntity userEntity) throws AuthorizationFailedException {
+    public UserAuthTokenEntity authorizeAccessToken(RequestContext requestContext, UserEntity userEntity) {
 
-        final UserAuthTokenEntity userAuthToken = userAuthDao.findToken(userEntity.getId(), requestContext.getClientId(), requestContext.getClientIpAddress());
+        final UserAuthTokenEntity userAuthToken = userAuthDao.findToken(userEntity.getId(), requestContext.getClientId(), requestContext.getOriginIpAddress());
         final UserAuthTokenVerifier userAuthTokenVerifier = new UserAuthTokenVerifier(userAuthToken);
 
         switch (userAuthTokenVerifier.getStatus()) {
@@ -68,7 +68,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                 return issueNewToken(requestContext, userEntity);
             case ACTIVE:
             case CONCURRENT_LOGIN:
-                return userAuthToken.getAccessToken();
+                return userAuthToken;
             case LOGGED_OUT:
                 return issueNewToken(requestContext, userEntity);
             case EXPIRED:
@@ -97,7 +97,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         userAuthDao.update(userAuthToken);
     }
 
-    private String issueNewToken(final RequestContext requestContext, final UserEntity userEntity) {
+    private UserAuthTokenEntity issueNewToken(final RequestContext requestContext, final UserEntity userEntity) {
 
         final ZonedDateTime requestTime = requestContext.getRequestTime();
 
@@ -107,7 +107,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         final JwtTokenProvider tokenProvider = new JwtTokenProvider(userEntity.getPassword());
 
 
-        final Token tokenSpec = new Token.Builder().clientId(requestContext.getClientId()).clientIpAddress(requestContext.getClientIpAddress()) //
+        final Token tokenSpec = new Token.Builder().clientId(requestContext.getClientId()).clientIpAddress(requestContext.getOriginIpAddress()) //
                 .issuedTime(requestTime).expirationTime(expirationTime) //
                 .userId(userEntity.getUuid()).userFirstname(userEntity.getFirstName()).userLastname(userEntity.getLastName()) //
                 .userEmailAddress(userEntity.getEmail()).userMobilePhone(userEntity.getMobilePhone()).lastLoginAt(userEntity.getLastLoginAt()) //
@@ -119,18 +119,18 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
         final UserAuthTokenEntity authTokenEntity = new UserAuthTokenEntity();
         authTokenEntity.setUser(userEntity);
-        authTokenEntity.setAccessToken(authToken);
+            authTokenEntity.setAccessToken(authToken);
         authTokenEntity.setClientId(requestContext.getClientId());
-        authTokenEntity.setClientIpAddress(requestContext.getClientIpAddress());
+        authTokenEntity.setOriginIpAddress(requestContext.getOriginIpAddress());
         authTokenEntity.setLoginAt(requestTime);
-        authTokenEntity.setExpiryAt(expirationTime);
+        authTokenEntity.setExpiresAt(expirationTime);
 
         userAuthDao.create(authTokenEntity);
 
         userEntity.setLastLoginAt(requestTime);
         userDao.update(userEntity);
 
-        return authToken;
+        return authTokenEntity;
     }
 
 }

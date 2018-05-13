@@ -31,12 +31,12 @@ public class UserAuthDaoImpl extends UserBaseDaoImpl<UserAuthTokenEntity> implem
     }
 
     @Override
-    public UserAuthTokenEntity findToken(final Long userId, final String clientId, final String clientIpAddress) {
+    public UserAuthTokenEntity findToken(final Long userId, final String clientId, final String originIpAddress) {
         final List<
                 UserAuthTokenEntity> userAuthTokens = entityManager.createNamedQuery(UserAuthTokenEntity.TOKEN_BY_USER_AND_CLIENT, UserAuthTokenEntity.class) //
                         .setParameter("userId", userId) //
                         .setParameter("clientId", clientId) //
-                        .setParameter("clientIpAddress", clientIpAddress) //
+                        .setParameter("originIpAddress", originIpAddress) //
                         .getResultList();
         if (userAuthTokens.isEmpty()) {
             return null;

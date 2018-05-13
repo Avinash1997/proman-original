@@ -6,7 +6,7 @@
  * Author: P7107311
  * URL: www.redux.com
 */
-package apps.proman.api.rest.provider;
+package apps.proman.api.controller.provider;
 
 import java.util.Base64;
 

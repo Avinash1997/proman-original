@@ -1,13 +1,14 @@
 /* 
  * Copyright 2017-2018, Redux Software. 
  * 
- * File: AuthenticationResource.java
+ * File: AuthenticationController.java
  * Date: Sep 28, 2017
  * Author: P7107311
  * URL: www.redux.com
 */
-package apps.proman.api.rest.authentication;
+package apps.proman.api.controller.authentication;
 
+import static apps.proman.api.data.ResourceConstants.BASE_URL;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -16,16 +17,16 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import apps.proman.service.common.exception.ApplicationException;
-import apps.proman.api.rest.ext.ResourceConstants;
+import apps.proman.service.user.model.AuthorizedUser;
 
 /**
  * Interface that defines Authentication related RESTful endpoints.
  */
-@RequestMapping(path = ResourceConstants.USER_BASE_URL)
-public interface AuthenticationResource {
+@RequestMapping(path = BASE_URL)
+public interface AuthenticationController {
 
     @RequestMapping(method = POST, path = "/authentication", produces = APPLICATION_JSON_UTF8_VALUE)
-    ResponseEntity authenticate(@RequestHeader final String authorization) throws ApplicationException;
+    ResponseEntity<AuthorizedUser> authenticate(@RequestHeader final String authorization) throws ApplicationException;
 
     @RequestMapping(method = POST, path = "/logout")
     void logout(@RequestHeader final String authorization) throws ApplicationException;

@@ -6,9 +6,9 @@
  * Author: P7107311
  * URL: www.redux.com
 */
-package apps.proman.api.rest.ext;
+package apps.proman.api.controller.ext;
 
-import static apps.proman.api.rest.ext.ResourceConstants.REQUEST_ATTR_REQUEST_CONTEXT;
+import static apps.proman.api.data.ResourceConstants.REQUEST_ATTR_REQUEST_CONTEXT;
 
 import javax.servlet.http.HttpServletRequest;
 

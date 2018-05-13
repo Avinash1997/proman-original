@@ -6,7 +6,7 @@
  * Author: P7107311
  * URL: www.redux.com
 */
-package apps.proman.api.rest.ext;
+package apps.proman.api.data;
 
 /**
  * TODO: Provide javadoc

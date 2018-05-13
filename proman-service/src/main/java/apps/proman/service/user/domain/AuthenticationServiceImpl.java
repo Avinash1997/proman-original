@@ -22,7 +22,9 @@ import apps.proman.service.common.exception.EntityNotFoundException;
 import apps.proman.service.user.UserErrorCode;
 import apps.proman.service.user.entity.UserAuthTokenEntity;
 import apps.proman.service.user.entity.UserEntity;
+import apps.proman.service.user.model.AuthorizedUser;
 import apps.proman.service.user.model.LogoutAction;
+import apps.proman.service.user.model.UserStatus;
 import apps.proman.service.user.provider.PasswordCryptographyProvider;
 
 /**
@@ -44,7 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public String authenticate(final RequestContext requestContext, final String username, final String password) throws AuthenticationFailedException, AuthorizationFailedException {
+    public AuthorizedUser authenticate(final RequestContext requestContext, final String username, final String password) throws AuthenticationFailedException, AuthorizationFailedException {
 
         UserEntity userEntity;
         try {
@@ -61,7 +63,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new AuthenticationFailedException(UserErrorCode.USR_003);
         }
 
-        return authorizationService.authorizeAccessToken(requestContext, userEntity);
+        UserAuthTokenEntity userAuthToken = authorizationService.authorizeAccessToken(requestContext, userEntity);
+        return authorizedUser(userEntity, userAuthToken);
     }
 
     @Override
@@ -83,6 +86,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             case CONCURRENT_LOGIN:
                 throw new AuthorizationFailedException(UserErrorCode.USR_005);
         }
+    }
+
+    private AuthorizedUser authorizedUser(final UserEntity userEntity, final UserAuthTokenEntity userAuthToken) {
+        final AuthorizedUser authorizedUser = new AuthorizedUser();
+        authorizedUser.setId(userEntity.getUuid());
+        authorizedUser.setFirstName(userEntity.getFirstName());
+        authorizedUser.setLastName(userEntity.getLastName());
+        authorizedUser.setEmailAddress(userEntity.getEmail());
+        authorizedUser.setMobilePhoneNumber(userEntity.getMobilePhone());
+        authorizedUser.setLastLoginTime(userEntity.getLastLoginAt());
+        authorizedUser.setStatus(UserStatus.get(userEntity.getStatus()));
+        authorizedUser.setAccessToken(userAuthToken.getAccessToken());
+        return authorizedUser;
     }
 
 }

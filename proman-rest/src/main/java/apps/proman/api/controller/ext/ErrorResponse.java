@@ -6,7 +6,7 @@
  * Author: P7107311
  * URL: www.redux.com
 */
-package apps.proman.service.common.exception;
+package apps.proman.api.controller.ext;
 
 /**
  * Custom object for sending error information in response.

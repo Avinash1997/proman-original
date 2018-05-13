@@ -12,13 +12,14 @@ import javax.validation.constraints.NotNull;
 import apps.proman.service.common.data.RequestContext;
 import apps.proman.service.common.exception.AuthenticationFailedException;
 import apps.proman.service.common.exception.AuthorizationFailedException;
+import apps.proman.service.user.model.AuthorizedUser;
 
 /**
  * Interface for authentication related services.
  */
 public interface AuthenticationService {
 
-    String authenticate(@NotNull RequestContext requestContext, @NotNull String username, @NotNull String password) throws AuthenticationFailedException, AuthorizationFailedException;
+    AuthorizedUser authenticate(@NotNull RequestContext requestContext, @NotNull String username, @NotNull String password) throws AuthenticationFailedException, AuthorizationFailedException;
 
     void logout(@NotNull RequestContext requestContext, @NotNull String accessToken) throws AuthorizationFailedException;
 

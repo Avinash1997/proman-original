@@ -18,7 +18,7 @@ import apps.proman.service.common.entity.Entity;
  */
 public class UserBaseDaoImpl<E extends Entity> extends BaseDaoImpl<E> {
 
-    @PersistenceContext(unitName = "persistence.user")
+    @PersistenceContext
     protected EntityManager entityManager;
 
     @Override

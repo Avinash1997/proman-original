@@ -12,6 +12,8 @@ package apps.proman.service.common.entity;
  */
 public interface Entity {
 
+    String SCHEMA = "proman";
+
     @Override
     boolean equals(Object that);
 

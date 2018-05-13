@@ -31,10 +31,6 @@ public class AuthorizedUser implements Serializable {
 
     @JsonProperty("first_name")
     private String firstName;
-
-    @JsonProperty("middle_name")
-    private String middleName;
-
     @JsonProperty("last_name")
     private String lastName;
 
@@ -43,9 +39,6 @@ public class AuthorizedUser implements Serializable {
 
     @JsonProperty("mobile_phone")
     private String mobilePhoneNumber;
-
-    @JsonProperty("office_phone")
-    private String officePhoneNumber;
 
     @JsonProperty("last_login_time")
     @JsonSerialize(using = DateTimeSerializer.class)
@@ -73,15 +66,7 @@ public class AuthorizedUser implements Serializable {
         this.firstName = firstName;
     }
 
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getLastName() {
+   public String getLastName() {
         return lastName;
     }
 
@@ -103,14 +88,6 @@ public class AuthorizedUser implements Serializable {
 
     public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
-    }
-
-    public String getOfficePhoneNumber() {
-        return officePhoneNumber;
-    }
-
-    public void setOfficePhoneNumber(String officePhoneNumber) {
-        this.officePhoneNumber = officePhoneNumber;
     }
 
     public ZonedDateTime getLastLoginTime() {

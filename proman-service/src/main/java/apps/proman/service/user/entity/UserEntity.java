@@ -7,6 +7,8 @@
  */
 package apps.proman.service.user.entity;
 
+import static apps.proman.service.common.entity.Entity.SCHEMA;
+
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import javax.persistence.Column;
@@ -36,7 +38,7 @@ import apps.proman.service.common.entity.ext.EntityHashCodeBuilder;
  * Entity mapping for USERS table.
  */
 @Entity
-@Table(name = "USERS")
+@Table(name = "USERS", schema = SCHEMA)
 @NamedQueries({ @NamedQuery(name = UserEntity.BY_EMAIL, query = "select u from UserEntity u where u.email = :email") })
 public class UserEntity extends MutableEntity implements Identifier<Long>, ExternalIdentifier<String>, Serializable {
 
@@ -72,28 +74,15 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Exter
     @Size(max = 200)
     private String firstName;
 
-    @Column(name = "MIDDLE_NAME")
-    @Size(max = 200)
-    private String middleName;
-
     @Column(name = "LAST_NAME")
     @NotNull
     @Size(max = 200)
     private String lastName;
 
-    @Column(name = "OFFICE_PHONE")
-    @NotNull
-    @Size(max = 50)
-    private String officePhone;
-
     @Column(name = "MOBILE_PHONE")
     @NotNull
     @Size(max = 50)
     private String mobilePhone;
-
-    @Column(name = "FAX")
-    @Size(max = 50)
-    private String fax;
 
     @Column(name = "STATUS")
     @NotNull
@@ -158,14 +147,6 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Exter
         this.firstName = firstName;
     }
 
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
     public String getLastName() {
         return lastName;
     }
@@ -174,13 +155,6 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Exter
         this.lastName = lastName;
     }
 
-    public String getOfficePhone() {
-        return officePhone;
-    }
-
-    public void setOfficePhone(String officePhone) {
-        this.officePhone = officePhone;
-    }
 
     public String getMobilePhone() {
         return mobilePhone;
@@ -188,14 +162,6 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Exter
 
     public void setMobilePhone(String mobilePhone) {
         this.mobilePhone = mobilePhone;
-    }
-
-    public String getFax() {
-        return fax;
-    }
-
-    public void setFax(final String fax) {
-        this.fax = fax;
     }
 
     public int getStatus() {

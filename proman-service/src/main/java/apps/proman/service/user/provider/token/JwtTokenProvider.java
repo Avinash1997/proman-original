@@ -44,15 +44,6 @@ public class JwtTokenProvider implements TokenProvider {
         return JWT.create().withIssuer(TOKEN_ISSUER) //
                 .withAudience(tokenSpec.getClientId(), tokenSpec.getClientIpAddress()) //
                 .withSubject(tokenSpec.getUserId()) //
-                .withClaim("user_id", tokenSpec.getUserId()) //
-                .withClaim("first_name", tokenSpec.getUserFirstname()) //
-                .withClaim("last_name", tokenSpec.getUserLastname()) //
-                .withClaim("email_address", tokenSpec.getUserEmailAddress()) //
-                .withClaim("mobile_number", tokenSpec.getUserMobilePhone()) //
-                .withClaim("last_login_at", tokenSpec.getUserLastLoginAt().getLong(ChronoField.INSTANT_SECONDS)) //
-                .withClaim("role_id", tokenSpec.getRoleId()) //
-                .withClaim("role_name", tokenSpec.getRoleName()) //
-                .withArrayClaim("role_permissions", tokenSpec.getPermissionIds().toArray(new Integer[0])) //
                 .withIssuedAt(issuedAt).withExpiresAt(expiryAt).sign(algorithm);
     }
 

@@ -36,9 +36,9 @@
 				<os><family>Linux</family></os>
 			</activation>
 			<modules>
+				<module>proman-api</module>
 				<module>proman-db</module>
 				<module>proman-service</module>
-				<module>proman-api</module>
 				<module>proman-rest</module>
 			</modules>
 		</profile>

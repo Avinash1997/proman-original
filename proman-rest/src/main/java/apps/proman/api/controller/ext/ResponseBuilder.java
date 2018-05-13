@@ -6,9 +6,9 @@
  * Author: P7107311
  * URL: www.redux.com
 */
-package apps.proman.api.rest.ext;
+package apps.proman.api.controller.ext;
 
-import static apps.proman.api.rest.ext.ResourceConstants.HEADER_ACCESS_TOKEN;
+import static apps.proman.api.data.ResourceConstants.HEADER_ACCESS_TOKEN;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

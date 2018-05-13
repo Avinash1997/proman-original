@@ -6,13 +6,12 @@
  * Author: P7107311
  * URL: www.redux.com
 */
-package apps.proman.api.rest.ext;
+package apps.proman.api.controller.ext;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import apps.proman.service.common.exception.ApplicationException;
-import apps.proman.service.common.exception.ErrorResponse;
 
 /**
  * Error response builder.

@@ -388,14 +388,14 @@ paths:
                   type: string
                 description: Used as correlation id while tracing for the request in the backend
      patch:
-        operationId: updateUserStatus
+        operationId: patchUser
         tags:
           - 'API#003 Users'
         security:
           - Authorization: []
-        summary: User Administration - Update status of an existing User
+        summary: User Administration - Partial update of an existing user
         description: >
-            API to update status of an existing user in Proman application
+            API to partial update of an existing user in the board of Proman application
         parameters:
           - $ref: '#/components/parameters/UserId'
           - $ref: '#/components/parameters/ClientId'
@@ -406,10 +406,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateUserStatusRequest'
+                $ref: '#/components/schemas/UserOperationsRequest'
         responses:
           '200':
-            description: OK - User status has been updated successfully
+            description: OK - Partial update of User is successful
             headers:
               request-id:
                 schema:
@@ -778,15 +778,27 @@ components:
           id: 100
           permissions: [121,122,142]
 
-    UpdateUserStatusRequest:
-      type: object
+    UserOperationsRequest:
+      type: array
       properties:
-        status:
-          type: object
-          description: Status of registered user
-          $ref: '#/components/schemas/UserStatusType'
+        op:
+          type: string
+          description: Type of operation
+          enum: [replace, add, remove]
+        path:
+          type: string
+          description: Resource path whose state to be modified
+          enum: [status, role, permissions]
+        value:
+          type: string
+          description: New state value to be updated to the resource
       example:
-        status: LOCKED
+        - op: replace
+          path: status
+          value: ACTIVE
+        - op: add
+          path: permissions
+          value: 100
 
     UserStatusType:
       type: string

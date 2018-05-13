@@ -206,14 +206,6 @@ paths:
                 schema:
                   type: string
                 description: Used as correlation id while tracing for the request in the backend
-         '404':
-            description: >-
-              NOT FOUND -  Board (resource) does not exist
-            headers:
-              request-id:
-                schema:
-                  type: string
-                description: Used as correlation id while tracing for the request in the backend
          '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
@@ -387,15 +379,16 @@ paths:
                 schema:
                   type: string
                 description: Used as correlation id while tracing for the request in the backend
+
      patch:
-        operationId: updateBoardStatus
+        operationId: patchBoard
         tags:
           - 'API#004 Boards'
         security:
           - Authorization: []
-        summary: Board Management - Update status of an existing Board
+        summary: Board Management - Partial update of an existing Board
         description: >
-            API to update status of an existing board in Proman application
+            API to partial update of an existing board in Proman application
         parameters:
           - $ref: '#/components/parameters/BoardId'
           - $ref: '#/components/parameters/ClientId'
@@ -406,10 +399,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateBoardStatusRequest'
+                $ref: '#/components/schemas/BoardOperationsRequest'
         responses:
           '200':
-            description: OK - Board status has been updated successfully
+            description: OK - Board has been partially updated
             headers:
               request-id:
                 schema:
@@ -466,6 +459,7 @@ paths:
                 schema:
                   type: string
                 description: Used as correlation id while tracing for the request in the backend
+
   /boards/{id}/members:
      get:
         operationId: getBoardMembers
@@ -492,142 +486,6 @@ paths:
              application/json:
                schema:
                  $ref: '#/components/schemas/BoardMembersSummaryResponse'
-         '400':
-           description: >-
-             BAD REQUEST - server cannot or will not process the request due to
-             something that is perceived to be a client error (e.g., malformed
-             request syntax, mandatory elements are missing)
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-         '401':
-           description: UNAUTHORIZED - user has provided wrong credentials
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-         '403':
-           description: >-
-             FORBIDDEN - request has not been applied because client application
-             has no permission to perform action
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-         '500':
-           description: >-
-             INTERNAL SERVER ERROR - server encountered an unexpected condition
-             that prevented it from fulfilling the request.
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-
-     post:
-        operationId: addBoardMembers
-        tags:
-          - 'API#004 Boards'
-        security:
-          - Authorization: []
-        summary: Board Management - Add members to the Board
-        description: >
-            API to add existing members to the Board
-        parameters:
-         - $ref: '#/components/parameters/BoardId'
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
-        requestBody:
-          description: Request containing members to be added to the board
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddBoardMembersRequest'
-        responses:
-         '200':
-           description: OK - Added members to the board
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-           content:
-             application/json:
-               schema:
-                 $ref: '#/components/schemas/AddBoardMembersResponse'
-         '400':
-           description: >-
-             BAD REQUEST - server cannot or will not process the request due to
-             something that is perceived to be a client error (e.g., malformed
-             request syntax, mandatory elements are missing)
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-         '401':
-           description: UNAUTHORIZED - user has provided wrong credentials
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-         '403':
-           description: >-
-             FORBIDDEN - request has not been applied because client application
-             has no permission to perform action
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-         '500':
-           description: >-
-             INTERNAL SERVER ERROR - server encountered an unexpected condition
-             that prevented it from fulfilling the request.
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-
-     patch:
-        operationId: removeBoardMembers
-        tags:
-          - 'API#004 Boards'
-        security:
-          - Authorization: []
-        summary: Board Management - Remove members froms the Board
-        description: >
-            API to remove existing members from the Board
-        parameters:
-         - $ref: '#/components/parameters/BoardId'
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
-        requestBody:
-          description: Request containing members to be removed from the board
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RemoveBoardMembersRequest'
-        responses:
-         '200':
-           description: OK - Removed members from the board
-           headers:
-             request-id:
-               schema:
-                 type: string
-               description: Used as correlation id while tracing for the request in the backend
-           content:
-             application/json:
-               schema:
-                 $ref: '#/components/schemas/RemoveBoardMembersResponse'
          '400':
            description: >-
              BAD REQUEST - server cannot or will not process the request due to
@@ -745,7 +603,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AddBoardMembersRequest'
+                $ref: '#/components/schemas/CreateBoardTaskRequest'
         responses:
          '200':
            description: OK - Added members to the board
@@ -757,7 +615,7 @@ paths:
            content:
              application/json:
                schema:
-                 $ref: '#/components/schemas/AddBoardMembersResponse'
+                 $ref: '#/components/schemas/CreateBoardTaskResponse'
          '400':
            description: >-
              BAD REQUEST - server cannot or will not process the request due to
@@ -784,6 +642,14 @@ paths:
                schema:
                  type: string
                description: Used as correlation id while tracing for the request in the backend
+         '422':
+            description: >-
+              UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
          '500':
            description: >-
              INTERNAL SERVER ERROR - server encountered an unexpected condition
@@ -847,6 +713,14 @@ paths:
                schema:
                  type: string
                description: Used as correlation id while tracing for the request in the backend
+         '404':
+            description: >-
+              NOT FOUND -  Task (resource) does not exist
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
          '500':
            description: >-
              INTERNAL SERVER ERROR - server encountered an unexpected condition
@@ -856,6 +730,173 @@ paths:
                schema:
                  type: string
                description: Used as correlation id while tracing for the request in the backend
+
+     put:
+        operationId: updateBoardTask
+        tags:
+          - 'API#004 Boards'
+        security:
+          - Authorization: []
+        summary: Board Management - Update an existing task in the board
+        description: >
+            API to update an existing task details in the board
+        parameters:
+          - $ref: '#/components/parameters/BoardId'
+          - $ref: '#/components/parameters/TaskId'
+          - $ref: '#/components/parameters/ClientId'
+          - $ref: '#/components/parameters/Authorization'
+        requestBody:
+          description: Request containing modified task details
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateBoardTaskRequest'
+        responses:
+          '200':
+            description: OK - Task has been updated successfully
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '400':
+            description: >-
+              BAD REQUEST - server cannot or will not process the request due to
+              something that is perceived to be a client error (e.g., malformed
+              request syntax, mandatory elements are missing)
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '401':
+            description: UNAUTHORIZED - user has provided wrong credentials
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '403':
+            description: >-
+              FORBIDDEN - request has not been applied because client application
+              has no permission to perform action
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '404':
+            description: >-
+              NOT FOUND - Task (resource) does not exist
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '422':
+            description: >-
+              UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+          '500':
+            description: >-
+              INTERNAL SERVER ERROR - server encountered an unexpected condition
+              that prevented it from fulfilling the request.
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+
+
+     patch:
+        operationId: patchBoardTask
+        tags:
+          - 'API#004 Boards'
+        security:
+          - Authorization: []
+        summary: Board Management - Partial update of an existing task belonging to the Board
+        description: >
+            API to partial update of an existing task in the board of Proman application
+        parameters:
+          - $ref: '#/components/parameters/BoardId'
+          - $ref: '#/components/parameters/TaskId'
+          - $ref: '#/components/parameters/ClientId'
+          - $ref: '#/components/parameters/Authorization'
+        requestBody:
+          description: Request containing modified status
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardTaskOperationsRequest'
+        responses:
+          '200':
+            description: OK - Task has been partially updated
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '400':
+            description: >-
+              BAD REQUEST - server cannot or will not process the request due to
+              something that is perceived to be a client error (e.g., malformed
+              request syntax, mandatory elements are missing)
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '401':
+            description: UNAUTHORIZED - user has provided wrong credentials
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '403':
+            description: >-
+              FORBIDDEN - request has not been applied because client application
+              has no permission to perform action
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '404':
+            description: >-
+              NOT FOUND - Task (resource) does not exist
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '422':
+            description: >-
+              UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '500':
+            description: >-
+              INTERNAL SERVER ERROR - server encountered an unexpected condition
+              that prevented it from fulfilling the request.
+            headers:
+              request-id:
+                schema:
+                  type: string
+                description: Used as correlation id while tracing for the request in the backend
 
 components:
 
@@ -1222,41 +1263,55 @@ components:
         - role
         - status
 
-    AddBoardMembersRequest:
-      type: object
+    BoardOperationsRequest:
+      type: array
       properties:
-        members:
-          type: array
-          description: List of member ids to be added to the board
-          $ref: '#/components/schemas/MemberIdType'
-      required:
-        - members
+        op:
+          type: string
+          description: Type of operation
+          enum: [replace, add, remove]
+        path:
+          type: string
+          description: Resource path whose state to be modified
+          enum: [status, members]
+        value:
+          type: string
+          description: New state value to be updated to the resource
+      example:
+        - op: replace
+          path: status
+          value: COMPLETED
+        - op: add
+          path: members
+          value: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+        - op: remove
+          path: members
+          value: 3d274a27-da31-25a8-55b4-c06ffc9d5f3e
 
-    AddBoardMembersResponse:
-      type: object
+    BoardTaskOperationsRequest:
+      type: array
       properties:
-        add_failed:
-          type: array
-          description: List of member ids that were not added
-          $ref: '#/components/schemas/MemberIdType'
-
-    RemoveBoardMembersRequest:
-      type: object
-      properties:
-        members:
-          type: array
-          description: List of member ids to be removed from the board
-          $ref: '#/components/schemas/MemberIdType'
-      required:
-        - members
-
-    RemoveBoardMembersResponse:
-      type: object
-      properties:
-        remove_failed:
-          type: array
-          description: List of member ids that were not removed
-          $ref: '#/components/schemas/MemberIdType'
+        op:
+          type: string
+          description: Type of operation
+          enum: [replace, add, remove]
+        path:
+          type: string
+          description: Resource path whose state to be modified
+          enum: [phase, status, owner, effort]
+        value:
+          type: string
+          description: New state value to be updated to the resource
+      example:
+        - op: replace
+          path: phase
+          value: TODO
+        - op: replace
+          path: status
+          value: REOPENED
+        - op: add
+          path: effort
+          value: 3600
 
     BoardTasksSummaryResponse:
       type: object
@@ -1367,7 +1422,7 @@ components:
         id:
           type: string
           format: uuid
-          description: Unique identifier of the board member in a standard UUID format generated by API backend
+          description: Unique identifier of the board task in a standard UUID format generated by API backend
         name:
           type: string
           description: Name of the task
@@ -1486,6 +1541,12 @@ components:
         - id
         - first_name
         - last_name
+
+    TaskWatchersType:
+      type: array
+      items:
+        type: string
+        description: List of memeber ids who are the watchers of this task
 
     BoardWorkflowType:
       type: object
@@ -1606,15 +1667,105 @@ components:
         end_date: 2018-06-10
         workflow_id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
 
-    UpdateBoardStatusRequest:
+    CreateBoardTaskRequest:
       type: object
       properties:
-        status:
+        name:
+          type: string
+          description: Name of the task
+        description:
+          type: string
+          description: Description of the task
+        phase_type:
+          type: string
+          description: Workflow phase that this task will be set with
+        owner_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the board task owner in a standard UUID format
+        start_date:
           type: object
-          description: Updated status of the board
-          $ref: '#/components/schemas/BoardStatusType'
+          description: Start date of the board
+          $ref: '#/components/schemas/FullDateType'
+        end_date:
+          type: object
+          description: End date of the board
+          $ref: '#/components/schemas/FullDateType'
+        original_effort:
+          type: integer
+          description: Estimated effort (in seconds) for this task
+        watchers:
+          type: object
+          description: List of watchers of this task
+          $ref: '#/components/schemas/TaskWatchersType'
+      required:
+        - name
+        - phase_type
+        - owner_id
       example:
-        status: COMPLETED
+        name: Analysis and Design
+        description: Analyse on the technical feasibility and work on design spec
+        phase_type: TODO
+        owner_id: d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+        status: IN PROGRESS
+        start_date: 2018-05-07
+        end_date: 2018-05-10
+        original_effort: 10800
+        logged_effort: 7200
+        remaining_effort: 3600
+        watchers:
+          - 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+          - 8d174a35-ca31-35a8-87b4-f06ffc9d5f8d
+
+    CreateBoardTaskResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the board task in a standard UUID format
+        status:
+          type: string
+          description: Status of the task
+          $ref: '#/components/schemas/TaskStatusType'
+      required:
+        - id
+        - status
+      example:
+        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+        status: IN PROGRESS
+
+    UpdateBoardTaskRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Modified name of the task
+        description:
+          type: string
+          description: Modified description of the task
+        owner_id:
+          type: string
+          format: uuid
+          description: Unique identifier of the board task owner in a standard UUID format
+        start_date:
+          type: object
+          description: Start date of the board
+          $ref: '#/components/schemas/FullDateType'
+        end_date:
+          type: object
+          description: End date of the board
+          $ref: '#/components/schemas/FullDateType'
+        original_effort:
+          type: integer
+          description: Estimated effort (in seconds) for this task
+      example:
+        name: Analysis and Design
+        description: Analyse on the technical feasibility and work on design spec
+        owner_id: d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+        start_date: 2018-05-07
+        end_date: 2018-05-10
+        original_effort: 10800
 
     BoardStatusType:
       type: string

@@ -13,13 +13,11 @@ package apps.proman.api.data;
  */
 public interface ResourceConstants {
 
-    String BASE_URL = "/";
+    String BASE_URL_PATTERN = "/*";
 
-    String BASE_URL_PATTERN = BASE_URL + "*";
+    String BASE_URL = "/v1";
 
-    String USER_BASE_URL = "/user";
-
-    String HEADER_ES_API_VERSION = "es-api-version";
+    String BASE_URL_AUTH = BASE_URL + "/auth";
 
     String HEADER_AUTHORIZATION = "authorization";
 
@@ -31,6 +29,12 @@ public interface ResourceConstants {
 
     String HEADER_ACCESS_TOKEN = "access-token";
 
+    String HEADER_LOCATION = "location";
+
     String REQUEST_ATTR_REQUEST_CONTEXT = "request-context";
+
+    String BASIC_AUTH_PREFIX = "Basic";
+
+    String BEARER_AUTH_PREFIX = "Bearer";
 
 }

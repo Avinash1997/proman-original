@@ -17,6 +17,7 @@ import apps.proman.service.common.exception.EntityNotFoundException;
 import apps.proman.service.user.UserErrorCode;
 import apps.proman.service.user.dao.UserDao;
 import apps.proman.service.user.entity.UserEntity;
+import apps.proman.service.user.model.UserStatus;
 
 /**
  * Implementation of {@link UserService}.
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public UserEntity findByUsername(final RequestContext requestContext, final String username) throws EntityNotFoundException {
+    public UserEntity findActiveUser(final RequestContext requestContext, final String username) throws EntityNotFoundException {
         final UserEntity userEntity = userDao.findByEmail(username);
         if (userEntity == null) {
             throw new EntityNotFoundException(UserErrorCode.USR_002, username);

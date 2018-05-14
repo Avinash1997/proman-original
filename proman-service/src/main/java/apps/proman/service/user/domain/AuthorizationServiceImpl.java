@@ -9,6 +9,8 @@ package apps.proman.service.user.domain;
 
 import java.time.ZonedDateTime;
 
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import apps.proman.service.common.data.RequestContext;
-import apps.proman.service.common.exception.AuthorizationFailedException;
 import apps.proman.service.user.dao.UserAuthDao;
 import apps.proman.service.user.dao.UserDao;
 import apps.proman.service.user.entity.UserAuthTokenEntity;
@@ -46,13 +47,21 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     @Transactional(propagation = Propagation.MANDATORY)
     public void loginAttemptFailed(final RequestContext requestContext, final UserEntity userEntity) {
         int failedLoginCount = userEntity.getFailedLoginCount();
-        if (failedLoginCount < 5) {
+        if (userEntity.getFailedLoginCount() <= 5) {
             failedLoginCount++;
             userEntity.setFailedLoginCount(failedLoginCount);
-        } else {
-            userEntity.setStatus(UserStatus.LOCKED.getCode());
         }
 
+        if (failedLoginCount == 5) {
+            userEntity.setStatus(UserStatus.LOCKED.getCode());
+        }
+        userDao.update(userEntity);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void resetFailedLoginAttempt(@NotNull RequestContext requestContext, @NotNull UserEntity userEntity) {
+        userEntity.setFailedLoginCount(0);
         userDao.update(userEntity);
     }
 
@@ -111,7 +120,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                 .issuedTime(requestTime).expirationTime(expirationTime) //
                 .userId(userEntity.getUuid()).userFirstname(userEntity.getFirstName()).userLastname(userEntity.getLastName()) //
                 .userEmailAddress(userEntity.getEmail()).userMobilePhone(userEntity.getMobilePhone()).lastLoginAt(userEntity.getLastLoginAt()) //
-                .roleId(userEntity.getRoleId()).roleName("Administrator").build();
+                .roleId(userEntity.getRole().getUuid()).roleName(userEntity.getRole().getName()).build();
 
         final String authToken = tokenProvider.serialize(tokenSpec);
 

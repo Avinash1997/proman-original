@@ -14,7 +14,7 @@ info:
 
 
     ```
-      https://proman.io/api/v1/users
+      https://proman.io/api/v1/
     ```
 
 
@@ -46,7 +46,7 @@ info:
     * Initial version
 
 servers:
-  - url: https://proman.io/api/v1/users
+  - url: https://proman.io/api/v1/
 tags:
   - name: 'API#003 Users'
     description: >-
@@ -74,13 +74,17 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateUserRequest'
       responses:
-        '200':
-          description: OK - User has been created successfully
+        '201':
+          description: CREATED - User has been created successfully
           headers:
             request-id:
               schema:
                 type: string
               description: Used as correlation id while tracing for the request in the backend
+            location:
+              schema:
+                type: string
+              description: Location of the new resource which was created by this request
           content:
             application/json:
               schema:

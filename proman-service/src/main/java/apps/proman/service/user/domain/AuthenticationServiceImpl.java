@@ -24,6 +24,7 @@ import apps.proman.service.user.entity.UserAuthTokenEntity;
 import apps.proman.service.user.entity.UserEntity;
 import apps.proman.service.user.model.AuthorizedUser;
 import apps.proman.service.user.model.LogoutAction;
+import apps.proman.service.user.model.UserRole;
 import apps.proman.service.user.model.UserStatus;
 import apps.proman.service.user.provider.PasswordCryptographyProvider;
 
@@ -50,21 +51,36 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         UserEntity userEntity;
         try {
-            userEntity = userService.findByUsername(requestContext, username);
+            userEntity = userService.findActiveUser(requestContext, username);
         } catch (EntityNotFoundException e) {
             LOGGER.warn("User with username [{}] does not exist", username);
             throw new AuthenticationFailedException(UserErrorCode.USR_002);
         }
 
-        final String encryptedPassword = passwordCryptographyProvider.encrypt(password, userEntity.getSalt());
-        if (!userEntity.getPassword().equals(encryptedPassword)) {
-            LOGGER.warn("Password match failed for user [{}]", username);
-            authorizationService.loginAttemptFailed(requestContext, userEntity);
-            throw new AuthenticationFailedException(UserErrorCode.USR_003);
+        if(UserStatus.LOCKED == UserStatus.get(userEntity.getStatus())) {
+            LOGGER.warn("Status of the username [{}] is LOCKED", username);
+            throw new AuthenticationFailedException(UserErrorCode.USR_006);
+        }
+        else if(UserStatus.INACTIVE == UserStatus.get(userEntity.getStatus())) {
+            LOGGER.warn("Status of the username [{}] is LOCKED", username);
+            throw new AuthenticationFailedException(UserErrorCode.USR_007);
+        }
+        else {
+            final String encryptedPassword = passwordCryptographyProvider.encrypt(password, userEntity.getSalt());
+            if (!userEntity.getPassword().equals(encryptedPassword)) {
+                LOGGER.warn("Password match failed for user [{}]", username);
+                authorizationService.loginAttemptFailed(requestContext, userEntity);
+                throw new AuthenticationFailedException(UserErrorCode.USR_003);
+            }
+
+            if(userEntity.getFailedLoginCount() > 0) {
+                authorizationService.resetFailedLoginAttempt(requestContext, userEntity);
+            }
+
+            UserAuthTokenEntity userAuthToken = authorizationService.authorizeAccessToken(requestContext, userEntity);
+            return authorizedUser(userEntity, userAuthToken);
         }
 
-        UserAuthTokenEntity userAuthToken = authorizationService.authorizeAccessToken(requestContext, userEntity);
-        return authorizedUser(userEntity, userAuthToken);
     }
 
     @Override
@@ -98,6 +114,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authorizedUser.setLastLoginTime(userEntity.getLastLoginAt());
         authorizedUser.setStatus(UserStatus.get(userEntity.getStatus()));
         authorizedUser.setAccessToken(userAuthToken.getAccessToken());
+        authorizedUser.setRole(new UserRole(userEntity.getRole().getUuid(), userEntity.getRole().getName()));
         return authorizedUser;
     }
 

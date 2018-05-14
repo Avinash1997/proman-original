@@ -16,6 +16,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -28,7 +30,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import apps.proman.service.common.entity.ExternalIdentifier;
+import apps.proman.service.common.entity.UniversalUniqueIdentifier;
 import apps.proman.service.common.entity.Identifier;
 import apps.proman.service.common.entity.MutableEntity;
 import apps.proman.service.common.entity.ext.EntityEqualsBuilder;
@@ -40,7 +42,7 @@ import apps.proman.service.common.entity.ext.EntityHashCodeBuilder;
 @Entity
 @Table(name = "USERS", schema = SCHEMA)
 @NamedQueries({ @NamedQuery(name = UserEntity.BY_EMAIL, query = "select u from UserEntity u where u.email = :email") })
-public class UserEntity extends MutableEntity implements Identifier<Long>, ExternalIdentifier<String>, Serializable {
+public class UserEntity extends MutableEntity implements Identifier<Long>, UniversalUniqueIdentifier<String>, Serializable {
 
     private static final long serialVersionUID = 7821286494206402080L;
 
@@ -56,9 +58,9 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Exter
     @Size(max = 64)
     private String uuid;
 
-    @Column(name = "ROLE_ID")
-    @NotNull
-    private int roleId;
+    @ManyToOne
+    @JoinColumn(name = "ROLE_ID")
+    private RoleEntity role;
 
     @Column(name = "EMAIL")
     @NotNull
@@ -115,12 +117,12 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Exter
         return uuid;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public RoleEntity getRole() {
+        return role;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRole(RoleEntity role) {
+        this.role = role;
     }
 
     public String getEmail() {

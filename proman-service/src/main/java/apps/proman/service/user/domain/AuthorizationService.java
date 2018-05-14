@@ -22,6 +22,8 @@ public interface AuthorizationService {
 
     void loginAttemptFailed(@NotNull RequestContext requestContext, @NotNull UserEntity userEntity);
 
+    void resetFailedLoginAttempt(@NotNull RequestContext requestContext, @NotNull UserEntity userEntity);
+
     UserAuthTokenEntity authorizeAccessToken(@NotNull RequestContext requestContext, @NotNull UserEntity userEntity) throws AuthorizationFailedException;
 
     UserAuthTokenEntity findAccessToken(@NotNull RequestContext requestContext, @NotNull String accessToken) throws AuthorizationFailedException;

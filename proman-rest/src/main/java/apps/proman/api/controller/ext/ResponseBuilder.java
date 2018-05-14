@@ -37,6 +37,11 @@ public class ResponseBuilder<T> {
         return this;
     }
 
+    public ResponseBuilder<T> location(final String value) {
+        this.headers.add(HEADER_ACCESS_TOKEN, value);
+        return this;
+    }
+
     public ResponseEntity<T> build() {
         return new ResponseEntity<T>(payload, headers, status);
     }

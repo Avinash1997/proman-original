@@ -11,13 +11,8 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import apps.proman.service.common.data.DateTimeSerializer;
 
 /**
  * Model containing authorized user's information.
@@ -26,29 +21,16 @@ public class AuthorizedUser implements Serializable {
 
     private static final long serialVersionUID = -2688713249566189861L;
 
-    @JsonProperty("id")
     private String id;
-
-    @JsonProperty("first_name")
     private String firstName;
-    @JsonProperty("last_name")
     private String lastName;
-
-    @JsonProperty("email_address")
     private String emailAddress;
-
-    @JsonProperty("mobile_phone")
     private String mobilePhoneNumber;
-
-    @JsonProperty("last_login_time")
-    @JsonSerialize(using = DateTimeSerializer.class)
+    //@JsonSerialize(using = DateTimeSerializer.class)
     private ZonedDateTime lastLoginTime;
-
-    @JsonProperty("status")
     private UserStatus status;
-
-    @JsonIgnore
     private String accessToken;
+    private UserRole role;
 
     public String getId() {
         return id;
@@ -112,6 +94,14 @@ public class AuthorizedUser implements Serializable {
 
     public void setAccessToken(final String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     @Override

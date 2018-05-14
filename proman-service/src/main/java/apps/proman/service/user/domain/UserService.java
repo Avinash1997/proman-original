@@ -18,6 +18,6 @@ import apps.proman.service.user.entity.UserEntity;
  */
 public interface UserService {
 
-    UserEntity findByUsername(@NotNull RequestContext requestContext, @NotNull String username) throws EntityNotFoundException;
+    UserEntity findActiveUser(@NotNull RequestContext requestContext, @NotNull String username) throws EntityNotFoundException;
 
 }

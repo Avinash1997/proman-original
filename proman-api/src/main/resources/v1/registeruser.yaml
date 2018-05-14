@@ -14,7 +14,7 @@ info:
 
 
     ```
-      https://proman.io/api/v1/register
+      https://proman.io/api/v1/
     ```
 
 
@@ -58,7 +58,7 @@ info:
     * Initial version
 
 servers:
-  - url: https://proman.io/api/v1/register
+  - url: https://proman.io/api/v1/
 tags:
   - name: 'API#002 Register'
     description: >-
@@ -86,13 +86,17 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ClientId'
       responses:
-        '200':
-          description: OK - User has been registered successfully
+        '201':
+          description: CREATED - User has been registered successfully
           headers:
             request-id:
               schema:
                 type: string
               description: Used as correlation id while tracing for the request in the backend
+            location:
+              schema:
+                type: string
+              description: Location of the new resource which was created by this request
           content:
             application/json:
               schema:

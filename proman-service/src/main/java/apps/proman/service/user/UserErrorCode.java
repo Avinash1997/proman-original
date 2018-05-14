@@ -25,7 +25,11 @@ public enum UserErrorCode implements ErrorCode {
 
     USR_004("USR-004", "Concurrent login attempt by the user from other device(s)."),
 
-    USR_005("USR-005", "Invalid access token.");
+    USR_005("USR-005", "Invalid access token."),
+
+    USR_006("USR-006", "User account is LOCKED."),
+
+    USR_007("USR-007", "User account is INACTIVE.");
 
     private static final Map<String, UserErrorCode> LOOKUP = new HashMap<String, UserErrorCode>();
 

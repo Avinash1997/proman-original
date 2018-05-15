@@ -19,6 +19,8 @@ public interface ResourceConstants {
 
     String BASE_URL_AUTH = BASE_URL + "/auth";
 
+    String BASE_URL_USERS = BASE_URL + "/users";
+
     String HEADER_AUTHORIZATION = "authorization";
 
     String HEADER_CLIENT_ID = "client-id";

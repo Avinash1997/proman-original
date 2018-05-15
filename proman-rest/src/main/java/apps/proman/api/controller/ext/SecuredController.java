@@ -19,7 +19,7 @@ import apps.proman.service.common.data.RequestContext;
 /**
  * Base class to be inherited by all REST resources.
  */
-public class SecuredResource {
+public class SecuredController {
 
     @Autowired
     private HttpServletRequest request;

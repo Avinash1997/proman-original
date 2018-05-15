@@ -7,6 +7,8 @@
  */
 package apps.proman.service.common.dao;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import javax.persistence.EntityManager;
 
 import apps.proman.service.common.entity.Entity;
@@ -29,15 +31,17 @@ public abstract class BaseDaoImpl<E extends Entity> implements BaseDao<E> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public E findById(final E e, final Long id) {
-        return (E) getEntityManager().find(e.getClass(), id);
+    public E findById(final Class<? extends Entity> entityClass, final Object id) {
+        Type mySuperclass = this.getClass().getGenericSuperclass();
+        Type tType = ((ParameterizedType) mySuperclass).getActualTypeArguments()[0];
+        return (E) getEntityManager().find(entityClass, id);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public E findByUUID(final E e, final String uuid) {
-        return (E) getEntityManager().createNamedQuery("SELECT e FROM " + e.getClass().getSimpleName()
-                + " WHERE e.uuid = :uuid", e.getClass()).setParameter("uuid", uuid).getSingleResult();
+    public E findByUUID(final Class<? extends Entity> entityClass, final Object uuid) {
+        return (E) getEntityManager().createQuery("SELECT e FROM " + entityClass.getSimpleName()
+                + " e WHERE e.uuid = :uuid", entityClass).setParameter("uuid", uuid).getSingleResult();
     }
 
     protected abstract EntityManager getEntityManager();

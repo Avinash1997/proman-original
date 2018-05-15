@@ -10,6 +10,7 @@ package apps.proman.service.user.domain;
 import javax.validation.constraints.NotNull;
 
 import apps.proman.service.common.data.RequestContext;
+import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.common.exception.AuthenticationFailedException;
 import apps.proman.service.common.exception.AuthorizationFailedException;
 import apps.proman.service.user.model.AuthorizedUser;
@@ -19,7 +20,7 @@ import apps.proman.service.user.model.AuthorizedUser;
  */
 public interface AuthenticationService {
 
-    AuthorizedUser authenticate(@NotNull RequestContext requestContext, @NotNull String username, @NotNull String password) throws AuthenticationFailedException, AuthorizationFailedException;
+    AuthorizedUser authenticate(@NotNull RequestContext requestContext, @NotNull String username, @NotNull String password) throws ApplicationException;
 
     void logout(@NotNull RequestContext requestContext, @NotNull String accessToken) throws AuthorizationFailedException;
 

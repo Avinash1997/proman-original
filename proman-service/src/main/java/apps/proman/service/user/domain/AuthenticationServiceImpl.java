@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import apps.proman.service.common.data.RequestContext;
+import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.common.exception.AuthenticationFailedException;
 import apps.proman.service.common.exception.AuthorizationFailedException;
 import apps.proman.service.common.exception.EntityNotFoundException;
@@ -47,11 +48,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public AuthorizedUser authenticate(final RequestContext requestContext, final String username, final String password) throws AuthenticationFailedException, AuthorizationFailedException {
+    public AuthorizedUser authenticate(final RequestContext requestContext, final String username, final String password) throws ApplicationException {
 
         UserEntity userEntity;
         try {
-            userEntity = userService.findActiveUser(requestContext, username);
+            userEntity = userService.findUserByEmail(requestContext, username);
         } catch (EntityNotFoundException e) {
             LOGGER.warn("User with username [{}] does not exist", username);
             throw new AuthenticationFailedException(UserErrorCode.USR_002);

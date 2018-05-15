@@ -7,6 +7,8 @@
 */
 package apps.proman.service.common.dao;
 
+import apps.proman.service.common.entity.Entity;
+
 /**
  * TODO: Provide javadoc
  */
@@ -16,8 +18,8 @@ public interface BaseDao<E> {
 
     E update(E e);
 
-    E findById(final E e, final Long id);
+    E findById(Class<? extends Entity> entityClass, final Object id);
 
-    E findByUUID(final E e, final String uuid);
+    E findByUUID(Class<? extends Entity> entityClass, final Object uuid);
 
 }

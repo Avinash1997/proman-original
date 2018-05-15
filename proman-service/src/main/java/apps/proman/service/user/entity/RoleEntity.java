@@ -3,11 +3,14 @@ package apps.proman.service.user.entity;
 import static apps.proman.service.common.entity.Entity.SCHEMA;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,6 +51,10 @@ public class RoleEntity extends MutableEntity implements Identifier<Integer>, Un
     @NotNull
     private boolean active;
 
+    @OneToMany
+    @JoinColumn(name = "ROLE_ID")
+    private List<RolePermissionEntity> permissions;
+
     @Override
     public Integer getId() {
         return id;
@@ -80,6 +87,14 @@ public class RoleEntity extends MutableEntity implements Identifier<Integer>, Un
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<RolePermissionEntity> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<RolePermissionEntity> permissions) {
+        this.permissions = permissions;
     }
 
     @Override

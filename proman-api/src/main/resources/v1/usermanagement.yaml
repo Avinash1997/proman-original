@@ -1,4 +1,4 @@
-openapi: 3.0.0
+swagger: '2.0'
 info:
   title: User Administration API
   version: 1.0.0
@@ -45,8 +45,11 @@ info:
 
     * Initial version
 
-servers:
-  - url: https://proman.io/api/v1/
+host: proman.io
+schemes:
+  - http
+  - https
+basePath: /api/v1/users
 tags:
   - name: 'API#003 Users'
     description: >-
@@ -63,9 +66,14 @@ paths:
       summary: User Administration - Create new User
       description: >
         API to create new user in Proman application
+      consumes:
+        - application/json
+      produces:
+        - application/json
       parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/parameters/ClientId'
+        - $ref: '#/parameters/Authorization'
+        - $ref: '#/parameters/CreateUserRequest'
       requestBody:
         description: Request containing new user details
         required: true
@@ -85,9 +93,7 @@ paths:
               schema:
                 type: string
               description: Location of the new resource which was created by this request
-          content:
-            application/json:
-              schema:
+          schema:
                 $ref: '#/components/schemas/CreateUserResponse'
         '400':
           description: >-

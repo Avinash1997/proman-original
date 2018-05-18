@@ -34,7 +34,7 @@ public class UserAdminController extends SecuredController  {
     private UserService userService;
 
     @RequestMapping(method = GET, path = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UserDetailsResponse> getUser(@RequestHeader final String authorization, @PathVariable("id") final String userUuid)
+    public ResponseEntity<UserDetailsResponse> getUser(@RequestHeader(required = false) final String authorization, @PathVariable("id") final String userUuid)
             throws ApplicationException {
 
         final UserEntity userEntity = userService.findUserByUuid(getRequestContext(), userUuid);
@@ -43,7 +43,7 @@ public class UserAdminController extends SecuredController  {
     }
 
     @RequestMapping(method = POST, path = "/", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<CreateUserResponse> createUser(@RequestHeader final String authorization, @ModelAttribute final CreateUserRequest newUserRequest) throws ApplicationException {
+    public ResponseEntity<CreateUserResponse> createUser(@RequestHeader(required = false) final String authorization, @ModelAttribute final CreateUserRequest newUserRequest) throws ApplicationException {
 
         final UserEntity createdUser = userService.createUser(getRequestContext(), toEntity().apply(newUserRequest));
         return new ResponseBuilder<CreateUserResponse>(HttpStatus.CREATED).payload(toCreateUserResponse().apply(createdUser)).build();

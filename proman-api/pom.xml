@@ -22,9 +22,12 @@
     <description>Project Management Application - API Contract Specification</description>
 
     <properties>
-        <io.swagger.version>1.5.13</io.swagger.version>
+        <swagger.codegen.version>2.3.1</swagger.codegen.version>
+        <swagger.codegen.generators.version>1.0.0-rc0</swagger.codegen.generators.version>
         <application.package>apps.proman.api</application.package>
         <contracts.dir>${project.basedir}/src/main/resources</contracts.dir>
+        <supported.language>spring</supported.language>
+        <supported.library>spring-boot</supported.library>
     </properties>
 
     <dependencies>
@@ -54,11 +57,11 @@
                 <plugin>
                     <groupId>io.swagger</groupId>
                     <artifactId>swagger-codegen-maven-plugin</artifactId>
-                    <version>2.2.3</version>
+                    <version>${swagger.codegen.version}</version>
                     <configuration>
                         <output>${project.build.directory}/generated-sources</output>
-                        <language>spring</language>
-                        <library>resttemplate</library>
+                        <language>${supported.language}</language>
+                        <library>${supported.library}</library>
                         <verbose>true</verbose>
                         <generateModels>true</generateModels>
                         <generateApis>false</generateApis>
@@ -78,13 +81,14 @@
             <plugin>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
-                <version>3.0.0-rc0</version>
+                <version>${swagger.codegen.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>io.swagger</groupId>
                         <artifactId>swagger-codegen-generators</artifactId>
-                        <version>1.0.0-rc0</version>
+                        <version>${swagger.codegen.generators.version}</version>
                     </dependency>
+
                 </dependencies>
                 <executions>
                     <execution>
@@ -94,7 +98,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>${contracts.dir}/v1/authentication.yaml</inputSpec>
-                            <language>java</language>
+                            <language>${supported.language}</language>
                         </configuration>
                     </execution>
                     <execution>
@@ -104,9 +108,10 @@
                         </goals>
                         <configuration>
                             <inputSpec>${contracts.dir}/v1/registeruser.yaml</inputSpec>
-                            <language>java</language>
+                            <language>${supported.language}</language>
                         </configuration>
                     </execution>
+                    <!--
                     <execution>
                         <id>usermanagement-v1</id>
                         <goals>
@@ -114,7 +119,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>${contracts.dir}/v1/usermanagement.yaml</inputSpec>
-                            <language>java</language>
+                            <language>${supported.language}</language>
                         </configuration>
                     </execution>
                     <execution>
@@ -124,9 +129,10 @@
                         </goals>
                         <configuration>
                             <inputSpec>${contracts.dir}/v1/boardmanagement.yaml</inputSpec>
-                            <language>java</language>
+                            <language>${supported.language}</language>
                         </configuration>
                     </execution>
+                    -->
                 </executions>
 
             </plugin>

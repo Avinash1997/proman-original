@@ -20,15 +20,15 @@ public class AuthFilter extends ApiFilter {
     @Override
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         final String authorization = servletRequest.getHeader(HEADER_AUTHORIZATION);
-        if(StringUtils.isEmpty(authorization)) {
-            throw new UnauthorizedException(RestErrorCode.ATH_001);
-        }
-        else if(!authorization.startsWith(BASIC_AUTH_PREFIX) && !authorization.startsWith(BEARER_AUTH_PREFIX)){
-            throw new UnauthorizedException(RestErrorCode.ATH_002);
-        }
-        else {
-            servletRequest.getHeaders(HEADER_AUTHORIZATION);
-        }
+//        if(StringUtils.isEmpty(authorization)) {
+//            throw new UnauthorizedException(RestErrorCode.ATH_001);
+//        }
+//        else if(!authorization.startsWith(BASIC_AUTH_PREFIX) && !authorization.startsWith(BEARER_AUTH_PREFIX)){
+//            throw new UnauthorizedException(RestErrorCode.ATH_002);
+//        }
+//        else {
+//            servletRequest.getHeaders(HEADER_AUTHORIZATION);
+//        }
 
         filterChain.doFilter(servletRequest, servletResponse);
     }

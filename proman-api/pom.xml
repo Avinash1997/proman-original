@@ -111,7 +111,6 @@
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
-                    <!--
                     <execution>
                         <id>usermanagement-v1</id>
                         <goals>
@@ -122,6 +121,7 @@
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>boardmanagement-v1</id>
                         <goals>
@@ -132,7 +132,7 @@
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
-                    -->
+
                 </executions>
 
             </plugin>

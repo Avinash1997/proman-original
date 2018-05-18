@@ -83,7 +83,12 @@ paths:
         - application/json
       parameters:
         - $ref: '#/parameters/ClientId'
-        - $ref: '#/parameters/RegisterUserRequest'
+        - in: body
+          name: RegisterUserRequest
+          description: Request containing user registration information
+          required: true
+          schema:
+           $ref: '#/definitions/RegisterUserRequest'
       responses:
         '201':
           description: CREATED - User has been registered successfully
@@ -143,13 +148,6 @@ parameters:
     required: true
     description: >-
       Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API.
-  RegisterUserRequest:
-    name: RegisterUserRequest
-    description: Request containing user registration information
-    in: body
-    required: true
-    schema:
-       $ref: '#/definitions/RegisterUserRequest'
 
 definitions:
   RegisterUserRequest:

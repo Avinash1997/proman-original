@@ -13,13 +13,14 @@ import javax.persistence.NoResultException;
 
 import org.springframework.stereotype.Repository;
 
+import apps.proman.service.common.dao.BaseDaoImpl;
 import apps.proman.service.user.entity.*;
 
 /**
  * Implementation of {@link UserAuthDao}.
  */
 @Repository
-public class UserAuthDaoImpl extends UserBaseDaoImpl<UserAuthTokenEntity> implements UserAuthDao {
+public class UserAuthDaoImpl extends BaseDaoImpl<UserAuthTokenEntity> implements UserAuthDao {
 
     @Override
     public UserAuthTokenEntity findToken(final String accessToken) {

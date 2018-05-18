@@ -17,25 +17,21 @@ import apps.proman.service.user.model.UserStatus;
 
 public final class UserTransformer {
 
-    public static Function<CreateUserRequest, UserEntity> toEntity() {
-        return userRequest -> {
-            UserEntity userEntity = new UserEntity();
-            userEntity.setFirstName(userRequest.getFirstName());
-            userEntity.setLastName(userRequest.getLastName());
-            userEntity.setEmail(userRequest.getEmailAddress());
-            userEntity.setMobilePhone(userRequest.getMobileNumber());
-            return userEntity;
-        };
+    public static UserEntity toEntity(CreateUserRequest userRequest) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setFirstName(userRequest.getFirstName());
+        userEntity.setLastName(userRequest.getLastName());
+        userEntity.setEmail(userRequest.getEmailAddress());
+        userEntity.setMobilePhone(userRequest.getMobileNumber());
+        return userEntity;
     }
 
-    public static Function<UserEntity, CreateUserResponse> toCreateUserResponse() {
-        return userEntity ->
-                new CreateUserResponse().id(userEntity.getUuid()).status(toStatus(userEntity.getStatus()));
+    public static CreateUserResponse toCreateUserResponse(UserEntity userEntity) {
+        return new CreateUserResponse().id(userEntity.getUuid()).status(toStatus(userEntity.getStatus()));
     }
 
-    public static Function<UserEntity, UserDetailsResponse> toUserDetailsResponse() {
-        return userEntity ->
-                new UserDetailsResponse().id(userEntity.getUuid())
+    public static UserDetailsResponse toUserDetailsResponse(UserEntity userEntity) {
+        return new UserDetailsResponse().id(userEntity.getUuid())
                 .firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName())
                 .emailAddress(userEntity.getEmail())

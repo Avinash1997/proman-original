@@ -73,28 +73,24 @@ paths:
       parameters:
         - $ref: '#/parameters/ClientId'
         - $ref: '#/parameters/Authorization'
-        - $ref: '#/parameters/CreateUserRequest'
-      requestBody:
-        description: Request containing new user details
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+        - in: body
+          name: CreateUserRequest
+          description: Request containing new user details
+          required: true
+          schema:
+            $ref: '#/definitions/CreateUserRequest'
       responses:
         '201':
           description: CREATED - User has been created successfully
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
             location:
-              schema:
-                type: string
+              type: string
               description: Location of the new resource which was created by this request
           schema:
-                $ref: '#/components/schemas/CreateUserResponse'
+            $ref: '#/definitions/CreateUserResponse'
         '400':
           description: >-
             BAD REQUEST - server cannot or will not process the request due to
@@ -102,15 +98,13 @@ paths:
             request syntax, mandatory elements are missing)
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
         '401':
           description: UNAUTHORIZED - user has provided wrong credentials
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
         '403':
           description: >-
@@ -118,29 +112,24 @@ paths:
             has no permission to perform action
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
         '422':
           description: >-
             UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '500':
           description: >-
             INTERNAL SERVER ERROR - server encountered an unexpected condition
             that prevented it from fulfilling the request.
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
 
     get:
@@ -152,32 +141,30 @@ paths:
        summary: User Administration - Get all Users
        description: >
          API to get all users of Proman application
+       produces:
+         - application/json
        parameters:
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
+         - $ref: '#/parameters/ClientId'
+         - $ref: '#/parameters/Authorization'
          - in: query
            name: offset
-           schema:
-             type: integer
+           type: integer
            required: false
            description: query to set the position of the records to be fetched from
          - in: query
            name: limit
-           schema:
-             type: integer
+           type: integer
            required: false
            description: query to limit the number of records per fetch
          - in: query
            name: role
-           schema:
-             type: integer
+           type: integer
            required: false
            description: query to filter the results based on specified role
          - in: query
            name: status
-           schema:
-             type: string
-             enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
+           type: string
+           enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
            required: false
            description: query to filter the results based on specified status
        responses:
@@ -185,64 +172,53 @@ paths:
            description: OK - Fetched all users
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
-           content:
-             application/json:
-               schema:
-                 $ref: '#/components/schemas/UsersSummaryResponse'
+           schema:
+              $ref: '#/definitions/UsersSummaryResponse'
          '400':
             description: >-
               BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a
               client error (e.g., malformed request syntax, mandatory elements are missing)
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
          '401':
             description: UNAUTHORIZED - user has provided wrong credentials
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
          '403':
             description: >-
               FORBIDDEN - request has not been applied because client application has no permission to perform action
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
          '404':
             description: >-
               NOT FOUND -  User (resource) does not exist
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
          '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorResponse'
+            schema:
+              $ref: '#/definitions/ErrorResponse'
          '500':
             description: >-
               INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
 
   /users/{id}:
@@ -255,22 +231,21 @@ paths:
         summary: User Administration - Get an existing User
         description: >
             API to get an existing user of Proman application
+        produces:
+          - application/json
         parameters:
-         - $ref: '#/components/parameters/UserId'
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
+         - $ref: '#/parameters/UserId'
+         - $ref: '#/parameters/ClientId'
+         - $ref: '#/parameters/Authorization'
         responses:
          '200':
            description: OK - Fetched user details
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
-           content:
-             application/json:
-               schema:
-                 $ref: '#/components/schemas/UserDetailsResponse'
+           schema:
+              $ref: '#/definitions/UserDetailsResponse'
          '400':
            description: >-
              BAD REQUEST - server cannot or will not process the request due to
@@ -278,15 +253,13 @@ paths:
              request syntax, mandatory elements are missing)
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '401':
            description: UNAUTHORIZED - user has provided wrong credentials
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '403':
            description: >-
@@ -294,16 +267,14 @@ paths:
              has no permission to perform action
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '404':
            description: >-
              NOT FOUND - User (resource) does not exist
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '500':
            description: >-
@@ -311,8 +282,7 @@ paths:
              that prevented it from fulfilling the request.
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
      put:
         operationId: updateUser
@@ -323,24 +293,26 @@ paths:
         summary: User Administration - Update an existing User
         description: >
             API to update an existing user in Proman application
+        consumes:
+          - application/json
+        produces:
+          - application/json
         parameters:
-          - $ref: '#/components/parameters/UserId'
-          - $ref: '#/components/parameters/ClientId'
-          - $ref: '#/components/parameters/Authorization'
-        requestBody:
-          description: Request containing modified user details
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateUserRequest'
+          - $ref: '#/parameters/UserId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+          - in: body
+            name: UpdateUserRequest
+            description: Request containing modified user details
+            required: true
+            schema:
+              $ref: '#/definitions/UpdateUserRequest'
         responses:
           '200':
             description: OK - User has been updated successfully
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '400':
             description: >-
@@ -349,15 +321,13 @@ paths:
               request syntax, mandatory elements are missing)
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '401':
             description: UNAUTHORIZED - user has provided wrong credentials
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '403':
             description: >-
@@ -365,37 +335,31 @@ paths:
               has no permission to perform action
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '404':
             description: >-
               NOT FOUND -  User (resource) does not exist
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorResponse'
+            schema:
+              $ref: '#/definitions/ErrorResponse'
           '500':
             description: >-
               INTERNAL SERVER ERROR - server encountered an unexpected condition
               that prevented it from fulfilling the request.
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
      patch:
         operationId: patchUser
@@ -406,24 +370,26 @@ paths:
         summary: User Administration - Partial update of an existing user
         description: >
             API to partial update of an existing user in the board of Proman application
+        consumes:
+          - application/json
+        produces:
+          - application/json
         parameters:
-          - $ref: '#/components/parameters/UserId'
-          - $ref: '#/components/parameters/ClientId'
-          - $ref: '#/components/parameters/Authorization'
-        requestBody:
-          description: Request containing modified status
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserOperationsRequest'
+          - $ref: '#/parameters/UserId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+          - in: body
+            name: UserOperationsRequest
+            description: Request containing modified status of user
+            required: true
+            schema:
+              $ref: '#/definitions/UserOperationsRequest'
         responses:
           '200':
             description: OK - Partial update of User is successful
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '400':
             description: >-
@@ -432,23 +398,20 @@ paths:
               request syntax, mandatory elements are missing)
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '401':
             description: UNAUTHORIZED - user has provided wrong credentials
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '404':
             description: >-
               NOT FOUND -  User (resource) does not exist
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '403':
             description: >-
@@ -456,16 +419,14 @@ paths:
               has no permission to perform action
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '500':
             description: >-
@@ -473,360 +434,341 @@ paths:
               that prevented it from fulfilling the request.
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
 
-components:
+parameters:
+  ClientId:
+    name: client-id
+    type: string
+    in: header
+    required: true
+    description: >-
+      Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API.
+  Authorization:
+    name: authorization
+    type: string
+    in: header
+    required: true
+    description: >-
+      Mandatory user credentials in bearer http authentication scheme format. Refer to the #/securityDefinitions
+      for more information on this header.
+  UserId:
+    name: id
+    type: string
+    in: path
+    required: true
+    description: >-
+      Unique identifier of User in a standard UUID format
 
-  securitySchemes:
-    Authorization:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: >
-        Bearer authentication (also called token authentication) is an HTTP authentication scheme that involves
-        security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access
-        to the bearer of this token.”
+securityDefinitions:
+  Authorization:
+    type: basic
+    description: >
+      Bearer authentication (also called token authentication) is an HTTP authentication scheme that involves
+      security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access
+      to the bearer of this token.”
 
-        The bearer token is a cryptic string, usually generated by the server in response to a login request. The
-        client must send this token in the Authorization header when making requests to protected resources:
+      The bearer token is a cryptic string, usually generated by the server in response to a login request. The
+      client must send this token in the Authorization header when making requests to protected resources:
 
-        ```
-        Authorization: Bearer <token>
+      ```
+      Authorization: Bearer <token>
 
-        ```
+      ```
 
-        Similarly to Basic authentication, Bearer authentication should only be used over HTTPS (SSL).
+      Similarly to Basic authentication, Bearer authentication should only be used over HTTPS (SSL).
 
-        Read https://jwt.io/introduction/ for more information on JWT standard.
+      Read https://jwt.io/introduction/ for more information on JWT standard.
 
-  parameters:
-    ClientId:
-      name: client-id
-      schema:
+definitions:
+
+  UsersSummaryResponse:
+    type: object
+    properties:
+      offset:
+        type: integer
+        description: offset or position of the fetched users
+      limit:
+        type: integer
+        description: number of users fetched per this request
+      total_count:
+        type: integer
+        description: total number of users for the specified input
+      users:
+        type: array
+        items:
+          $ref: '#/definitions/UsersSummaryType'
+        description: List of users
+    required:
+      - offset
+      - limit
+      - total_count
+      - users
+    example:
+
+  UsersSummaryType:
+    type: object
+    properties:
+      id:
         type: string
-      in: header
-      required: true
-      description: >-
-        Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API.
-    Authorization:
-      name: authorization
-      schema:
+        description: Unique identifier of the user in a standard UUID format
+      first_name:
         type: string
-      in: header
-      required: true
-      description: >-
-        Mandatory user credentials in bearer http authentication scheme format. Refer to the #/components/securitySchemes
-        for more information on this header.
-    UserId:
-      name: id
-      schema:
+        description: First name of the user
+      last_name:
         type: string
-      in: path
-      required: true
-      description: >-
-        Unique identifier of User in a standard UUID format
+        description: Last name of the user
+      email_address:
+        type: string
+        description: Email address of the user
+      status:
+        $ref: '#/definitions/UserStatusType'
+      role:
+        $ref: '#/definitions/RoleSummaryType'
+    required:
+      - id
+      - first_name
+      - last_name
+      - email_address
+      - status
+      - role
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      first_name: Proman
+      last_name: Administrator
+      email_address: proman.admin@proman.io
+      status: ACTIVE
+      role:
+        id: 100
+        name: Administrator
 
-  schemas:
-
-    UsersSummaryResponse:
-      type: object
-      properties:
-        offset:
-          type: integer
-          description: offset or position of the fetched users
-        limit:
-          type: integer
-          description: number of users fetched per this request
-        total_count:
-          type: integer
-          description: total number of users for the specified input
-        users:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/UsersSummaryType'
-          description: List of users
-      required:
-        - offset
-        - limit
-        - total_count
-        - users
-      example:
-
-    UsersSummaryType:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the user in a standard UUID format
-        first_name:
-          type: string
-          description: First name of the user
-        last_name:
-          type: string
-          description: Last name of the user
-        email_address:
-          type: string
-          description: Email address of the user
-        status:
-          type: object
-          description: Status of the user
-          $ref: '#/components/schemas/UserStatusType'
-        role:
-          type: object
-          description: Role mapped to the user
-          $ref: '#/components/schemas/RoleSummaryType'
-      required:
-        - id
-        - first_name
-        - last_name
-        - email_address
-        - status
-        - role
-      example:
-        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        first_name: Proman
-        last_name: Administrator
-        email_address: proman.admin@proman.io
-        status: ACTIVE
-        role:
-          id: 100
-          name: Administrator
-
-    UserDetailsResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the user in a standard UUID format
-        first_name:
-          type: string
-          description: First name of the user
-        last_name:
-          type: string
-          description: Last name of the user
-        email_address:
-          type: string
-          description: Email address of the user
-        mobile_number:
-          type: string
-          description: Mobile number of the user
-        status:
-          type: object
-          description: Status of the user
-          $ref: '#/components/schemas/UserStatusType'
-        role:
-          type: object
-          description: Role to be mapped to the user
-          $ref: '#/components/schemas/RoleDetailsType'
-      required:
-        - id
-        - first_name
-        - last_name
-        - email_address
-        - status
-        - role
-      example:
-        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        first_name: Proman
-        last_name: Administrator
-        email_address: proman.admin@proman.io
-        mobile_number: +91 1234567890
-        status: ACTIVE
-        role:
-          id: 100
-          name: Administrator
-          permissions:
-            - id: 121
-              name: Create User
-            - id: 122
-              name: Update User
-
-    RoleSummaryType:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Role id of the user
-        name:
-          type: string
-          description: Role name of the user
-      required:
-        - id
-        - name
-
-    RoleDetailsType:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Role id of the user
-        name:
-          type: string
-          description: Role name of the user
+  UserDetailsResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier of the user in a standard UUID format
+      first_name:
+        type: string
+        description: First name of the user
+      last_name:
+        type: string
+        description: Last name of the user
+      email_address:
+        type: string
+        description: Email address of the user
+      mobile_number:
+        type: string
+        description: Mobile number of the user
+      status:
+        $ref: '#/definitions/UserStatusType'
+      role:
+        $ref: '#/definitions/RoleDetailsType'
+    required:
+      - id
+      - first_name
+      - last_name
+      - email_address
+      - status
+      - role
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      first_name: Proman
+      last_name: Administrator
+      email_address: proman.admin@proman.io
+      mobile_number: +91 1234567890
+      status: ACTIVE
+      role:
+        id: 100
+        name: Administrator
         permissions:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/PermissionsType'
-          description: Permissions assigned to the user
-      required:
-        - id
-        - name
-        - permissions
+          - id: 121
+            name: Create User
+          - id: 122
+            name: Update User
 
-    PermissionsType:
-      type: object
-      properties:
-        id:
+  RoleSummaryType:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Role id of the user
+      name:
+        type: string
+        description: Role name of the user
+    required:
+      - id
+      - name
+
+  RoleDetailsType:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Role id of the user
+      name:
+        type: string
+        description: Role name of the user
+      permissions:
+        type: array
+        items:
+          $ref: '#/definitions/PermissionsType'
+        description: Permissions assigned to the user
+    required:
+      - id
+      - name
+      - permissions
+
+  PermissionsType:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Permission id of the user
+      name:
+        type: string
+        description: Permission name of the user
+    required:
+      - id
+      - name
+
+  CreateUserRequest:
+    type: object
+    properties:
+      first_name:
+        type: string
+        description: First name of the new user
+      last_name:
+        type: string
+        description: Last name of the new user
+      email_address:
+        type: string
+        description: Email address of the new user
+      mobile_number:
+        type: string
+        description: Mobile number of the new user
+      role:
+        $ref: '#/definitions/RoleRequest'
+    required:
+      - first_name
+      - last_name
+      - email_address
+      - role
+    example:
+      first_name: Proman
+      last_name: Administrator
+      email_address: proman.admin@proman.io
+      mobile_number: +91 1234567890
+      role:
+        id: 100
+        permissions: [121,122,142]
+
+  RoleRequest:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Role id to be mapped to the user
+      permissions:
+        type: array
+        items:
           type: integer
-          description: Permission id of the user
-        name:
-          type: string
-          description: Permission name of the user
-      required:
-        - id
-        - name
+        description: List of permission ids to be mapped to the new user
+    required:
+      - id
 
-    CreateUserRequest:
-      type: object
-      properties:
-        first_name:
-          type: string
-          description: First name of the new user
-        last_name:
-          type: string
-          description: Last name of the new user
-        email_address:
-          type: string
-          description: Email address of the new user
-        mobile_number:
-          type: string
-          description: Mobile number of the new user
-        role:
-          type: object
-          description: Role to be mapped to the user
-          $ref: '#/components/schemas/RoleRequest'
-      required:
-        - first_name
-        - last_name
-        - email_address
-        - role
-      example:
-        first_name: Proman
-        last_name: Administrator
-        email_address: proman.admin@proman.io
-        mobile_number: +91 1234567890
-        role:
-          id: 100
-          permissions: [121,122,142]
+  CreateUserResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier in a standard UUID format generated by API backend
+      status:
+        $ref: '#/definitions/UserStatusType'
+    required:
+      - id
+      - status
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      status: ACTIVE
 
-    RoleRequest:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Role id to be mapped to the user
-        permissions:
-          type: array
-          items:
-            type: integer
-          description: List of permission ids to be mapped to the new user
-      required:
-        - role_id
+  UpdateUserRequest:
+    type: object
+    properties:
+      first_name:
+        type: string
+        description: Modified first name of an existing user
+      last_name:
+        type: string
+        description: Modified last name of an existing user
+      email_address:
+        type: string
+        description: Modified email address of an existing user
+      mobile_number:
+        type: string
+        description: Modified mobile number of an existing user
+      role:
+        $ref: '#/definitions/RoleRequest'
+    required:
+      - first_name
+      - last_name
+      - email_address
+      - mobile_number
+      - role
+    example:
+      first_name: Proman
+      last_name: Administrator
+      email_address: proman.admin@proman.io
+      mobile_number: +91 1234567890
+      role:
+        id: 100
+        permissions: [121,122,142]
 
-    CreateUserResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier in a standard UUID format generated by API backend
-        status:
-          type: object
-          description: Status of registered user
-          $ref: '#/components/schemas/UserStatusType'
-      required:
-        - id
-        - status
-      example:
-        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        status: ACTIVE
+  UserOperationsRequest:
+    type: array
+    items:
+      $ref: '#/definitions/UserOperationRequest'
 
-    UpdateUserRequest:
-      type: object
-      properties:
-        first_name:
-          type: string
-          description: Modified first name of an existing user
-        last_name:
-          type: string
-          description: Modified last name of an existing user
-        email_address:
-          type: string
-          description: Modified email address of an existing user
-        mobile_number:
-          type: string
-          description: Modified mobile number of an existing user
-        role:
-          type: object
-          description: Modified role of an existing user
-          $ref: '#/components/schemas/RoleRequest'
-      required:
-        - first_name
-        - last_name
-        - email_address
-        - mobile_number
-        - role
-      example:
-        first_name: Proman
-        last_name: Administrator
-        email_address: proman.admin@proman.io
-        mobile_number: +91 1234567890
-        role:
-          id: 100
-          permissions: [121,122,142]
+  UserOperationRequest:
+    type: object
+    properties:
+      op:
+        type: string
+        description: Type of operation
+        enum: [replace, add, remove]
+      path:
+        type: string
+        description: Resource path whose state to be modified
+        enum: [status, role, permissions]
+      value:
+        type: string
+        description: New state value to be updated to the resource
+    example:
+      - op: replace
+        path: status
+        value: ACTIVE
+      - op: add
+        path: permissions
+        value: 100
 
-    UserOperationsRequest:
-      type: array
-      properties:
-        op:
-          type: string
-          description: Type of operation
-          enum: [replace, add, remove]
-        path:
-          type: string
-          description: Resource path whose state to be modified
-          enum: [status, role, permissions]
-        value:
-          type: string
-          description: New state value to be updated to the resource
-      example:
-        - op: replace
-          path: status
-          value: ACTIVE
-        - op: add
-          path: permissions
-          value: 100
+  UserStatusType:
+    type: string
+    enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
+    description: Status of the User
 
-    UserStatusType:
-      type: string
-      enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
-      description: Status of the User
-
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Application specific standard error code
-        message:
-          type: string
-          description: Error message stating the reason
-      required:
-        - code
-        - message
-      example:
-        code: USR-001
-        message: Email address already exist
+  ErrorResponse:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Application specific standard error code
+      message:
+        type: string
+        description: Error message stating the reason
+    required:
+      - code
+      - message
+    example:
+      code: USR-001
+      message: Email address already exist

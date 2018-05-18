@@ -23,15 +23,20 @@ import apps.proman.api.model.CreateUserRequest;
 import apps.proman.api.model.CreateUserResponse;
 import apps.proman.api.model.UserDetailsResponse;
 import apps.proman.service.common.exception.ApplicationException;
+import apps.proman.service.user.domain.RoleService;
 import apps.proman.service.user.domain.UserService;
+import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.UserEntity;
 
 @RestController
 @RequestMapping(path = BASE_URL_USERS)
-public class UserAdminController extends SecuredController  {
+public class UserAdminController extends SecuredController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
 
     @RequestMapping(method = GET, path = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDetailsResponse> getUser(@RequestHeader(required = false) final String authorization, @PathVariable("id") final String userUuid)
@@ -39,14 +44,18 @@ public class UserAdminController extends SecuredController  {
 
         final UserEntity userEntity = userService.findUserByUuid(getRequestContext(), userUuid);
         return new ResponseBuilder<UserDetailsResponse>(HttpStatus.OK)
-                .payload(toUserDetailsResponse().apply(userEntity)).build();
+                    .payload(toUserDetailsResponse(userEntity)).build();
     }
 
     @RequestMapping(method = POST, path = "/", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<CreateUserResponse> createUser(@RequestHeader(required = false) final String authorization, @ModelAttribute final CreateUserRequest newUserRequest) throws ApplicationException {
 
-        final UserEntity createdUser = userService.createUser(getRequestContext(), toEntity().apply(newUserRequest));
-        return new ResponseBuilder<CreateUserResponse>(HttpStatus.CREATED).payload(toCreateUserResponse().apply(createdUser)).build();
+        final UserEntity newUserEntity = toEntity(newUserRequest);
+        final RoleEntity roleEntity = roleService.findUserByUuid(getRequestContext(), newUserRequest.getRole().getId());
+        newUserEntity.setRole(roleEntity);
+
+        final UserEntity createdUser = userService.createUser(getRequestContext(), newUserEntity);
+        return new ResponseBuilder<CreateUserResponse>(HttpStatus.CREATED).payload(toCreateUserResponse(createdUser)).build();
     }
 
 }

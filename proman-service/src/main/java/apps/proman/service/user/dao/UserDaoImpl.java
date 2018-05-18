@@ -11,13 +11,14 @@ import javax.persistence.NoResultException;
 
 import org.springframework.stereotype.Repository;
 
+import apps.proman.service.common.dao.BaseDaoImpl;
 import apps.proman.service.user.entity.UserEntity;
 
 /**
  * Implementation of {@link UserDao}.
  */
 @Repository
-public class UserDaoImpl extends UserBaseDaoImpl<UserEntity> implements UserDao {
+public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDao {
 
     @Override
     public UserEntity findByEmail(final String email) {

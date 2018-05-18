@@ -1,4 +1,4 @@
-openapi: 3.0.0
+swagger: '2.0'
 info:
   title: Board Management API
   version: 1.0.0
@@ -45,8 +45,11 @@ info:
 
     * Initial version
 
-servers:
-  - url: https://proman.io/api/v1/
+host: proman.io
+schemes:
+  - http
+  - https
+basePath: /api/v1/boards
 tags:
   - name: 'API#004 Boards'
     description: >-
@@ -63,32 +66,31 @@ paths:
       summary: Board Management - Create new Board
       description: >
         API to create new board in Proman application
+      consumes:
+        - application/json
+      produces:
+        - application/json
       parameters:
-        - $ref: '#/components/parameters/ClientId'
-        - $ref: '#/components/parameters/Authorization'
-      requestBody:
-        description: Request containing new board details
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateBoardRequest'
+        - $ref: '#/parameters/ClientId'
+        - $ref: '#/parameters/Authorization'
+        - in: body
+          name: CreateBoardRequest
+          description: Request containing new board details
+          required: true
+          schema:
+            $ref: '#/definitions/CreateBoardRequest'
       responses:
         '201':
           description: CREATED - Board has been created successfully
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
             location:
-              schema:
-                type: string
+              type: string
               description: Location of the new resource which was created by this request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateBoardResponse'
+          schema:
+            $ref: '#/definitions/CreateBoardResponse'
         '400':
           description: >-
             BAD REQUEST - server cannot or will not process the request due to
@@ -96,15 +98,13 @@ paths:
             request syntax, mandatory elements are missing)
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
         '401':
           description: UNAUTHORIZED - user has provided wrong credentials
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
         '403':
           description: >-
@@ -112,29 +112,24 @@ paths:
             has no permission to perform action
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
         '422':
           description: >-
             UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          schema:
+            $ref: '#/definitions/ErrorResponse'
         '500':
           description: >-
             INTERNAL SERVER ERROR - server encountered an unexpected condition
             that prevented it from fulfilling the request.
           headers:
             request-id:
-              schema:
-                type: string
+              type: string
               description: Used as correlation id while tracing for the request in the backend
 
     get:
@@ -146,32 +141,30 @@ paths:
        summary: Board Management - Get all Boards
        description: >
          API to get all boards of Proman application
+       produces:
+         - application/json
        parameters:
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
+         - $ref: '#/parameters/ClientId'
+         - $ref: '#/parameters/Authorization'
          - in: query
            name: offset
-           schema:
-             type: integer
+           type: integer
            required: false
            description: query to set the position of the records to be fetched from
          - in: query
            name: limit
-           schema:
-             type: integer
+           type: integer
            required: false
            description: query to limit the number of records per fetch
          - in: query
            name: role
-           schema:
-             type: integer
+           type: integer
            required: false
            description: query to filter the results based on specified role
          - in: query
            name: status
-           schema:
-             type: string
-             enum: [OPEN, IN PROGRESS, COMPLETED]
+           type: string
+           enum: [OPEN, IN PROGRESS, COMPLETED]
            required: false
            description: query to filter the results based on specified status
        responses:
@@ -179,56 +172,46 @@ paths:
            description: OK - Fetched all boards
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
-           content:
-             application/json:
-               schema:
-                 $ref: '#/components/schemas/BoardsSummaryResponse'
+           schema:
+             $ref: '#/definitions/BoardsSummaryResponse'
          '400':
             description: >-
               BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a
               client error (e.g., malformed request syntax, mandatory elements are missing)
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
          '401':
             description: UNAUTHORIZED - user has provided wrong credentials
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
          '403':
             description: >-
               FORBIDDEN - request has not been applied because client application has no permission to perform action
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
          '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorResponse'
+            schema:
+              $ref: '#/definitions/ErrorResponse'
          '500':
             description: >-
               INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
 
   /boards/{id}:
@@ -241,22 +224,21 @@ paths:
         summary: Board Management - Get an existing Board
         description: >
             API to get an existing Board detalis of Proman application
+        produces:
+          - application/json
         parameters:
-         - $ref: '#/components/parameters/BoardId'
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
+          - $ref: '#/parameters/BoardId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
         responses:
          '200':
            description: OK - Fetched board details
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
-           content:
-             application/json:
-               schema:
-                 $ref: '#/components/schemas/BoardDetailsResponse'
+           schema:
+             $ref: '#/definitions/BoardDetailsResponse'
          '400':
            description: >-
              BAD REQUEST - server cannot or will not process the request due to
@@ -264,15 +246,13 @@ paths:
              request syntax, mandatory elements are missing)
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '401':
            description: UNAUTHORIZED - user has provided wrong credentials
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '403':
            description: >-
@@ -280,16 +260,14 @@ paths:
              has no permission to perform action
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '404':
            description: >-
              NOT FOUND - Board (resource) does not exist
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '500':
            description: >-
@@ -297,8 +275,7 @@ paths:
              that prevented it from fulfilling the request.
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
      put:
         operationId: updateBoard
@@ -309,24 +286,24 @@ paths:
         summary: Board Management - Update an existing Board
         description: >
             API to update an existing board details in Proman application
+        consumes:
+          - application/json
         parameters:
-          - $ref: '#/components/parameters/BoardId'
-          - $ref: '#/components/parameters/ClientId'
-          - $ref: '#/components/parameters/Authorization'
-        requestBody:
-          description: Request containing modified board details
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateBoardRequest'
+          - $ref: '#/parameters/BoardId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+          - in: body
+            name: UpdateBoardRequest
+            description: Request containing modified board details
+            required: true
+            schema:
+              $ref: '#/definitions/UpdateBoardRequest'
         responses:
           '200':
             description: OK - Board has been updated successfully
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '400':
             description: >-
@@ -335,15 +312,13 @@ paths:
               request syntax, mandatory elements are missing)
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '401':
             description: UNAUTHORIZED - user has provided wrong credentials
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '403':
             description: >-
@@ -351,37 +326,31 @@ paths:
               has no permission to perform action
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '404':
             description: >-
               NOT FOUND - Board (resource) does not exist
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorResponse'
+            schema:
+              $ref: '#/definitions/ErrorResponse'
           '500':
             description: >-
               INTERNAL SERVER ERROR - server encountered an unexpected condition
               that prevented it from fulfilling the request.
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
 
      patch:
@@ -394,23 +363,21 @@ paths:
         description: >
             API to partial update of an existing board in Proman application
         parameters:
-          - $ref: '#/components/parameters/BoardId'
-          - $ref: '#/components/parameters/ClientId'
-          - $ref: '#/components/parameters/Authorization'
-        requestBody:
-          description: Request containing modified status
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BoardOperationsRequest'
+          - $ref: '#/parameters/BoardId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+          - in: body
+            name: BoardOperationsRequest
+            description: Request containing modified status of board
+            required: true
+            schema:
+              $ref: '#/definitions/BoardOperationsRequest'
         responses:
           '200':
             description: OK - Board has been partially updated
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '400':
             description: >-
@@ -419,15 +386,13 @@ paths:
               request syntax, mandatory elements are missing)
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '401':
             description: UNAUTHORIZED - user has provided wrong credentials
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '403':
             description: >-
@@ -435,33 +400,31 @@ paths:
               has no permission to perform action
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '404':
             description: >-
               NOT FOUND - Board (resource) does not exist
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
+            schema:
+              $ref: '#/definitions/ErrorResponse'
           '500':
             description: >-
               INTERNAL SERVER ERROR - server encountered an unexpected condition
               that prevented it from fulfilling the request.
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
 
   /boards/{id}/members:
@@ -474,22 +437,21 @@ paths:
         summary: Board Management - List of members belonging to the Board
         description: >
             API to get an existing members of the Board
+        produces:
+          - application/json
         parameters:
-         - $ref: '#/components/parameters/BoardId'
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
+         - $ref: '#/parameters/BoardId'
+         - $ref: '#/parameters/ClientId'
+         - $ref: '#/parameters/Authorization'
         responses:
          '200':
            description: OK - Fetched list of board members
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
-           content:
-             application/json:
-               schema:
-                 $ref: '#/components/schemas/BoardMembersSummaryResponse'
+           schema:
+             $ref: '#/definitions/BoardMembersSummaryResponse'
          '400':
            description: >-
              BAD REQUEST - server cannot or will not process the request due to
@@ -497,15 +459,13 @@ paths:
              request syntax, mandatory elements are missing)
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '401':
            description: UNAUTHORIZED - user has provided wrong credentials
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '403':
            description: >-
@@ -513,8 +473,7 @@ paths:
              has no permission to perform action
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '500':
            description: >-
@@ -522,8 +481,7 @@ paths:
              that prevented it from fulfilling the request.
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
 
   /boards/{id}/tasks:
@@ -536,22 +494,21 @@ paths:
         summary: Board Management - List of tasks belonging to the Board
         description: >
             API to get an existing tasks of the Board
+        produces:
+          - application/json
         parameters:
-         - $ref: '#/components/parameters/BoardId'
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
+         - $ref: '#/parameters/BoardId'
+         - $ref: '#/parameters/ClientId'
+         - $ref: '#/parameters/Authorization'
         responses:
          '200':
            description: OK - Fetched list of tasks belonging to the board
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
-           content:
-             application/json:
-               schema:
-                 $ref: '#/components/schemas/BoardTasksSummaryResponse'
+           schema:
+             $ref: '#/definitions/BoardTasksSummaryResponse'
          '400':
            description: >-
              BAD REQUEST - server cannot or will not process the request due to
@@ -559,15 +516,13 @@ paths:
              request syntax, mandatory elements are missing)
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '401':
            description: UNAUTHORIZED - user has provided wrong credentials
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '403':
            description: >-
@@ -575,8 +530,7 @@ paths:
              has no permission to perform action
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '500':
            description: >-
@@ -584,8 +538,7 @@ paths:
              that prevented it from fulfilling the request.
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
 
      post:
@@ -597,33 +550,32 @@ paths:
         summary: Board Management - Add task to the Board
         description: >
             API to add existing members to the Board
+        consumes:
+          - application/json
+        produces:
+          - application/json
         parameters:
-         - $ref: '#/components/parameters/BoardId'
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
-        requestBody:
-          description: Request containing members to be added to the board
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateBoardTaskRequest'
+          - $ref: '#/parameters/BoardId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+          - in: body
+            name: CreateBoardTaskRequest
+            description: Request containing members to be added to the board
+            required: true
+            schema:
+              $ref: '#/definitions/CreateBoardTaskRequest'
         responses:
           '201':
             description: CREATED - Task has been created successfully in the board
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
               location:
-                schema:
-                  type: string
+                type: string
                 description: Location of the new resource which was created by this request
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/CreateBoardTaskResponse'
+            schema:
+              $ref: '#/definitions/CreateBoardTaskResponse'
           '400':
             description: >-
               BAD REQUEST - server cannot or will not process the request due to
@@ -631,15 +583,13 @@ paths:
               request syntax, mandatory elements are missing)
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '401':
             description: UNAUTHORIZED - user has provided wrong credentials
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '403':
             description: >-
@@ -647,25 +597,24 @@ paths:
                has no permission to perform action
             headers:
                request-id:
-                 schema:
-                   type: string
+                 type: string
                  description: Used as correlation id while tracing for the request in the backend
           '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
+            schema:
+              $ref: '#/definitions/ErrorResponse'
           '500':
             description: >-
                INTERNAL SERVER ERROR - server encountered an unexpected condition
                that prevented it from fulfilling the request.
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
 
   /boards/{id}/tasks/{task_id}:
@@ -678,23 +627,22 @@ paths:
         summary: Board Management - Task details belonging to the Board
         description: >
             API to get details of an existing task in the Board
+        produces:
+          - application/json
         parameters:
-         - $ref: '#/components/parameters/BoardId'
-         - $ref: '#/components/parameters/TaskId'
-         - $ref: '#/components/parameters/ClientId'
-         - $ref: '#/components/parameters/Authorization'
+         - $ref: '#/parameters/BoardId'
+         - $ref: '#/parameters/TaskId'
+         - $ref: '#/parameters/ClientId'
+         - $ref: '#/parameters/Authorization'
         responses:
          '200':
            description: OK - Fetched details of the task belonging to the board
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
-           content:
-             application/json:
-               schema:
-                 $ref: '#/components/schemas/BoardTaskDetailsResponse'
+           schema:
+              $ref: '#/definitions/BoardTaskDetailsResponse'
          '400':
            description: >-
              BAD REQUEST - server cannot or will not process the request due to
@@ -702,15 +650,13 @@ paths:
              request syntax, mandatory elements are missing)
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '401':
            description: UNAUTHORIZED - user has provided wrong credentials
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '403':
            description: >-
@@ -718,16 +664,14 @@ paths:
              has no permission to perform action
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
          '404':
             description: >-
               NOT FOUND -  Task (resource) does not exist
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
          '500':
            description: >-
@@ -735,8 +679,7 @@ paths:
              that prevented it from fulfilling the request.
            headers:
              request-id:
-               schema:
-                 type: string
+               type: string
                description: Used as correlation id while tracing for the request in the backend
 
      put:
@@ -748,25 +691,27 @@ paths:
         summary: Board Management - Update an existing task in the board
         description: >
             API to update an existing task details in the board
+        consumes:
+          - application/json
+        produces:
+          - application/json
         parameters:
-          - $ref: '#/components/parameters/BoardId'
-          - $ref: '#/components/parameters/TaskId'
-          - $ref: '#/components/parameters/ClientId'
-          - $ref: '#/components/parameters/Authorization'
-        requestBody:
-          description: Request containing modified task details
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateBoardTaskRequest'
+          - $ref: '#/parameters/BoardId'
+          - $ref: '#/parameters/TaskId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+          - in: body
+            name: UpdateBoardTaskRequest
+            description: Request containing modified task details
+            required: true
+            schema:
+              $ref: '#/definitions/UpdateBoardTaskRequest'
         responses:
           '200':
             description: OK - Task has been updated successfully
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '400':
             description: >-
@@ -775,15 +720,13 @@ paths:
               request syntax, mandatory elements are missing)
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '401':
             description: UNAUTHORIZED - user has provided wrong credentials
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '403':
             description: >-
@@ -791,37 +734,31 @@ paths:
               has no permission to perform action
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '404':
             description: >-
               NOT FOUND - Task (resource) does not exist
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ErrorResponse'
+            schema:
+              $ref: '#/definitions/ErrorResponse'
           '500':
             description: >-
               INTERNAL SERVER ERROR - server encountered an unexpected condition
               that prevented it from fulfilling the request.
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
 
 
@@ -834,25 +771,27 @@ paths:
         summary: Board Management - Partial update of an existing task belonging to the Board
         description: >
             API to partial update of an existing task in the board of Proman application
+        consumes:
+          - application/json
+        produces:
+          - application/json
         parameters:
-          - $ref: '#/components/parameters/BoardId'
-          - $ref: '#/components/parameters/TaskId'
-          - $ref: '#/components/parameters/ClientId'
-          - $ref: '#/components/parameters/Authorization'
-        requestBody:
-          description: Request containing modified status
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BoardTaskOperationsRequest'
+          - $ref: '#/parameters/BoardId'
+          - $ref: '#/parameters/TaskId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+          - in: body
+            name: BoardTaskOperationsRequest
+            description: Request containing modified status of board task
+            required: true
+            schema:
+              $ref: '#/definitions/BoardTaskOperationsRequest'
         responses:
           '200':
             description: OK - Task has been partially updated
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '400':
             description: >-
@@ -861,15 +800,13 @@ paths:
               request syntax, mandatory elements are missing)
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '401':
             description: UNAUTHORIZED - user has provided wrong credentials
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '403':
             description: >-
@@ -877,941 +814,908 @@ paths:
               has no permission to perform action
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '404':
             description: >-
               NOT FOUND - Task (resource) does not exist
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
           '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
+            schema:
+              $ref: '#/definitions/ErrorResponse'
           '500':
             description: >-
               INTERNAL SERVER ERROR - server encountered an unexpected condition
               that prevented it from fulfilling the request.
             headers:
               request-id:
-                schema:
-                  type: string
+                type: string
                 description: Used as correlation id while tracing for the request in the backend
 
-components:
 
-  securitySchemes:
-    Authorization:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: >
-        Bearer authentication (also called token authentication) is an HTTP authentication scheme that involves
-        security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access
-        to the bearer of this token.”
+securityDefinitions:
+  Authorization:
+    type: basic
+    description: >
+      Bearer authentication (also called token authentication) is an HTTP authentication scheme that involves
+      security tokens called bearer tokens. The name “Bearer authentication” can be understood as “give access
+      to the bearer of this token.”
 
-        The bearer token is a cryptic string, usually generated by the server in response to a login request. The
-        client must send this token in the Authorization header when making requests to protected resources:
+      The bearer token is a cryptic string, usually generated by the server in response to a login request. The
+      client must send this token in the Authorization header when making requests to protected resources:
 
-        ```
-        Authorization: Bearer <token>
+      ```
+      Authorization: Bearer <token>
 
-        ```
+      ```
 
-        Similarly to Basic authentication, Bearer authentication should only be used over HTTPS (SSL).
+      Similarly to Basic authentication, Bearer authentication should only be used over HTTPS (SSL).
 
-        Read https://jwt.io/introduction/ for more information on JWT standard.
+      Read https://jwt.io/introduction/ for more information on JWT standard.
 
-  parameters:
-    ClientId:
-      name: client-id
-      schema:
-        type: string
-      in: header
-      required: true
-      description: >-
-        Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API.
-    Authorization:
-      name: authorization
-      schema:
-        type: string
-      in: header
-      required: true
-      description: >-
-        Mandatory user credentials in bearer http authentication scheme format. Refer to the #/components/securitySchemes
-        for more information on this header.
-    BoardId:
-      name: id
-      schema:
+parameters:
+  ClientId:
+    name: client-id
+    type: string
+    in: header
+    required: true
+    description: >-
+      Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API.
+  Authorization:
+    name: authorization
+    type: string
+    in: header
+    required: true
+    description: >-
+      Mandatory user credentials in bearer http authentication scheme format. Refer to the #/securityDefinitions
+      for more information on this header.
+  BoardId:
+    name: id
+    type: string
+    format: uuid
+    in: path
+    required: true
+    description: >-
+      Unique identifier of Board in a standard UUID format
+  TaskId:
+    name: task_id
+    type: string
+    format: uuid
+    in: path
+    required: true
+    description: >-
+      Unique identifier of Task in a standard UUID format
+
+definitions:
+
+  BoardsSummaryResponse:
+    type: object
+    properties:
+      offset:
+        type: integer
+        description: offset or position of the fetched boards
+      limit:
+        type: integer
+        description: number of boards fetched per this request
+      total_count:
+        type: integer
+        description: total number of boards in the database
+      boards:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/BoardsSummaryType'
+        description: List of boards
+    required:
+      - offset
+      - limit
+      - total_count
+      - boards
+    example:
+      offset: 1
+      limit: 10
+      total_count: 33
+      boards:
+        - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+          name: Build Prototype
+          owner:
+            id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+            first_name: Project
+            last_name: Manager
+          start_date: 2018-05-07
+          end_date: 2018-05-10
+          workflow:
+            id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+            name: Kanban
+          status: ACTIVE
+
+        - id: 8d174a25-da31-55a8-85b4-c06ffc9d5f8f
+          name: Implement API
+          owner:
+            id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+            first_name: Project
+            last_name: Manager
+          start_date: 2018-07-01
+          end_date: 2018-10-12
+          workflow:
+            id: 2d174a25-fa31-45a8-85b4-b07ffc9d5f8d
+            name: Custom Scrum
+          status: ACTIVE
+
+  BoardsSummaryType:
+    type: object
+    properties:
+      id:
         type: string
         format: uuid
-      in: path
-      required: true
-      description: >-
-        Unique identifier of Board in a standard UUID format
-    TaskId:
-      name: task_id
-      schema:
+        description: Unique identifier of the board in a standard UUID format
+      name:
+        type: string
+        description: Name of the board
+      owner:
+        type: object
+        description: Name of the board owner
+        $ref: '#/definitions/BoardOwnerType'
+      start_date:
+        description: Start date of the board
+        $ref: '#/definitions/FullDateType'
+      end_date:
+        description: End date of the board
+        $ref: '#/definitions/FullDateType'
+      workflow:
+        type: object
+        description: Workflow of the Board
+        $ref: '#/definitions/BoardWorkflowType'
+      status:
+        $ref: '#/definitions/BoardStatusType'
+    required:
+      - id
+      - name
+      - owner
+      - start_date
+      - end_date
+      - workflow
+      - status
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      name: Build Prototype
+      owner:
+        id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+        first_name: Project
+        last_name: Manager
+      start_date: 2018-05-07
+      end_date: 2018-05-10
+      workflow:
+        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+        name: Kanban
+      status: ACTIVE
+
+  BoardDetailsResponse:
+    type: object
+    properties:
+      id:
         type: string
         format: uuid
-      in: path
-      required: true
-      description: >-
-        Unique identifier of Task in a standard UUID format
-
-  schemas:
-
-    BoardsSummaryResponse:
-      type: object
-      properties:
-        offset:
-          type: integer
-          description: offset or position of the fetched boards
-        limit:
-          type: integer
-          description: number of boards fetched per this request
-        total_count:
-          type: integer
-          description: total number of boards in the database
-        boards:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/BoardsSummaryType'
-          description: List of boards
-      required:
-        - offset
-        - limit
-        - total_count
-        - boards
-      example:
-        offset: 1
-        limit: 10
-        total_count: 33
-        boards:
-          - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-            name: Build Prototype
-            owner:
-              id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
-              first_name: Project
-              last_name: Manager
-            start_date: 2018-05-07
-            end_date: 2018-05-10
-            workflow:
-              id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-              name: Kanban
-            status: ACTIVE
-
-          - id: 8d174a25-da31-55a8-85b4-c06ffc9d5f8f
-            name: Implement API
-            owner:
-              id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
-              first_name: Project
-              last_name: Manager
-            start_date: 2018-07-01
-            end_date: 2018-10-12
-            workflow:
-              id: 2d174a25-fa31-45a8-85b4-b07ffc9d5f8d
-              name: Custom Scrum
-            status: ACTIVE
-
-    BoardsSummaryType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the board in a standard UUID format
-        name:
-          type: string
-          description: Name of the board
-        owner:
-          type: object
-          description: Name of the board owner
-          $ref: '#/components/schemas/BoardOwnerType'
-        start_date:
-          type: object
-          description: Start date of the board
-          $ref: '#/components/schemas/FullDateType'
-        end_date:
-          type: object
-          description: End date of the board
-          $ref: '#/components/schemas/FullDateType'
-        workflow:
-          type: object
-          description: Workflow of the Board
-          $ref: '#/components/schemas/BoardWorkflowType'
-        status:
-          type: string
-          description: Status of the board
-          $ref: '#/components/schemas/BoardStatusType'
-      required:
-        - id
-        - name
-        - owner
-        - start_date
-        - end_date
-        - workflow
-        - status
-      example:
+        description: Unique identifier of the board in a standard UUID format
+      name:
+        type: string
+        description: Name of the board
+      owner:
+        type: object
+        description: Details of the board owner
+        $ref: '#/definitions/BoardOwnerDetailsType'
+      start_date:
+        description: Start date of the board
+        $ref: '#/definitions/FullDateType'
+      end_date:
+        description: End date of the board
+        $ref: '#/definitions/FullDateType'
+      workflow:
+        type: object
+        description: Workflow of the Board
+        $ref: '#/definitions/BoardWorkflowDetailsType'
+      status:
+        $ref: '#/definitions/BoardStatusType'
+      total_members:
+        type: integer
+        description: Total number of members (users) in the board
+    required:
+      - id
+      - name
+      - owner
+      - start_date
+      - end_date
+      - workflow
+      - status
+      - total_members
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      name: Build Prototype
+      owner:
+        id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+        first_name: Project
+        last_name: Manager
+        email_address: project.manager@proman.io
+        role:
+          id: 200
+          name: Project Manager
+      start_date: 2018-05-07
+      end_date: 2018-05-10
+      workflow:
         id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        name: Build Prototype
-        owner:
-          id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
-          first_name: Project
-          last_name: Manager
-        start_date: 2018-05-07
-        end_date: 2018-05-10
-        workflow:
-          id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-          name: Kanban
-        status: ACTIVE
+        name: Kanban
+      status: ACTIVE
+      total_members: 8
 
-    BoardDetailsResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the board in a standard UUID format
-        name:
-          type: string
-          description: Name of the board
-        owner:
+  BoardOwnerType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
+      first_name:
+        type: string
+        description: First name of the owner (user)
+      last_name:
+        type: string
+        description: Last name of the owner (user)
+    required:
+      - id
+      - first_name
+      - last_name
+
+  BoardOwnerDetailsType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
+      first_name:
+        type: string
+        description: First name of the owner (user)
+      last_name:
+        type: string
+        description: Last name of the owner (user)
+      email_address:
+        type: string
+        description: Email address of the owner (user)
+      role:
+        $ref: '#/definitions/RoleType'
+    required:
+      - id
+      - first_name
+      - last_name
+      - email_address
+      - role
+
+  RoleType:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Role id of the owner (user)
+      name:
+        type: string
+        description: Role name of the owner (user)
+    required:
+      - id
+      - name
+
+  BoardMembersSummaryResponse:
+    type: object
+    properties:
+      offset:
+        type: integer
+        description: offset or position of the fetched members
+      limit:
+        type: integer
+        description: number of members fetched per this request
+      total_count:
+        type: integer
+        description: total number of members in the database
+      members:
+        type: array
+        items:
           type: object
-          description: Details of the board owner
-          $ref: '#/components/schemas/BoardOwnerDetailsType'
-        start_date:
-          type: object
-          description: Start date of the board
-          $ref: '#/components/schemas/FullDateType'
-        end_date:
-          type: object
-          description: End date of the board
-          $ref: '#/components/schemas/FullDateType'
-        workflow:
-          type: object
-          description: Workflow of the Board
-          $ref: '#/components/schemas/BoardWorkflowDetailsType'
-        status:
-          type: object
-          description: Status of the board
-          $ref: '#/components/schemas/BoardStatusType'
-        total_members:
-          type: integer
-          description: Total number of members (users) in the board
-      required:
-        - id
-        - name
-        - owner
-        - start_date
-        - end_date
-        - workflow
-        - status
-        - total_members
-      example:
-        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        name: Build Prototype
-        owner:
-          id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+          $ref: '#/definitions/BoardMembersResponse'
+        description: List of members
+    required:
+      - offset
+      - limit
+      - total_count
+      - members
+    example:
+      offset: 1
+      limit: 10
+      total_count: 8
+      members:
+        - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
           first_name: Project
           last_name: Manager
           email_address: project.manager@proman.io
           role:
             id: 200
             name: Project Manager
-        start_date: 2018-05-07
-        end_date: 2018-05-10
-        workflow:
-          id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-          name: Kanban
-        status: ACTIVE
-        total_members: 8
+          status: ACTIVE
+        - id: 8d174a25-da31-55a8-85b4-c06ffc9d5f8f
+          first_name: Team
+          last_name: Leader
+          email_address: team.leader@proman.io
+          role:
+            id: 200
+            name: Team Leader
+          status: LOCKED
 
-    BoardOwnerType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
-        first_name:
-          type: string
-          description: First name of the owner (user)
-        last_name:
-          type: string
-          description: Last name of the owner (user)
-      required:
-        - id
-        - first_name
-        - last_name
-
-    BoardOwnerDetailsType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
-        first_name:
-          type: string
-          description: First name of the owner (user)
-        last_name:
-          type: string
-          description: Last name of the owner (user)
-        email_address:
-          type: string
-          description: Email address of the owner (user)
-        role:
-          type: object
-          description: Role mapped to the owner (user)
-          $ref: '#/components/schemas/RoleType'
-      required:
-        - id
-        - first_name
-        - last_name
-        - email_address
-        - role
-
-    RoleType:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Role id of the owner (user)
-        name:
-          type: string
-          description: Role name of the owner (user)
-      required:
-        - id
-        - name
-
-    BoardMembersSummaryResponse:
-      type: object
-      properties:
-        offset:
-          type: integer
-          description: offset or position of the fetched members
-        limit:
-          type: integer
-          description: number of members fetched per this request
-        total_count:
-          type: integer
-          description: total number of members in the database
-        members:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/BoardMembersResponse'
-          description: List of members
-      required:
-        - offset
-        - limit
-        - total_count
-        - members
-      example:
-        offset: 1
-        limit: 10
-        total_count: 8
-        members:
-          - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-            first_name: Project
-            last_name: Manager
-            email_address: project.manager@proman.io
-            role:
-              id: 200
-              name: Project Manager
-            status: ACTIVE
-          - id: 8d174a25-da31-55a8-85b4-c06ffc9d5f8f
-            first_name: Team
-            last_name: Leader
-            email_address: team.leader@proman.io
-            role:
-              id: 200
-              name: Team Leader
-            status: LOCKED
-
-    BoardMembersResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the board member in a standard UUID format generated by API backend
-        first_name:
-          type: string
-          description: First name of the member (user)
-        last_name:
-          type: string
-          description: Last name of the member (user)
-        email_address:
-          type: string
-          description: Email address of the member (user)
-        role:
-          type: object
-          description: Role mapped to the member (user)
-          $ref: '#/components/schemas/RoleType'
-        status:
-          type: object
-          description: Status of the member
-          $ref: '#/components/schemas/MemberStatusType'
-      required:
-        - id
-        - first_name
-        - last_name
-        - email_address
-        - role
-        - status
-
-    BoardOperationsRequest:
-      type: array
-      properties:
-        op:
-          type: string
-          description: Type of operation
-          enum: [replace, add, remove]
-        path:
-          type: string
-          description: Resource path whose state to be modified
-          enum: [status, members]
-        value:
-          type: string
-          description: New state value to be updated to the resource
-      example:
-        - op: replace
-          path: status
-          value: COMPLETED
-        - op: add
-          path: members
-          value: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
-        - op: remove
-          path: members
-          value: 3d274a27-da31-25a8-55b4-c06ffc9d5f3e
-
-    BoardTaskOperationsRequest:
-      type: array
-      properties:
-        op:
-          type: string
-          description: Type of operation
-          enum: [replace, add, remove]
-        path:
-          type: string
-          description: Resource path whose state to be modified
-          enum: [phase, status, owner, effort]
-        value:
-          type: string
-          description: New state value to be updated to the resource
-      example:
-        - op: replace
-          path: phase
-          value: TODO
-        - op: replace
-          path: status
-          value: REOPENED
-        - op: add
-          path: effort
-          value: 3600
-
-    BoardTasksSummaryResponse:
-      type: object
-      properties:
-        offset:
-          type: integer
-          description: offset or position of the fetched tasks
-        limit:
-          type: integer
-          description: number of tasks fetched per this request
-        total_count:
-          type: integer
-          description: total number of tasks in the database
-        tasks:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/BoardTasksResponse'
-          description: List of tasks
-      required:
-        - offset
-        - limit
-        - total_count
-        - tasks
-      example:
-        offset: 1
-        limit: 10
-        total_count: 8
-        tasks:
-          - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-            name: Analysis and Design
-            description: Analyse on the technical feasibility and work on design spec
-            phase_type: TODO
-            owner:
-              id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
-              first_name: Technical
-              last_name: Lead
-            progress: 25
-            status: IN PROGRESS
-          - id: 8d174a25-da31-55a8-85b4-c06ffc9d5f8f
-            name: Implement Code
-            description: Write backend code
-            phase_type: TODO
-            owner:
-              id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
-              first_name: Senior
-              last_name: Developer
-            progress: 0
-            status: REOPENED
-
-    BoardTasksResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the board member in a standard UUID format generated by API backend
-        name:
-          type: string
-          description: Name of the task
-        description:
-          type: string
-          description: Description of the task
-        phase_type:
-          type: string
-          description: Workflow phase that this task is currently in
-        owner:
-          type: object
-          description: Owner (user) of this task
-          $ref: '#/components/schemas/TaskOwnerType'
-        progress:
-          type: integer
-          description: Progress of this task (in percentage)
-        status:
-          type: object
-          description: Status of this task
-          $ref: '#/components/schemas/TaskStatusType'
-      required:
-        - id
-        - name
-        - description
-        - phase_type
-        - owner
-        - progress
-        - status
-
-    TaskOwnerType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
-        first_name:
-          type: string
-          description: First name of the owner (user)
-        last_name:
-          type: string
-          description: Last name of the owner (user)
-      required:
-        - id
-        - first_name
-        - last_name
-
-    BoardTaskDetailsResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the board task in a standard UUID format generated by API backend
-        name:
-          type: string
-          description: Name of the task
-        description:
-          type: string
-          description: Description of the task
-        phase_type:
-          type: string
-          description: Workflow phase that this task is currently in
-        owner:
-          type: object
-          description: Owner (user) of this task
-          $ref: '#/components/schemas/TaskOwnerDetailsType'
-        status:
-          type: object
-          description: Status of this task
-          $ref: '#/components/schemas/TaskStatusType'
-        start_date:
-          type: object
-          description: Start date of the board
-          $ref: '#/components/schemas/FullDateType'
-        end_date:
-          type: object
-          description: End date of the board
-          $ref: '#/components/schemas/FullDateType'
-        original_effort:
-          type: integer
-          description: Estimated effort (in seconds) for this task
-        logged_effort:
-          type: integer
-          description: Logged effort (in seconds) for this task
-        remaining_effort:
-          type: integer
-          description: Remaining effort (in seconds) for this task
-        watchers:
-          type: array
-          description: List of watchers of this task
-          $ref: '#/components/schemas/TaskWatcherType'
-      required:
-        - id
-        - name
-        - description
-        - phase_type
-        - owner
-        - status
-        - start_date
-        - original_effort
-        - logged_effort
-        - remaining_effort
-        - watchers
-      example:
-        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        name: Analysis and Design
-        description: Analyse on the technical feasibility and work on design spec
-        phase_type: TODO
-        owner:
-          id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
-          first_name: Technical
-          last_name: Lead
-          email_address: technical.lead@proman.io
-        status: IN PROGRESS
-        start_date: 2018-05-07
-        end_date: 2018-05-10
-        original_effort: 10800
-        logged_effort: 7200
-        remaining_effort: 3600
-        watchers:
-          - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-            first_name: Project
-            last_name: Manager
-          - id: 8d174a35-ca31-35a8-87b4-f06ffc9d5f8d
-            first_name: Team
-            last_name: Lead
-
-    TaskOwnerDetailsType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
-        first_name:
-          type: string
-          description: First name of the owner (user)
-        last_name:
-          type: string
-          description: Last name of the owner (user)
-        email_address:
-          type: string
-          description: Email address of the owner (user)
-        role:
-          type: object
-          description: Role mapped to the owner (user)
-          $ref: '#/components/schemas/RoleType'
-      required:
-        - id
-        - first_name
-        - last_name
-        - email_address
-        - role
-
-    TaskWatcherType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
-        first_name:
-          type: string
-          description: First name of the owner (user)
-        last_name:
-          type: string
-          description: Last name of the owner (user)
-      required:
-        - id
-        - first_name
-        - last_name
-
-    TaskWatchersType:
-      type: array
-      items:
+  BoardMembersResponse:
+    type: object
+    properties:
+      id:
         type: string
-        description: List of memeber ids who are the watchers of this task
+        format: uuid
+        description: Unique identifier of the board member in a standard UUID format generated by API backend
+      first_name:
+        type: string
+        description: First name of the member (user)
+      last_name:
+        type: string
+        description: Last name of the member (user)
+      email_address:
+        type: string
+        description: Email address of the member (user)
+      role:
+        $ref: '#/definitions/RoleType'
+      status:
+        $ref: '#/definitions/MemberStatusType'
+    required:
+      - id
+      - first_name
+      - last_name
+      - email_address
+      - role
+      - status
 
-    BoardWorkflowType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the workflow in a standard UUID format generated by API backend
-        name:
-          type: string
-          description: Name of the workflow
-      required:
-        - id
-        - name
+  BoardOperationsRequest:
+    type: array
+    items:
+      $ref: '#/definitions/BoardOperationRequest'
 
-    BoardWorkflowDetailsType:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the workflow in a standard UUID format generated by API backend
-        name:
-          type: string
-          description: Name of the workflow
-        phases:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/BoardWorkflowPhaseType'
-          description: List of phases that this workflow has
-      required:
-        - id
-        - name
-        - phases
+  BoardOperationRequest:
+    type: object
+    properties:
+      op:
+        type: string
+        description: Type of operation
+        enum: [replace, add, remove]
+      path:
+        type: string
+        description: Resource path whose state to be modified
+        enum: [status, members]
+      value:
+        type: string
+        description: New state value to be updated to the resource
+    example:
+      - op: replace
+        path: status
+        value: COMPLETED
+      - op: add
+        path: members
+        value: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+      - op: remove
+        path: members
+        value: 3d274a27-da31-25a8-55b4-c06ffc9d5f3e
 
-    BoardWorkflowPhaseType:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Name of the workflow phase
-        description:
-          type: string
-          description: Description of the workflow phase
+  BoardTaskOperationsRequest:
+    type: array
+    items:
+      $ref: '#/definitions/BoardTaskOperationRequest'
 
-    CreateBoardRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the new board
-        start_date:
-          type: object
-          description: Start date of the board
-          $ref: '#/components/schemas/FullDateType'
-        end_date:
-          type: object
-          description: End date of the board
-          $ref: '#/components/schemas/FullDateType'
-        workflow_id:
-          type: string
-          description: Workflow reference identifier
-      required:
-        - name
-        - start_date
-        - end_date
-        - workflow_id
-      example:
-        name: Build Prototype
-        start_date: 2018-05-07
-        end_date: 2018-05-10
-        workflow_id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+  BoardTaskOperationRequest:
+    type: object
+    properties:
+      op:
+        type: string
+        description: Type of operation
+        enum: [replace, add, remove]
+      path:
+        type: string
+        description: Resource path whose state to be modified
+        enum: [phase, status, owner, effort]
+      value:
+        type: string
+        description: New state value to be updated to the resource
+    example:
+      - op: replace
+        path: phase
+        value: TODO
+      - op: replace
+        path: status
+        value: REOPENED
+      - op: add
+        path: effort
+        value: 3600
 
-    CreateBoardResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier in a standard UUID format generated by API backend
-        status:
+  BoardTasksSummaryResponse:
+    type: object
+    properties:
+      offset:
+        type: integer
+        description: offset or position of the fetched tasks
+      limit:
+        type: integer
+        description: number of tasks fetched per this request
+      total_count:
+        type: integer
+        description: total number of tasks in the database
+      tasks:
+        type: array
+        items:
           type: object
-          description: Status of the board
-          $ref: '#/components/schemas/BoardStatusType'
-      required:
-        - id
-        - status
-      example:
-        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        status: OPEN
+          $ref: '#/definitions/BoardTasksResponse'
+        description: List of tasks
+    required:
+      - offset
+      - limit
+      - total_count
+      - tasks
+    example:
+      offset: 1
+      limit: 10
+      total_count: 8
+      tasks:
+        - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+          name: Analysis and Design
+          description: Analyse on the technical feasibility and work on design spec
+          phase_type: TODO
+          owner:
+            id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+            first_name: Technical
+            last_name: Lead
+          progress: 25
+          status: IN PROGRESS
+        - id: 8d174a25-da31-55a8-85b4-c06ffc9d5f8f
+          name: Implement Code
+          description: Write backend code
+          phase_type: TODO
+          owner:
+            id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+            first_name: Senior
+            last_name: Developer
+          progress: 0
+          status: REOPENED
 
-    UpdateBoardRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the new board
-        start_date:
-          type: object
-          description: Start date of the board
-          $ref: '#/components/schemas/FullDateType'
-        end_date:
-          type: object
-          description: End date of the board
-          $ref: '#/components/schemas/FullDateType'
-        workflow_id:
-          type: string
-          description: Workflow reference identifier
-      required:
-        - name
-        - start_date
-        - end_date
-        - workflow_id
-      example:
-        name: Build Prototype
-        start_date: 2018-05-07
-        end_date: 2018-06-10
-        workflow_id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+  BoardTasksResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the board member in a standard UUID format generated by API backend
+      name:
+        type: string
+        description: Name of the task
+      description:
+        type: string
+        description: Description of the task
+      phase_type:
+        type: string
+        description: Workflow phase that this task is currently in
+      owner:
+        type: object
+        description: Owner (user) of this task
+        $ref: '#/definitions/TaskOwnerType'
+      progress:
+        type: integer
+        description: Progress of this task (in percentage)
+      status:
+        $ref: '#/definitions/TaskStatusType'
+    required:
+      - id
+      - name
+      - description
+      - phase_type
+      - owner
+      - progress
+      - status
 
-    CreateBoardTaskRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the task
-        description:
-          type: string
-          description: Description of the task
-        phase_type:
-          type: string
-          description: Workflow phase that this task will be set with
-        owner_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the board task owner in a standard UUID format
-        start_date:
-          type: object
-          description: Start date of the board
-          $ref: '#/components/schemas/FullDateType'
-        end_date:
-          type: object
-          description: End date of the board
-          $ref: '#/components/schemas/FullDateType'
-        original_effort:
-          type: integer
-          description: Estimated effort (in seconds) for this task
-        watchers:
-          type: object
-          description: List of watchers of this task
-          $ref: '#/components/schemas/TaskWatchersType'
-      required:
-        - name
-        - phase_type
-        - owner_id
-      example:
-        name: Analysis and Design
-        description: Analyse on the technical feasibility and work on design spec
-        phase_type: TODO
-        owner_id: d274a25-ca31-45a8-85b4-b06ffc9d5f8f
-        status: IN PROGRESS
-        start_date: 2018-05-07
-        end_date: 2018-05-10
-        original_effort: 10800
-        logged_effort: 7200
-        remaining_effort: 3600
-        watchers:
-          - 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-          - 8d174a35-ca31-35a8-87b4-f06ffc9d5f8d
+  TaskOwnerType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
+      first_name:
+        type: string
+        description: First name of the owner (user)
+      last_name:
+        type: string
+        description: Last name of the owner (user)
+    required:
+      - id
+      - first_name
+      - last_name
 
-    CreateBoardTaskResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the board task in a standard UUID format
-        status:
-          type: string
-          description: Status of the task
-          $ref: '#/components/schemas/TaskStatusType'
-      required:
-        - id
-        - status
-      example:
-        id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
-        status: IN PROGRESS
+  BoardTaskDetailsResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the board task in a standard UUID format generated by API backend
+      name:
+        type: string
+        description: Name of the task
+      description:
+        type: string
+        description: Description of the task
+      phase_type:
+        type: string
+        description: Workflow phase that this task is currently in
+      owner:
+        type: object
+        description: Owner (user) of this task
+        $ref: '#/definitions/TaskOwnerDetailsType'
+      status:
+        $ref: '#/definitions/TaskStatusType'
+      start_date:
+        description: Start date of the board
+        $ref: '#/definitions/FullDateType'
+      end_date:
+        description: End date of the board
+        $ref: '#/definitions/FullDateType'
+      original_effort:
+        type: integer
+        description: Estimated effort (in seconds) for this task
+      logged_effort:
+        type: integer
+        description: Logged effort (in seconds) for this task
+      remaining_effort:
+        type: integer
+        description: Remaining effort (in seconds) for this task
+      watchers:
+        type: array
+        description: List of watchers of this task
+        $ref: '#/definitions/TaskWatcherType'
+    required:
+      - id
+      - name
+      - description
+      - phase_type
+      - owner
+      - status
+      - start_date
+      - original_effort
+      - logged_effort
+      - remaining_effort
+      - watchers
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      name: Analysis and Design
+      description: Analyse on the technical feasibility and work on design spec
+      phase_type: TODO
+      owner:
+        id: 8d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+        first_name: Technical
+        last_name: Lead
+        email_address: technical.lead@proman.io
+      status: IN PROGRESS
+      start_date: 2018-05-07
+      end_date: 2018-05-10
+      original_effort: 10800
+      logged_effort: 7200
+      remaining_effort: 3600
+      watchers:
+        - id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+          first_name: Project
+          last_name: Manager
+        - id: 8d174a35-ca31-35a8-87b4-f06ffc9d5f8d
+          first_name: Team
+          last_name: Lead
 
-    UpdateBoardTaskRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Modified name of the task
-        description:
-          type: string
-          description: Modified description of the task
-        owner_id:
-          type: string
-          format: uuid
-          description: Unique identifier of the board task owner in a standard UUID format
-        start_date:
-          type: object
-          description: Start date of the board
-          $ref: '#/components/schemas/FullDateType'
-        end_date:
-          type: object
-          description: End date of the board
-          $ref: '#/components/schemas/FullDateType'
-        original_effort:
-          type: integer
-          description: Estimated effort (in seconds) for this task
-      example:
-        name: Analysis and Design
-        description: Analyse on the technical feasibility and work on design spec
-        owner_id: d274a25-ca31-45a8-85b4-b06ffc9d5f8f
-        start_date: 2018-05-07
-        end_date: 2018-05-10
-        original_effort: 10800
+  TaskOwnerDetailsType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
+      first_name:
+        type: string
+        description: First name of the owner (user)
+      last_name:
+        type: string
+        description: Last name of the owner (user)
+      email_address:
+        type: string
+        description: Email address of the owner (user)
+      role:
+        $ref: '#/definitions/RoleType'
+    required:
+      - id
+      - first_name
+      - last_name
+      - email_address
+      - role
 
-    BoardStatusType:
+  TaskWatcherType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the owner (user) in a standard UUID format generated by API backend
+      first_name:
+        type: string
+        description: First name of the owner (user)
+      last_name:
+        type: string
+        description: Last name of the owner (user)
+    required:
+      - id
+      - first_name
+      - last_name
+
+  TaskWatchersType:
+    type: array
+    items:
       type: string
-      enum: [OPEN, IN PROGRESS, COMPLETED]
-      description: Status of the board
+      description: List of memeber ids who are the watchers of this task
 
-    MemberIdType:
-      type: string
-      format: uuid
-      description: Unique identifier of the member in a standard UUID format generated by API backend
+  BoardWorkflowType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the workflow in a standard UUID format generated by API backend
+      name:
+        type: string
+        description: Name of the workflow
+    required:
+      - id
+      - name
 
-    MemberStatusType:
-      type: string
-      enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
-      description: Status of the board
+  BoardWorkflowDetailsType:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the workflow in a standard UUID format generated by API backend
+      name:
+        type: string
+        description: Name of the workflow
+      phases:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/BoardWorkflowPhaseType'
+        description: List of phases that this workflow has
+    required:
+      - id
+      - name
+      - phases
 
-    FullDateType:
-      type: string
-      format: full-date
-      description: Full date format
+  BoardWorkflowPhaseType:
+    type: object
+    properties:
+      type:
+        type: string
+        description: Name of the workflow phase
+      description:
+        type: string
+        description: Description of the workflow phase
 
-    TaskStatusType:
-      type: string
-      enum: [OPEN, IN PROGRESS, ON HOLD, COMPLETED, REOPENED, CLOSED]
-      description: Status of the task
+  CreateBoardRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the new board
+      start_date:
+        description: Start date of the board
+        $ref: '#/definitions/FullDateType'
+      end_date:
+        description: End date of the board
+        $ref: '#/definitions/FullDateType'
+      workflow_id:
+        type: string
+        description: Workflow reference identifier
+    required:
+      - name
+      - start_date
+      - end_date
+      - workflow_id
+    example:
+      name: Build Prototype
+      start_date: 2018-05-07
+      end_date: 2018-05-10
+      workflow_id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
 
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Application specific standard error code
-        message:
-          type: string
-          description: Error message stating the reason
-      required:
-        - code
-        - message
-      example:
-        code: BRD-001
-        message: Board with name already exist
+  CreateBoardResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier in a standard UUID format generated by API backend
+      status:
+        $ref: '#/definitions/BoardStatusType'
+    required:
+      - id
+      - status
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      status: OPEN
+
+  UpdateBoardRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the new board
+      start_date:
+        description: Start date of the board
+        $ref: '#/definitions/FullDateType'
+      end_date:
+        description: End date of the board
+        $ref: '#/definitions/FullDateType'
+      workflow_id:
+        type: string
+        description: Workflow reference identifier
+    required:
+      - name
+      - start_date
+      - end_date
+      - workflow_id
+    example:
+      name: Build Prototype
+      start_date: 2018-05-07
+      end_date: 2018-06-10
+      workflow_id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+
+  CreateBoardTaskRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the task
+      description:
+        type: string
+        description: Description of the task
+      phase_type:
+        type: string
+        description: Workflow phase that this task will be set with
+      owner_id:
+        type: string
+        format: uuid
+        description: Unique identifier of the board task owner in a standard UUID format
+      start_date:
+        description: Start date of the board
+        $ref: '#/definitions/FullDateType'
+      end_date:
+        description: End date of the board
+        $ref: '#/definitions/FullDateType'
+      original_effort:
+        type: integer
+        description: Estimated effort (in seconds) for this task
+      watchers:
+        type: object
+        description: List of watchers of this task
+        $ref: '#/definitions/TaskWatchersType'
+    required:
+      - name
+      - phase_type
+      - owner_id
+    example:
+      name: Analysis and Design
+      description: Analyse on the technical feasibility and work on design spec
+      phase_type: TODO
+      owner_id: d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+      status: IN PROGRESS
+      start_date: 2018-05-07
+      end_date: 2018-05-10
+      original_effort: 10800
+      logged_effort: 7200
+      remaining_effort: 3600
+      watchers:
+        - 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+        - 8d174a35-ca31-35a8-87b4-f06ffc9d5f8d
+
+  CreateBoardTaskResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: Unique identifier of the board task in a standard UUID format
+      status:
+        $ref: '#/definitions/TaskStatusType'
+    required:
+      - id
+      - status
+    example:
+      id: 7d174a25-ba31-45a8-85b4-b06ffc9d5f8f
+      status: IN PROGRESS
+
+  UpdateBoardTaskRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Modified name of the task
+      description:
+        type: string
+        description: Modified description of the task
+      owner_id:
+        type: string
+        format: uuid
+        description: Unique identifier of the board task owner in a standard UUID format
+      start_date:
+        description: Start date of the board
+        $ref: '#/definitions/FullDateType'
+      end_date:
+        description: End date of the board
+        $ref: '#/definitions/FullDateType'
+      original_effort:
+        type: integer
+        description: Estimated effort (in seconds) for this task
+    example:
+      name: Analysis and Design
+      description: Analyse on the technical feasibility and work on design spec
+      owner_id: d274a25-ca31-45a8-85b4-b06ffc9d5f8f
+      start_date: 2018-05-07
+      end_date: 2018-05-10
+      original_effort: 10800
+
+  BoardStatusType:
+    type: string
+    enum: [OPEN, IN PROGRESS, COMPLETED]
+    description: Status of the board
+
+  MemberIdType:
+    type: string
+    format: uuid
+    description: Unique identifier of the member in a standard UUID format generated by API backend
+
+  MemberStatusType:
+    type: string
+    enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
+    description: Status of the board
+
+  FullDateType:
+    type: string
+    format: full-date
+    description: Full date format
+
+  TaskStatusType:
+    type: string
+    enum: [OPEN, IN PROGRESS, ON HOLD, COMPLETED, REOPENED, CLOSED]
+    description: Status of the task
+
+  ErrorResponse:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Application specific standard error code
+      message:
+        type: string
+        description: Error message stating the reason
+    required:
+      - code
+      - message
+    example:
+      code: BRD-001
+      message: Board with name already exist

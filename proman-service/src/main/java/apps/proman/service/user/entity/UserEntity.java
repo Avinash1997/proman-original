@@ -11,6 +11,7 @@ import static apps.proman.service.common.entity.Entity.SCHEMA;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -50,7 +52,7 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Unive
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "UUID")
@@ -219,6 +221,11 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Unive
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.uuid = UUID.randomUUID().toString();
     }
 
 }

@@ -102,7 +102,7 @@
 	<profiles>
 		<!-- database setup -->
 		<profile>
-			<id>setup-db</id>
+			<id>setup</id>
 			<activation>
     			<activeByDefault>false</activeByDefault>
   			</activation>
@@ -136,7 +136,7 @@
 		
 		<!-- insert seed data -->
 		<profile>
-			<id>insert-seed-data</id>
+			<id>seed</id>
 			<activation>
     			<activeByDefault>false</activeByDefault>
   			</activation>

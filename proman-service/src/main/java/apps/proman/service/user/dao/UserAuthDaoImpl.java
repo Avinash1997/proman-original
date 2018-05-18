@@ -25,25 +25,10 @@ public class UserAuthDaoImpl extends BaseDaoImpl<UserAuthTokenEntity> implements
     @Override
     public UserAuthTokenEntity findToken(final String accessToken) {
         try {
-            return entityManager.createNamedQuery(UserAuthTokenEntity.TOKEN_BY_ACCESS_TOKEN, UserAuthTokenEntity.class).setParameter("accessToken", accessToken).getSingleResult();
+            return entityManager.createNamedQuery(UserAuthTokenEntity.BY_ACCESS_TOKEN, UserAuthTokenEntity.class).setParameter("accessToken", accessToken).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
-    }
-
-    @Override
-    public UserAuthTokenEntity findToken(final Long userId, final String clientId, final String originIpAddress) {
-        final List<
-                UserAuthTokenEntity> userAuthTokens = entityManager.createNamedQuery(UserAuthTokenEntity.TOKEN_BY_USER_AND_CLIENT, UserAuthTokenEntity.class) //
-                        .setParameter("userId", userId) //
-                        .setParameter("clientId", clientId) //
-                        .setParameter("originIpAddress", originIpAddress) //
-                        .getResultList();
-        if (userAuthTokens.isEmpty()) {
-            return null;
-        }
-
-        return userAuthTokens.get(0);
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * An enum representing user's logout action.
+ * An enum representing user's invalidateToken action.
  */
 public enum LogoutAction {
 

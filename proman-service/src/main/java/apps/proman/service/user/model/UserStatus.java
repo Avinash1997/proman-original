@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public enum UserStatus {
 
-    INACTIVE(0), ACTIVE(1), LOCKED(2);
+    INACTIVE(0), ACTIVE(1), LOCKED(2), REGISTERED(3);
 
     private static final Map<Integer, UserStatus> LOOKUP = new HashMap();
 

@@ -4,12 +4,15 @@ server:
     contextPath: /api
 
 spring:
+
   application:
     name: proman-api
+
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres@123
+
   jpa:
     properties:
       hibernate:

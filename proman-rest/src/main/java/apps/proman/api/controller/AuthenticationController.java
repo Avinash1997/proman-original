@@ -23,26 +23,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import apps.proman.api.controller.ext.ResponseBuilder;
-import apps.proman.api.controller.ext.SecuredController;
 import apps.proman.api.controller.provider.BasicAuthDecoder;
 import apps.proman.api.controller.provider.BearerAuthDecoder;
 import apps.proman.api.model.AuthorizedUserResponse;
 import apps.proman.api.model.RoleDetailsType;
 import apps.proman.service.common.exception.ApplicationException;
+import apps.proman.service.user.domain.AuthTokenService;
 import apps.proman.service.user.domain.AuthenticationService;
 import apps.proman.service.user.model.AuthorizedUser;
 
 @RestController
 @RequestMapping(path = BASE_URL_AUTH)
-public class AuthenticationController extends SecuredController {
+public class AuthenticationController {
 
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private AuthTokenService authTokenService;
+
     @RequestMapping(method = POST, path = "/login", produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AuthorizedUserResponse> login(@RequestHeader final String authorization) throws ApplicationException {
         final BasicAuthDecoder basicAuthDecoder = new BasicAuthDecoder(authorization);
-        final AuthorizedUser authorizedUser = authenticationService.authenticate(getRequestContext(), basicAuthDecoder.getUsername(), basicAuthDecoder.getPassword());
+        final AuthorizedUser authorizedUser = authenticationService.authenticate(basicAuthDecoder.getUsername(), basicAuthDecoder.getPassword());
         return new ResponseBuilder<AuthorizedUserResponse>(HttpStatus.OK).payload(authorizedUserTransform.apply(authorizedUser))
                 .accessToken(authorizedUser.getAccessToken()).build();
     }
@@ -50,7 +53,7 @@ public class AuthenticationController extends SecuredController {
     @RequestMapping(method = POST, path = "/logout")
     public void logout(@RequestHeader final String authorization) throws ApplicationException {
         final BearerAuthDecoder authDecoder = new BearerAuthDecoder(authorization);
-        authenticationService.logout(getRequestContext(), authDecoder.getAccessToken());
+        authTokenService.invalidateToken(authDecoder.getAccessToken());
     }
 
     private Function<AuthorizedUser, AuthorizedUserResponse> authorizedUserTransform =

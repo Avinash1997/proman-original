@@ -1,5 +1,7 @@
 package apps.proman.api.handler;
 
+import static org.springframework.http.HttpStatus.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,22 +22,27 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthenticationFailedException.class)
     public final ResponseEntity<ErrorResponse> handleAuthenticationFailedException(AuthenticationFailedException ex, WebRequest request) {
-        return new ResponseEntity(errorResponse(ex), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(errorResponse(ex), UNAUTHORIZED);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     public final ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex, WebRequest request) {
-        return new ResponseEntity(errorResponse(ex), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity(errorResponse(ex), UNAUTHORIZED);
     }
 
     @ExceptionHandler(AuthorizationFailedException.class)
     public final ResponseEntity<ErrorResponse> handleAuthorizationFailedException(AuthorizationFailedException ex, WebRequest request) {
-        return new ResponseEntity(errorResponse(ex), HttpStatus.FORBIDDEN);
+        return new ResponseEntity(errorResponse(ex), FORBIDDEN);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public final ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
-        return new ResponseEntity(errorResponse(ex), HttpStatus.NOT_FOUND);
+        return new ResponseEntity(errorResponse(ex), NOT_FOUND);
+    }
+
+    @ExceptionHandler(ApplicationException.class)
+    public final ResponseEntity<ErrorResponse> handleApplicationException(ApplicationException ex, WebRequest request) {
+        return new ResponseEntity(errorResponse(ex), UNPROCESSABLE_ENTITY);
     }
 
     private ErrorResponse errorResponse(final ApplicationException appExc) {

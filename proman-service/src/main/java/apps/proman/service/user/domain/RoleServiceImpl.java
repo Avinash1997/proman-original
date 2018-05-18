@@ -5,7 +5,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import apps.proman.service.common.data.RequestContext;
 import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.user.dao.RoleDao;
 import apps.proman.service.user.entity.RoleEntity;
@@ -17,7 +16,7 @@ public class RoleServiceImpl implements  RoleService {
     private RoleDao roleDao;
 
     @Override
-    public RoleEntity findUserByUuid(@NotNull RequestContext requestContext, @NotNull Integer roleUuid) throws ApplicationException {
+    public RoleEntity findRoleByUuid(@NotNull Integer roleUuid) throws ApplicationException {
         return roleDao.findByUUID(RoleEntity.class, roleUuid);
     }
 }

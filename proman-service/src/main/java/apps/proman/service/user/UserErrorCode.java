@@ -27,11 +27,13 @@ public enum UserErrorCode implements ErrorCode {
 
     USR_005("USR-005", "Invalid access token."),
 
-    USR_006("USR-006", "User account is LOCKED."),
+    USR_006("USR-006", "Access token is already expired."),
 
-    USR_007("USR-007", "User account is INACTIVE."),
+    USR_007("USR-007", "User account is LOCKED."),
 
-    USR_008("USR-008", "User with email address [{0}] already exist.");
+    USR_008("USR-008", "User account is INACTIVE."),
+
+    USR_009("USR-009", "User with email address [{0}] already exist.");
 
     private static final Map<String, UserErrorCode> LOOKUP = new HashMap<String, UserErrorCode>();
 

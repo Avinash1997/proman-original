@@ -19,12 +19,4 @@ public interface UserAuthDao extends BaseDao<UserAuthTokenEntity> {
 
     UserAuthTokenEntity findToken(@NotNull String accessToken);
 
-    /**
-     * @param userId
-     * @param clientId
-     * @param clientIpAddress
-     * @return
-     */
-    UserAuthTokenEntity findToken(@NotNull Long userId, @NotNull String clientId, @NotNull String clientIpAddress);
-
 }

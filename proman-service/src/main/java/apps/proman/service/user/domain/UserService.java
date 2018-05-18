@@ -9,9 +9,7 @@ package apps.proman.service.user.domain;
 
 import javax.validation.constraints.NotNull;
 
-import apps.proman.service.common.data.RequestContext;
 import apps.proman.service.common.exception.ApplicationException;
-import apps.proman.service.common.exception.EntityNotFoundException;
 import apps.proman.service.user.entity.UserEntity;
 import apps.proman.service.user.model.UserStatus;
 
@@ -20,14 +18,16 @@ import apps.proman.service.user.model.UserStatus;
  */
 public interface UserService {
 
-    UserEntity findUserByEmail(@NotNull RequestContext requestContext, @NotNull String emailAddress) throws ApplicationException;
+    UserEntity findUserByEmail(@NotNull String emailAddress) throws ApplicationException;
 
-    UserEntity findUserByUuid(@NotNull RequestContext requestContext, @NotNull String userUuid) throws ApplicationException;
+    UserEntity findUserByUuid(@NotNull String userUuid) throws ApplicationException;
 
-    UserEntity createUser(@NotNull RequestContext requestContext, @NotNull UserEntity newUser) throws ApplicationException;
+    UserEntity createUser(@NotNull UserEntity newUser, @NotNull Integer roleUuid) throws ApplicationException;
 
-    void updateUser(@NotNull RequestContext requestContext, @NotNull String userUuid, @NotNull UserEntity updatedUser) throws ApplicationException;
+    UserEntity createUser(@NotNull UserEntity newUser) throws ApplicationException;
 
-    void updateUserStatus(@NotNull RequestContext requestContext, @NotNull String userUuid, @NotNull UserStatus newUserStatus) throws ApplicationException;
+    void updateUser(@NotNull String userUuid, @NotNull UserEntity updatedUser) throws ApplicationException;
+
+    void updateUserStatus(@NotNull String userUuid, @NotNull UserStatus newUserStatus) throws ApplicationException;
 
 }

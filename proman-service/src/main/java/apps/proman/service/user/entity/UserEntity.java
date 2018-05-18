@@ -226,6 +226,7 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Unive
     @PrePersist
     public void prePersist() {
         this.uuid = UUID.randomUUID().toString();
+        super.prePersist();
     }
 
 }

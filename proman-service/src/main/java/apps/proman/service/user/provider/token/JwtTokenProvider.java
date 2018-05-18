@@ -8,6 +8,7 @@
 package apps.proman.service.user.provider.token;
 
 import java.io.UnsupportedEncodingException;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Date;
 
@@ -22,7 +23,7 @@ import apps.proman.service.common.exception.UnexpectedException;
 /**
  * Provider to serialize/deserialize the JWT specification based tokens.
  */
-public class JwtTokenProvider implements TokenProvider {
+public class JwtTokenProvider {
 
     private static final String TOKEN_ISSUER = "https://proman.io";
 
@@ -36,22 +37,14 @@ public class JwtTokenProvider implements TokenProvider {
         }
     }
 
-    @Override
-    public String serialize(final Token tokenSpec) {
-        final Date issuedAt = new Date(tokenSpec.getIssuedTime().getLong(ChronoField.INSTANT_SECONDS));
-        final Date expiryAt = new Date(tokenSpec.getExpirationTime().getLong(ChronoField.INSTANT_SECONDS));
+    public String generateToken(final String userUuid, final ZonedDateTime issuedDateTime, final ZonedDateTime expiresDateTime) {
+
+        final Date issuedAt = new Date(issuedDateTime.getLong(ChronoField.INSTANT_SECONDS));
+        final Date expiresAt = new Date(expiresDateTime.getLong(ChronoField.INSTANT_SECONDS));
 
         return JWT.create().withIssuer(TOKEN_ISSUER) //
-                .withAudience(tokenSpec.getClientId(), tokenSpec.getClientIpAddress()) //
-                .withSubject(tokenSpec.getUserId()) //
-                .withIssuedAt(issuedAt).withExpiresAt(expiryAt).sign(algorithm);
-    }
-
-    @Override
-    public Token deserialize(final String rawToken) {
-        final JWTVerifier verifier = JWT.require(algorithm).withIssuer(TOKEN_ISSUER).build();
-        final DecodedJWT jwt = verifier.verify(rawToken);
-        return new Token.Builder().clientId(jwt.getAudience().get(0)).clientIpAddress(jwt.getAudience().get(1)).userId(jwt.getSubject()).build();
+                .withAudience(userUuid) //
+                .withIssuedAt(issuedAt).withExpiresAt(expiresAt).sign(algorithm);
     }
 
 }

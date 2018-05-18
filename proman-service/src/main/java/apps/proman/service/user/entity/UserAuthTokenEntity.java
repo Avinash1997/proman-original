@@ -38,26 +38,20 @@ import apps.proman.service.common.entity.ext.EntityHashCodeBuilder;
 @Entity
 @Table(name = "USER_AUTH_TOKENS", schema = SCHEMA)
 @NamedQueries({ //
-        @NamedQuery(name = UserAuthTokenEntity.TOKEN_BY_USER_AND_CLIENT, //
-                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.clientId = :clientId AND uat.originIpAddress = :originIpAddress ORDER BY uat.createdAt DESC"), //
-        @NamedQuery(name = UserAuthTokenEntity.TOKEN_BY_ACCESS_TOKEN, //
+
+        @NamedQuery(name = UserAuthTokenEntity.BY_ACCESS_TOKEN, //
                 query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.accessToken = :accessToken"), //
-        @NamedQuery(name = UserAuthTokenEntity.VALID_TOKEN_BY_USER, //
-                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.expiresAt > :currentTime AND uat.logoutAt is null"), //
-        @NamedQuery(name = UserAuthTokenEntity.EXPIRED_TOKEN_BY_USER, //
-                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId AND uat.expiresAt <= :currentTime AND uat.logoutAt is null") //
+        @NamedQuery(name = UserAuthTokenEntity.BY_USER, //
+                query = "SELECT uat FROM UserAuthTokenEntity uat WHERE uat.user.id = :userId"), //
 })
 public class UserAuthTokenEntity extends MutableEntity implements Identifier<Long>, Serializable {
 
     private static final long serialVersionUID = -8078348738674166228L;
 
-    public static final String TOKEN_BY_USER_AND_CLIENT = "UserAuthTokenEntity.latestAuthTokenByUserAndClient";
+    public static final String BY_ACCESS_TOKEN = "UserAuthTokenEntity.byAccessToken";
 
-    public static final String TOKEN_BY_ACCESS_TOKEN = "UserAuthTokenEntity.authTokenByAccessToken";
+    public static final String BY_USER = "UserAuthTokenEntity.byUser";
 
-    public static final String VALID_TOKEN_BY_USER = "UserAuthTokenEntity.validTokenByUser";
-
-    public static final String EXPIRED_TOKEN_BY_USER = "UserAuthTokenEntity.expiredTokenByUser";
 
     @Id
     @Column(name = "ID")
@@ -68,26 +62,12 @@ public class UserAuthTokenEntity extends MutableEntity implements Identifier<Lon
     @JoinColumn(name = "USER_ID")
     private UserEntity user;
 
-    @Column(name = "CLIENT_ID")
-    @NotNull
-    @Size(max = 20)
-    private String clientId;
-
-    @Column(name = "ORIGIN_IPADDRESS")
-    @NotNull
-    @Size(max = 20)
-    private String originIpAddress;
-
-    @Column(name = "ACCESS_TOKEN")
+     @Column(name = "ACCESS_TOKEN")
     @NotNull
     @Size(max = 500)
     private String accessToken;
 
-    @Column(name = "REFRESH_TOKEN")
-    @Size(max = 500)
-    private String refreshToken;
-
-    @Column(name = "LOGIN_AT")
+     @Column(name = "LOGIN_AT")
     @NotNull
     private ZonedDateTime loginAt;
 
@@ -112,22 +92,6 @@ public class UserAuthTokenEntity extends MutableEntity implements Identifier<Lon
 
     public void setUser(UserEntity user) {
         this.user = user;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getOriginIpAddress() {
-        return originIpAddress;
-    }
-
-    public void setOriginIpAddress(String ipAddress) {
-        this.originIpAddress = ipAddress;
     }
 
     public String getAccessToken() {

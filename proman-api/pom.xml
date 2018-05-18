@@ -97,7 +97,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${contracts.dir}/v1/authentication.yaml</inputSpec>
+                            <inputSpec>${contracts.dir}/v1/authentication.json</inputSpec>
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
@@ -107,7 +107,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${contracts.dir}/v1/registeruser.yaml</inputSpec>
+                            <inputSpec>${contracts.dir}/v1/signup.json</inputSpec>
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
@@ -117,7 +117,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${contracts.dir}/v1/usermanagement.yaml</inputSpec>
+                            <inputSpec>${contracts.dir}/v1/usermanagement.json</inputSpec>
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
@@ -128,7 +128,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${contracts.dir}/v1/boardmanagement.yaml</inputSpec>
+                            <inputSpec>${contracts.dir}/v1/boardmanagement.json</inputSpec>
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>

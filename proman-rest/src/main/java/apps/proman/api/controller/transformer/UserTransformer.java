@@ -22,6 +22,7 @@ public final class UserTransformer {
         userEntity.setFirstName(userRequest.getFirstName());
         userEntity.setLastName(userRequest.getLastName());
         userEntity.setEmail(userRequest.getEmailAddress());
+        //userEntity.setPassword(userRequest.getPassword());
         userEntity.setMobilePhone(userRequest.getMobileNumber());
         return userEntity;
     }

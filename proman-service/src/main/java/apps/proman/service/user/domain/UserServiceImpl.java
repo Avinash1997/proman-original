@@ -21,6 +21,7 @@ import apps.proman.service.user.UserErrorCode;
 import apps.proman.service.user.dao.UserDao;
 import apps.proman.service.user.entity.UserEntity;
 import apps.proman.service.user.model.UserStatus;
+import apps.proman.service.user.provider.PasswordCryptographyProvider;
 
 /**
  * Implementation of {@link UserService}.
@@ -30,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PasswordCryptographyProvider passwordCryptographyProvider;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -58,9 +62,15 @@ public class UserServiceImpl implements UserService {
     public UserEntity createUser(final RequestContext requestContext, final UserEntity newUser) throws ApplicationException {
 
         final UserEntity userEntity = userDao.findByEmail(newUser.getEmail());
+
         if(userEntity != null) {
             throw new ApplicationException(UserErrorCode.USR_008, newUser.getEmail());
         }
+
+        final String[] encryptedData = passwordCryptographyProvider.encrypt(newUser.getPassword());
+        userEntity.setPassword(encryptedData[0]);
+        userEntity.setSalt(encryptedData[1]);
+
         return userDao.create(newUser);
     }
 

@@ -28,7 +28,7 @@ public class PasswordCryptographyProvider {
     private static String SECRET_KEY_ALGORITHM = "PBKDF2WithHmacSHA512";
     private static int HASHING_ITERATIONS = 1000;
     private static int HASHING_KEY_LENGTH = 64;
-    final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     /**
      * This method generates Salt and hashed Password

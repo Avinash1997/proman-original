@@ -92,32 +92,33 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>authentication-v1</id>
+                        <id>authentication</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${contracts.dir}/v1/authentication.json</inputSpec>
+                            <inputSpec>${contracts.dir}/authentication.json</inputSpec>
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>registeruser-v1</id>
+                        <id>signup</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${contracts.dir}/v1/signup.json</inputSpec>
+                            <inputSpec>${contracts.dir}/signup.json</inputSpec>
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
+
                     <execution>
-                        <id>usermanagement-v1</id>
+                        <id>usermanagement</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${contracts.dir}/v1/usermanagement.json</inputSpec>
+                            <inputSpec>${contracts.dir}/usermanagement.json</inputSpec>
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
@@ -128,11 +129,10 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${contracts.dir}/v1/boardmanagement.json</inputSpec>
+                            <inputSpec>${contracts.dir}/boardmanagement.json</inputSpec>
                             <language>${supported.language}</language>
                         </configuration>
                     </execution>
-
                 </executions>
 
             </plugin>

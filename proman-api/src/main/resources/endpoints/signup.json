@@ -35,9 +35,6 @@
             ],
             "parameters": [
                {
-                  "$ref": "#/parameters/ClientId"
-               },
-               {
                   "in": "body",
                   "name": "SignupUserRequest",
                   "description": "Request containing user signup information",
@@ -111,15 +108,6 @@
                }
             }
          }
-      }
-   },
-   "parameters": {
-      "ClientId": {
-         "name": "client-id",
-         "type": "string",
-         "in": "header",
-         "required": true,
-         "description": "Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API."
       }
    },
    "definitions": {

@@ -39,9 +39,6 @@
             ],
             "parameters": [
                {
-                  "$ref": "#/parameters/ClientId"
-               },
-               {
                   "$ref": "#/parameters/Authorization"
                },
                {
@@ -137,9 +134,6 @@
                "application/json"
             ],
             "parameters": [
-               {
-                  "$ref": "#/parameters/ClientId"
-               },
                {
                   "$ref": "#/parameters/Authorization"
                },
@@ -272,9 +266,6 @@
                   "$ref": "#/parameters/UserId"
                },
                {
-                  "$ref": "#/parameters/ClientId"
-               },
-               {
                   "$ref": "#/parameters/Authorization"
                }
             ],
@@ -359,9 +350,6 @@
             "parameters": [
                {
                   "$ref": "#/parameters/UserId"
-               },
-               {
-                  "$ref": "#/parameters/ClientId"
                },
                {
                   "$ref": "#/parameters/Authorization"
@@ -468,9 +456,6 @@
                   "$ref": "#/parameters/UserId"
                },
                {
-                  "$ref": "#/parameters/ClientId"
-               },
-               {
                   "$ref": "#/parameters/Authorization"
                },
                {
@@ -552,13 +537,6 @@
       }
    },
    "parameters": {
-      "ClientId": {
-         "name": "client-id",
-         "type": "string",
-         "in": "header",
-         "required": true,
-         "description": "Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API."
-      },
       "Authorization": {
          "name": "authorization",
          "type": "string",

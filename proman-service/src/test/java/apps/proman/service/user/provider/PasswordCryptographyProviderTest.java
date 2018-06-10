@@ -15,7 +15,7 @@ import org.junit.Test;
 
 public class PasswordCryptographyProviderTest {
 
-    private static final String RAW_PASSWORD = "Pr0m@n123";
+    private static final String RAW_PASSWORD = "proman@123";
 
     private final PasswordCryptographyProvider cryptographyProvider = new PasswordCryptographyProvider();
 

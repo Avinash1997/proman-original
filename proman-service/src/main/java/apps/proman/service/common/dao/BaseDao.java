@@ -18,8 +18,8 @@ public interface BaseDao<E> {
 
     E update(E e);
 
-    E findById(Class<? extends Entity> entityClass, final Object id);
+    E findById(final Object id);
 
-    E findByUUID(Class<? extends Entity> entityClass, final Object uuid);
+    E findByUUID(final Object uuid);
 
 }

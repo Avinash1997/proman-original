@@ -1,4 +1,4 @@
-package apps.proman.service.user.domain;
+package apps.proman.service.user.business;
 
 import javax.validation.constraints.NotNull;
 

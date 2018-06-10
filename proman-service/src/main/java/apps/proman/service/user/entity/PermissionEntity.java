@@ -30,11 +30,11 @@ public class PermissionEntity extends ImmutableEntity implements Identifier<Inte
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "UUID")
     @NotNull
-    private int uuid;
+    private Integer uuid;
 
     @ManyToOne
     @JoinColumn(name = "GROUP_ID")

@@ -1,9 +1,12 @@
 package apps.proman.api.controller;
 
 import static apps.proman.api.controller.transformer.UserTransformer.*;
+import static apps.proman.api.data.ResourceConstants.BASE_URL;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +27,13 @@ import apps.proman.api.model.UserStatusType;
 import apps.proman.api.model.UsersSummaryResponse;
 import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.user.UserErrorCode;
-import apps.proman.service.user.domain.UserService;
+import apps.proman.service.user.business.UserService;
 import apps.proman.service.user.entity.UserEntity;
-import apps.proman.service.user.model.SearchResult;
+import apps.proman.service.common.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping(BASE_URL)
 public class UserAdminController {
 
     @Autowired
@@ -71,6 +74,9 @@ public class UserAdminController {
     public ResponseEntity<CreateUserResponse> createUser(@RequestBody final CreateUserRequest newUserRequest) throws ApplicationException {
 
         final UserEntity newUserEntity = toEntity(newUserRequest);
+        //newUserEntity.setUuid(UUID.randomUUID().toString());
+        newUserEntity.setStatus(UserStatus.ACTIVE.getCode());
+
         final UserEntity createdUser = userService.createUser(newUserEntity, newUserRequest.getRole().getId());
         return new ResponseBuilder<CreateUserResponse>(HttpStatus.CREATED).payload(toCreateUserResponse(createdUser)).build();
     }

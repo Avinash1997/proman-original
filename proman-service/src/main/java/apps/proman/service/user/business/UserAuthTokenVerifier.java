@@ -5,7 +5,7 @@
  * Date: May 5, 2018
  * Author: Thribhuvan Krishnamurthy
  */
-package apps.proman.service.user.domain;
+package apps.proman.service.user.business;
 
 import java.time.ZonedDateTime;
 

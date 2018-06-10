@@ -1,8 +1,6 @@
 package apps.proman.api.controller.transformer;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import apps.proman.api.model.CreateUserRequest;
@@ -11,6 +9,7 @@ import apps.proman.api.model.PermissionsType;
 import apps.proman.api.model.RoleDetailsType;
 import apps.proman.api.model.RoleSummaryType;
 import apps.proman.api.model.SignupUserRequest;
+import apps.proman.api.model.SignupUserResponse;
 import apps.proman.api.model.UserDetailsResponse;
 import apps.proman.api.model.UserStatusType;
 import apps.proman.api.model.UsersSummaryResponse;
@@ -18,7 +17,7 @@ import apps.proman.api.model.UsersSummaryType;
 import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.RolePermissionEntity;
 import apps.proman.service.user.entity.UserEntity;
-import apps.proman.service.user.model.SearchResult;
+import apps.proman.service.common.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;
 
 public final class UserTransformer {
@@ -43,6 +42,10 @@ public final class UserTransformer {
 
     public static CreateUserResponse toCreateUserResponse(UserEntity userEntity) {
         return new CreateUserResponse().id(userEntity.getUuid()).status(toStatus(userEntity.getStatus()));
+    }
+
+    public static SignupUserResponse toSignupResponse(UserEntity userEntity) {
+        return new SignupUserResponse().id(userEntity.getUuid()).status(toStatus(userEntity.getStatus()));
     }
 
     public static UserDetailsResponse toUserDetailsResponse(UserEntity userEntity) {

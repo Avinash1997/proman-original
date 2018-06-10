@@ -9,16 +9,12 @@ package apps.proman.service.user.dao;
 
 import java.util.List;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
 import apps.proman.service.common.dao.BaseDaoImpl;
 import apps.proman.service.user.entity.UserEntity;
-import apps.proman.service.user.model.SearchResult;
+import apps.proman.service.common.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;
 
 /**

@@ -5,7 +5,7 @@
  * Date: May 5, 2018
  * Author: Thribhuvan Krishnamurthy
  */
-package apps.proman.service.user.domain;
+package apps.proman.service.user.business;
 
 import static apps.proman.service.user.UserErrorCode.*;
 
@@ -18,7 +18,7 @@ import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.common.exception.EntityNotFoundException;
 import apps.proman.service.user.dao.UserDao;
 import apps.proman.service.user.entity.UserEntity;
-import apps.proman.service.user.model.SearchResult;
+import apps.proman.service.common.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;
 import apps.proman.service.user.provider.PasswordCryptographyProvider;
 
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public UserEntity findUserByUuid(final String userUuid) throws ApplicationException {
 
-        final UserEntity userEntity = userDao.findByUUID(UserEntity.class, userUuid);
+        final UserEntity userEntity = userDao.findByUUID(userUuid);
         if (userEntity == null) {
             throw new EntityNotFoundException(USR_001, userUuid);
         }
@@ -78,23 +78,14 @@ public class UserServiceImpl implements UserService {
             throw new ApplicationException(USR_009, newUser.getEmail());
         }
 
-        newUser.setStatus(UserStatus.ACTIVE.getCode());
+        setDefaultPassword(newUser);
         newUser.setRole(roleService.findRoleByUuid(roleUuid));
-
-        String password = newUser.getPassword();
-        if(password == null) {
-            password = "pr0manU$er@123";
-        }
-
-        final String[] encryptedData = passwordCryptographyProvider.encrypt(password);
-        newUser.setSalt(encryptedData[0]);
-        newUser.setPassword(encryptedData[1]);
 
         return userDao.create(newUser);
     }
 
     @Override
-    @Transactional(propagation = Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity createUser(final UserEntity newUser) throws ApplicationException {
 
         final UserEntity userEntity = userDao.findByEmail(newUser.getEmail());
@@ -102,11 +93,7 @@ public class UserServiceImpl implements UserService {
             throw new ApplicationException(USR_009, newUser.getEmail());
         }
 
-        newUser.setStatus(UserStatus.REGISTERED.getCode());
-
-        final String[] encryptedData = passwordCryptographyProvider.encrypt(newUser.getPassword());
-        userEntity.setPassword(encryptedData[0]);
-        userEntity.setSalt(encryptedData[1]);
+        setDefaultPassword(newUser);
 
         return userDao.create(newUser);
     }
@@ -115,7 +102,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateUser(final String userUuid, final UserEntity updatedUser) throws ApplicationException {
 
-        final UserEntity existingUserEntity = userDao.findByUUID(UserEntity.class, userUuid);
+        final UserEntity existingUserEntity = userDao.findByUUID(userUuid);
         if (existingUserEntity == null) {
             throw new EntityNotFoundException(USR_001, userUuid);
         }
@@ -131,7 +118,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateUserStatus(final String userUuid, final UserStatus newUserStatus) throws ApplicationException {
 
-        final UserEntity existingUserEntity = userDao.findByUUID(UserEntity.class, userUuid);
+        final UserEntity existingUserEntity = userDao.findByUUID(userUuid);
         if (existingUserEntity == null) {
             throw new EntityNotFoundException(USR_001, userUuid);
         }
@@ -141,6 +128,16 @@ public class UserServiceImpl implements UserService {
             existingUserEntity.setStatus(newUserStatus.getCode());
             userDao.update(existingUserEntity);
         }
+    }
+
+    private void setDefaultPassword(final UserEntity newUser) {
+        String password = newUser.getPassword();
+        if(password == null) {
+            password = "proman@123";
+        }
+        final String[] encryptedData = passwordCryptographyProvider.encrypt(password);
+        newUser.setSalt(encryptedData[0]);
+        newUser.setPassword(encryptedData[1]);
     }
 
 }

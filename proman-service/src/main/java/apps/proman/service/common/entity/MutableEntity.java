@@ -8,6 +8,7 @@
 package apps.proman.service.common.entity;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;

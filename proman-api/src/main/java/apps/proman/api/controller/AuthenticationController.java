@@ -28,8 +28,8 @@ import apps.proman.api.controller.provider.BearerAuthDecoder;
 import apps.proman.api.model.AuthorizedUserResponse;
 import apps.proman.api.model.RoleDetailsType;
 import apps.proman.service.common.exception.ApplicationException;
-import apps.proman.service.user.domain.AuthTokenService;
-import apps.proman.service.user.domain.AuthenticationService;
+import apps.proman.service.user.business.AuthTokenService;
+import apps.proman.service.user.business.AuthenticationService;
 import apps.proman.service.user.model.AuthorizedUser;
 
 @RestController

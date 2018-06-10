@@ -1,4 +1,4 @@
-package apps.proman.service.user.model;
+package apps.proman.service.common.model;
 
 import java.util.Collection;
 

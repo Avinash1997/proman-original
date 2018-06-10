@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 
 import apps.proman.service.common.dao.BaseDao;
 import apps.proman.service.user.entity.UserEntity;
-import apps.proman.service.user.model.SearchResult;
+import apps.proman.service.common.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;
 
 /**

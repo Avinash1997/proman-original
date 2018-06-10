@@ -5,12 +5,11 @@
  * Date: May 5, 2018
  * Author: Thribhuvan Krishnamurthy
  */
-package apps.proman.service.user.domain;
+package apps.proman.service.user.business;
 
 import javax.validation.constraints.NotNull;
 
 import apps.proman.service.common.exception.ApplicationException;
-import apps.proman.service.common.exception.AuthorizationFailedException;
 import apps.proman.service.user.model.AuthorizedUser;
 
 /**

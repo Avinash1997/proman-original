@@ -35,21 +35,31 @@ public class BaseDaoImpl<E extends Entity> implements BaseDao<E> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public E findById(final Class<? extends Entity> entityClass, final Object id) {
-        Type mySuperclass = this.getClass().getGenericSuperclass();
-        Type tType = ((ParameterizedType) mySuperclass).getActualTypeArguments()[0];
-        return (E) entityManager.find(entityClass, id);
+    public E findById(final Object id) {
+        final Class clazz = entityClass();
+        return (E) entityManager.find(clazz, id);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public E findByUUID(final Class<? extends Entity> entityClass, final Object uuid) {
-        return (E) entityManager.createQuery("SELECT e FROM " + entityClass.getSimpleName()
-                + " e WHERE e.uuid = :uuid", entityClass).setParameter("uuid", uuid).getSingleResult();
+    public E findByUUID(final Object uuid) {
+        final Class clazz = entityClass();
+        return (E) entityManager.createQuery("SELECT e FROM " + clazz.getSimpleName()
+                + " e WHERE e.uuid = :uuid", clazz).setParameter("uuid", uuid).getSingleResult();
     }
 
     protected int getOffset(final int page, final int limit) {
-        return (page - 1) * limit ;
+        return (page - 1) * limit;
+    }
+
+    private Class<?> entityClass() {
+
+        final Type tType = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        try {
+            return Class.forName(tType.getTypeName());
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
 }

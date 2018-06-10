@@ -5,15 +5,13 @@
  * Date: May 5, 2018
  * Author: Thribhuvan Krishnamurthy
  */
-package apps.proman.service.user.domain;
+package apps.proman.service.user.business;
 
 import static apps.proman.service.user.UserErrorCode.USR_005;
 import static apps.proman.service.user.UserErrorCode.USR_006;
 
 import java.time.ZonedDateTime;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

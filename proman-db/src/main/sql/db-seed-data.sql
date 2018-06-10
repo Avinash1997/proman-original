@@ -37,7 +37,7 @@ INSERT INTO proman.PERMISSIONS (ID, UUID, NAME, DESCRIPTION, GROUP_ID, CREATED_B
 		(21, 121, 'Remove Workflow Template', 'Remove an existing workflow template', 3, CURRENT_USER),
 		(22, 122, 'View Reports', 'View various reports', 4, CURRENT_USER);
 
-INSERT INTO proman.ROLES (ID, UUID, NAME, DESCRIPTION, STATUS, CREATED_BY)
+INSERT INTO proman.ROLES (ID, UUID, NAME, DESCRIPTION, ACTIVE, CREATED_BY)
 		VALUES 
 		(1, 101, 'Administrator', 'Administrator', true, CURRENT_USER),
 		(2, 102, 'Project Manager', 'Project Manager', true, CURRENT_USER),
@@ -64,7 +64,7 @@ INSERT INTO proman.ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID, CREATED_BY)
 INSERT INTO proman.USERS (ID, ROLE_ID, UUID, EMAIL, PASSWORD, SALT, FIRST_NAME, LAST_NAME,
 					MOBILE_PHONE, STATUS, FAILED_LOGIN_COUNT, LAST_LOGIN_AT, LAST_PASSWORD_CHANGE_AT, CREATED_BY)
 		VALUES 
-		(nextval('proman.users_id_seq'), 1, '7d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'admin@proman.io', 'DC7F35F8259BC745', 'WTpaUp4S1n/4N95pIVfV73HnHE0OCrvvf3PGCFEafZ0=', 'Proman', 'Administrator',
+		(nextval('proman.users_id_seq'), 1, '7d174a25-ba31-45a8-85b4-b06ffc9d5f8f', 'admin@proman.io', 'DF8582C633D66A48', 'sHrhX9BtMOnUpSKFHz8mltet4gXGfGR33JdvH0fst5I=', 'Proman', 'Administrator',
 		'(111) 111-1111', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_USER);
 
 		

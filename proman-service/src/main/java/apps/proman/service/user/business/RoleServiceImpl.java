@@ -1,4 +1,4 @@
-package apps.proman.service.user.domain;
+package apps.proman.service.user.business;
 
 import javax.validation.constraints.NotNull;
 
@@ -17,6 +17,6 @@ public class RoleServiceImpl implements  RoleService {
 
     @Override
     public RoleEntity findRoleByUuid(@NotNull Integer roleUuid) throws ApplicationException {
-        return roleDao.findByUUID(RoleEntity.class, roleUuid);
+        return roleDao.findByUUID(roleUuid);
     }
 }

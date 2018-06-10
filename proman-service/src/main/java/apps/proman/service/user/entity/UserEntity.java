@@ -21,6 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
@@ -66,7 +67,6 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Unive
     private long id;
 
     @Column(name = "UUID")
-    @NotNull
     @Size(max = 64)
     private String uuid;
 
@@ -100,7 +100,7 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Unive
 
     @Column(name = "STATUS")
     @NotNull
-    private int status;
+    private Integer status;
 
     @Column(name = "FAILED_LOGIN_COUNT")
     @Min(0)
@@ -127,6 +127,10 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Unive
     @Override
     public String getUuid() {
         return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public RoleEntity getRole() {
@@ -178,11 +182,11 @@ public class UserEntity extends MutableEntity implements Identifier<Long>, Unive
         this.mobilePhone = mobilePhone;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(final int status) {
+    public void setStatus(final Integer status) {
         this.status = status;
     }
 

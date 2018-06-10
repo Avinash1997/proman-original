@@ -147,7 +147,7 @@ paths:
          - $ref: '#/parameters/ClientId'
          - $ref: '#/parameters/Authorization'
          - in: query
-           name: offset
+           name: page
            type: integer
            required: false
            description: query to set the position of the records to be fetched from
@@ -486,9 +486,9 @@ definitions:
   UsersSummaryResponse:
     type: object
     properties:
-      offset:
+      page:
         type: integer
-        description: offset or position of the fetched users
+        description: page or position of the fetched users
       limit:
         type: integer
         description: number of users fetched per this request
@@ -501,7 +501,7 @@ definitions:
           $ref: '#/definitions/UsersSummaryType'
         description: List of users
     required:
-      - offset
+      - page
       - limit
       - total_count
       - users

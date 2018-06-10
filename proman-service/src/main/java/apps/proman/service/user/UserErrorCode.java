@@ -33,7 +33,10 @@ public enum UserErrorCode implements ErrorCode {
 
     USR_008("USR-008", "User account is INACTIVE."),
 
-    USR_009("USR-009", "User with email address [{0}] already exist.");
+    USR_009("USR-009", "User with email address [{0}] already exist."),
+
+    USR_010("USR-010", "Not a valid user status. Supported statuses are [{0}]")
+    ;
 
     private static final Map<String, UserErrorCode> LOOKUP = new HashMap<String, UserErrorCode>();
 

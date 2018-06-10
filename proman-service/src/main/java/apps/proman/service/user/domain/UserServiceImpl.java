@@ -16,10 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.common.exception.EntityNotFoundException;
-import apps.proman.service.user.UserErrorCode;
 import apps.proman.service.user.dao.UserDao;
-import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.UserEntity;
+import apps.proman.service.user.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;
 import apps.proman.service.user.provider.PasswordCryptographyProvider;
 
@@ -37,6 +36,16 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordCryptographyProvider passwordCryptographyProvider;
+
+    @Override
+    public SearchResult<UserEntity> findUsers(int page, int limit) {
+        return userDao.findUsers(page, limit);
+    }
+
+    @Override
+    public SearchResult<UserEntity> findUsers(UserStatus userStatus, int page, int limit) {
+        return userDao.findUsers(userStatus, page, limit);
+    }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)

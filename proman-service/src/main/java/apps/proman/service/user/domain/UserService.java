@@ -11,12 +11,17 @@ import javax.validation.constraints.NotNull;
 
 import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.user.entity.UserEntity;
+import apps.proman.service.user.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;
 
 /**
  * Interface for user related services.
  */
 public interface UserService {
+
+    SearchResult<UserEntity> findUsers(int offset, int limit);
+
+    SearchResult<UserEntity> findUsers(UserStatus userStatus, int offset, int limit);
 
     UserEntity findUserByEmail(@NotNull String emailAddress) throws ApplicationException;
 

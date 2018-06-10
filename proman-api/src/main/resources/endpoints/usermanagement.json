@@ -562,9 +562,9 @@
       "UsersSummaryResponse": {
          "type": "object",
          "properties": {
-            "offset": {
+            "page": {
                "type": "integer",
-               "description": "offset or position of the fetched users"
+               "description": "page or position of the fetched users"
             },
             "limit": {
                "type": "integer",
@@ -583,7 +583,7 @@
             }
          },
          "required": [
-            "offset",
+            "page",
             "limit",
             "total_count",
             "users"

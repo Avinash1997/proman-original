@@ -125,6 +125,8 @@
                 						<srcFile>${sql.path}/db-setup.sql</srcFile>
 										<srcFile>${sql.path}/db-setup-roles.sql</srcFile>
 										<srcFile>${sql.path}/db-setup-users.sql</srcFile>
+										<srcFile>${sql.path}/db-setup-workflows.sql</srcFile>
+										<srcFile>${sql.path}/db-setup-boards.sql</srcFile>
               						</srcFiles>
 		                        </configuration>
 		                    </execution>

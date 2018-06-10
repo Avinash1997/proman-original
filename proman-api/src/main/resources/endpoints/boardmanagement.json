@@ -3,7 +3,7 @@
    "info": {
       "title": "Board Management API",
       "version": "1.0.0",
-      "description": "## API of Board Management Services\n\nThis specification describes the endpoints, request/response model of the Board Management API. This API provides REST resources to manage project boards of Proman application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL: https://proman.io/api/v1/\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Proman.\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Proman reserves the right to add new parameters without further notice (in request and response).\n  * Proman reserves the right to add new error codes without further notice. Proman will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Proman reserves the right to enhance enumerations by new values.\n  * Proman reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nBoard Management APIs can only be called by authorized users who has rights with required permissions to manage boards. These APIs can be used to create new board, modify an existing board, map team to the board, add members (users) to the board, remove members (users) from the board, map workflow, mark board as completed, . The users once mapped to the board will have an access to board and tasks assigned to them.\n## Release Notes\n### 1.0.0\n* Initial version\n"
+      "description": "## API of Board Management Services\n\nThis specification describes the endpoints, request/response model of the Board Management API. This API provides REST resources to manage project boards of Proman application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```  https://proman.io/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Proman.\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Proman reserves the right to add new parameters without further notice (in request and response).\n  * Proman reserves the right to add new error codes without further notice. Proman will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Proman reserves the right to enhance enumerations by new values.\n  * Proman reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nBoard Management APIs can only be called by authorized users who has rights with required permissions to manage boards. These APIs can be used to create new board, modify an existing board, map team to the board, add members (users) to the board, remove members (users) from the board, map workflow, mark board as completed, . The users once mapped to the board will have an access to board and tasks assigned to them.\n## Release Notes\n### 1.0.0\n* Initial version\n"
    },
    "host": "proman.io",
    "schemes": [
@@ -38,6 +38,9 @@
                "application/json"
             ],
             "parameters": [
+               {
+                  "$ref": "#/parameters/ClientId"
+               },
                {
                   "$ref": "#/parameters/Authorization"
                },
@@ -135,11 +138,14 @@
             ],
             "parameters": [
                {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
                   "$ref": "#/parameters/Authorization"
                },
                {
                   "in": "query",
-                  "name": "offset",
+                  "name": "page",
                   "type": "integer",
                   "required": false,
                   "description": "query to set the position of the records to be fetched from"
@@ -153,19 +159,11 @@
                },
                {
                   "in": "query",
-                  "name": "role",
-                  "type": "integer",
-                  "required": false,
-                  "description": "query to filter the results based on specified role"
-               },
-               {
-                  "in": "query",
                   "name": "status",
                   "type": "string",
                   "enum": [
                      "OPEN",
-                     "IN PROGRESS",
-                     "COMPLETED"
+                     "CLOSED"
                   ],
                   "required": false,
                   "description": "query to filter the results based on specified status"
@@ -235,7 +233,7 @@
             }
          }
       },
-      "/boards/{id}": {
+      "/boards/{board_id}": {
          "get": {
             "operationId": "getBoard",
             "tags": [
@@ -254,6 +252,9 @@
             "parameters": [
                {
                   "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
                },
                {
                   "$ref": "#/parameters/Authorization"
@@ -337,6 +338,9 @@
             "parameters": [
                {
                   "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
                },
                {
                   "$ref": "#/parameters/Authorization"
@@ -437,6 +441,9 @@
                   "$ref": "#/parameters/BoardId"
                },
                {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
                   "$ref": "#/parameters/Authorization"
                },
                {
@@ -517,11 +524,9 @@
                   }
                }
             }
-         }
-      },
-      "/boards/{id}/members": {
-         "get": {
-            "operationId": "getBoardMembers",
+         },
+         "delete": {
+            "operationId": "deleteBoard",
             "tags": [
                "API#004 Boards"
             ],
@@ -530,8 +535,93 @@
                   "Authorization": []
                }
             ],
-            "summary": "Board Management - List of members belonging to the Board",
-            "description": "API to get an existing members of the Board\n",
+            "summary": "Board Management - Remove an existing Board",
+            "description": "API to remove an existing Board\n",
+            "parameters": [
+               {
+                  "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
+                  "$ref": "#/parameters/Authorization"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "OK - Board status has been set to DELETED",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "400": {
+                  "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "401": {
+                  "description": "UNAUTHORIZED - user has provided wrong credentials",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "403": {
+                  "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "404": {
+                  "description": "NOT FOUND - Board (resource) does not exist",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "500": {
+                  "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/boards/{board_id}/projects": {
+         "post": {
+            "operationId": "createBoardProject",
+            "tags": [
+               "API#004 Boards"
+            ],
+            "security": [
+               {
+                  "Authorization": []
+               }
+            ],
+            "summary": "Board Management - Create new Project in the Board",
+            "description": "API to create new Project in the Board\n",
+            "consumes": [
+               "application/json"
+            ],
             "produces": [
                "application/json"
             ],
@@ -540,12 +630,67 @@
                   "$ref": "#/parameters/BoardId"
                },
                {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
                   "$ref": "#/parameters/Authorization"
+               },
+               {
+                  "in": "body",
+                  "name": "CreateBoardRequest",
+                  "description": "Request containing new board details",
+                  "required": true,
+                  "schema": {
+                     "$ref": "#/definitions/CreateBoardProjectRequest"
+                  }
                }
             ],
             "responses": {
-               "200": {
-                  "description": "OK - Fetched list of board members",
+               "201": {
+                  "description": "CREATED - Project has been created successfully",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     },
+                     "location": {
+                        "type": "string",
+                        "description": "Location of the new resource which was created by this request"
+                     }
+                  },
+                  "schema": {
+                     "$ref": "#/definitions/CreateBoardProjectResponse"
+                  }
+               },
+               "400": {
+                  "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "401": {
+                  "description": "UNAUTHORIZED - user has provided wrong credentials",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "403": {
+                  "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "422": {
+                  "description": "UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors",
                   "headers": {
                      "request-id": {
                         "type": "string",
@@ -553,7 +698,57 @@
                      }
                   },
                   "schema": {
-                     "$ref": "#/definitions/BoardMembersSummaryResponse"
+                     "$ref": "#/definitions/ErrorResponse"
+                  }
+               },
+               "500": {
+                  "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               }
+            }
+         },
+         "get": {
+            "operationId": "getBoardProjects",
+            "tags": [
+               "API#004 Boards"
+            ],
+            "security": [
+               {
+                  "Authorization": []
+               }
+            ],
+            "summary": "Board Management - List of projects belonging to the Board",
+            "description": "API to get an existing projects of the Board\n",
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
+                  "$ref": "#/parameters/Authorization"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "OK - Fetched list of board projects",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  },
+                  "schema": {
+                     "$ref": "#/definitions/BoardProjectsSummaryResponse"
                   }
                },
                "400": {
@@ -595,9 +790,9 @@
             }
          }
       },
-      "/boards/{id}/tasks": {
+      "/boards/{board_id}/projects/{project_id}": {
          "get": {
-            "operationId": "getBoardTasks",
+            "operationId": "getBoardProjectDetails",
             "tags": [
                "API#004 Boards"
             ],
@@ -606,14 +801,487 @@
                   "Authorization": []
                }
             ],
-            "summary": "Board Management - List of tasks belonging to the Board",
-            "description": "API to get an existing tasks of the Board\n",
+            "summary": "Board Management - Get an existing project details of the Board",
+            "description": "API to get an existing Projects detalis of the Board\n",
             "produces": [
                "application/json"
             ],
             "parameters": [
                {
                   "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
+                  "$ref": "#/parameters/Authorization"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "OK - Fetched project details",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  },
+                  "schema": {
+                     "$ref": "#/definitions/BoardProjectDetailsResponse"
+                  }
+               },
+               "400": {
+                  "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "401": {
+                  "description": "UNAUTHORIZED - user has provided wrong credentials",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "403": {
+                  "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "404": {
+                  "description": "NOT FOUND - Board (resource) does not exist",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "500": {
+                  "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               }
+            }
+         },
+         "put": {
+            "operationId": "updateBoardProject",
+            "tags": [
+               "API#004 Boards"
+            ],
+            "security": [
+               {
+                  "Authorization": []
+               }
+            ],
+            "summary": "Board Management - Update an existing Project in the Board",
+            "description": "API to update an existing project details in the Board\n",
+            "consumes": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
+                  "$ref": "#/parameters/Authorization"
+               },
+               {
+                  "in": "body",
+                  "name": "UpdateBoardRequest",
+                  "description": "Request containing modified board details",
+                  "required": true,
+                  "schema": {
+                     "$ref": "#/definitions/UpdateBoardProjectRequest"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "OK - Project has been updated successfully",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "400": {
+                  "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "401": {
+                  "description": "UNAUTHORIZED - user has provided wrong credentials",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "403": {
+                  "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "404": {
+                  "description": "NOT FOUND - Board (resource) does not exist",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "422": {
+                  "description": "UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  },
+                  "schema": {
+                     "$ref": "#/definitions/ErrorResponse"
+                  }
+               },
+               "500": {
+                  "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               }
+            }
+         },
+         "patch": {
+            "operationId": "patchBoardProject",
+            "tags": [
+               "API#004 Boards"
+            ],
+            "security": [
+               {
+                  "Authorization": []
+               }
+            ],
+            "summary": "Board Management - Partial update of an existing Board",
+            "description": "API to partial update of an existing board in Proman application\n",
+            "parameters": [
+               {
+                  "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
+                  "$ref": "#/parameters/Authorization"
+               },
+               {
+                  "in": "body",
+                  "name": "ProjectOperationsRequest",
+                  "description": "Request containing modified status of board",
+                  "required": true,
+                  "schema": {
+                     "$ref": "#/definitions/ProjectOperationsRequest"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "OK - Board has been partially updated",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "400": {
+                  "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "401": {
+                  "description": "UNAUTHORIZED - user has provided wrong credentials",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "403": {
+                  "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "404": {
+                  "description": "NOT FOUND - Board (resource) does not exist",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "422": {
+                  "description": "UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  },
+                  "schema": {
+                     "$ref": "#/definitions/ErrorResponse"
+                  }
+               },
+               "500": {
+                  "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               }
+            }
+         },
+         "delete": {
+            "operationId": "deleteBoardProject",
+            "tags": [
+               "API#004 Boards"
+            ],
+            "security": [
+               {
+                  "Authorization": []
+               }
+            ],
+            "summary": "Board Management - Remove an existing Project from the Board",
+            "description": "API to remove an existing Project from the Board\n",
+            "parameters": [
+               {
+                  "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
+                  "$ref": "#/parameters/Authorization"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "OK - Project status has been set to DELETED",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "400": {
+                  "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "401": {
+                  "description": "UNAUTHORIZED - user has provided wrong credentials",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "403": {
+                  "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "404": {
+                  "description": "NOT FOUND - Board (resource) does not exist",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "500": {
+                  "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/boards/{board_id}/projects/{project_id}/members": {
+         "get": {
+            "operationId": "getProjectMembers",
+            "tags": [
+               "API#004 Boards"
+            ],
+            "security": [
+               {
+                  "Authorization": []
+               }
+            ],
+            "summary": "Board Management - List of Project members belonging to the Board",
+            "description": "API to get an existing members of the Project beloging to the Board\n",
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
+                  "$ref": "#/parameters/Authorization"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "OK - Fetched list of board members",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  },
+                  "schema": {
+                     "$ref": "#/definitions/ProjectMembersSummaryResponse"
+                  }
+               },
+               "400": {
+                  "description": "BAD REQUEST - server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, mandatory elements are missing)",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "401": {
+                  "description": "UNAUTHORIZED - user has provided wrong credentials",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "403": {
+                  "description": "FORBIDDEN - request has not been applied because client application has no permission to perform action",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               },
+               "500": {
+                  "description": "INTERNAL SERVER ERROR - server encountered an unexpected condition that prevented it from fulfilling the request.",
+                  "headers": {
+                     "request-id": {
+                        "type": "string",
+                        "description": "Used as correlation id while tracing for the request in the backend"
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/boards/{board_id}/projects/{project_id}/tasks": {
+         "get": {
+            "operationId": "getProjectTasks",
+            "tags": [
+               "API#004 Boards"
+            ],
+            "security": [
+               {
+                  "Authorization": []
+               }
+            ],
+            "summary": "Board Management - List of Project tasks belonging to the Board",
+            "description": "API to get an existing project tasks of the Board\n",
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "$ref": "#/parameters/BoardId"
+               },
+               {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
                },
                {
                   "$ref": "#/parameters/Authorization"
@@ -629,7 +1297,7 @@
                      }
                   },
                   "schema": {
-                     "$ref": "#/definitions/BoardTasksSummaryResponse"
+                     "$ref": "#/definitions/ProjectTasksSummaryResponse"
                   }
                },
                "400": {
@@ -671,7 +1339,7 @@
             }
          },
          "post": {
-            "operationId": "addBoardTask",
+            "operationId": "addProjectTask",
             "tags": [
                "API#004 Boards"
             ],
@@ -680,8 +1348,8 @@
                   "Authorization": []
                }
             ],
-            "summary": "Board Management - Add task to the Board",
-            "description": "API to add existing members to the Board\n",
+            "summary": "Board Management - Add task to the Project",
+            "description": "API to add task to the project\n",
             "consumes": [
                "application/json"
             ],
@@ -693,15 +1361,21 @@
                   "$ref": "#/parameters/BoardId"
                },
                {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
                   "$ref": "#/parameters/Authorization"
                },
                {
                   "in": "body",
-                  "name": "CreateBoardTaskRequest",
+                  "name": "CreateProjectTaskRequest",
                   "description": "Request containing members to be added to the board",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/CreateBoardTaskRequest"
+                     "$ref": "#/definitions/CreateProjectTaskRequest"
                   }
                }
             ],
@@ -719,7 +1393,7 @@
                      }
                   },
                   "schema": {
-                     "$ref": "#/definitions/CreateBoardTaskResponse"
+                     "$ref": "#/definitions/CreateProjectTaskResponse"
                   }
                },
                "400": {
@@ -773,9 +1447,9 @@
             }
          }
       },
-      "/boards/{id}/tasks/{task_id}": {
+      "/boards/{board_id}/projects/{project_id}/tasks/{task_id}": {
          "get": {
-            "operationId": "getBoardTaskDetails",
+            "operationId": "getProjectTaskDetails",
             "tags": [
                "API#004 Boards"
             ],
@@ -794,7 +1468,13 @@
                   "$ref": "#/parameters/BoardId"
                },
                {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
                   "$ref": "#/parameters/TaskId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
                },
                {
                   "$ref": "#/parameters/Authorization"
@@ -810,7 +1490,7 @@
                      }
                   },
                   "schema": {
-                     "$ref": "#/definitions/BoardTaskDetailsResponse"
+                     "$ref": "#/definitions/ProjectTaskDetailsResponse"
                   }
                },
                "400": {
@@ -861,7 +1541,7 @@
             }
          },
          "put": {
-            "operationId": "updateBoardTask",
+            "operationId": "updateProjectTask",
             "tags": [
                "API#004 Boards"
             ],
@@ -870,8 +1550,8 @@
                   "Authorization": []
                }
             ],
-            "summary": "Board Management - Update an existing task in the board",
-            "description": "API to update an existing task details in the board\n",
+            "summary": "Board Management - Update an existing task in the project",
+            "description": "API to update an existing task details in the project\n",
             "consumes": [
                "application/json"
             ],
@@ -883,18 +1563,24 @@
                   "$ref": "#/parameters/BoardId"
                },
                {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
                   "$ref": "#/parameters/TaskId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
                },
                {
                   "$ref": "#/parameters/Authorization"
                },
                {
                   "in": "body",
-                  "name": "UpdateBoardTaskRequest",
+                  "name": "UpdateProjectTaskRequest",
                   "description": "Request containing modified task details",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/UpdateBoardTaskRequest"
+                     "$ref": "#/definitions/UpdateProjectTaskRequest"
                   }
                }
             ],
@@ -968,7 +1654,7 @@
             }
          },
          "patch": {
-            "operationId": "patchBoardTask",
+            "operationId": "patchProjectTask",
             "tags": [
                "API#004 Boards"
             ],
@@ -977,8 +1663,8 @@
                   "Authorization": []
                }
             ],
-            "summary": "Board Management - Partial update of an existing task belonging to the Board",
-            "description": "API to partial update of an existing task in the board of Proman application\n",
+            "summary": "Board Management - Partial update of an existing task belonging to the Project",
+            "description": "API to partial update of an existing task in the project of Proman application\n",
             "consumes": [
                "application/json"
             ],
@@ -990,18 +1676,24 @@
                   "$ref": "#/parameters/BoardId"
                },
                {
+                  "$ref": "#/parameters/ProjectId"
+               },
+               {
                   "$ref": "#/parameters/TaskId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
                },
                {
                   "$ref": "#/parameters/Authorization"
                },
                {
                   "in": "body",
-                  "name": "BoardTaskOperationsRequest",
+                  "name": "ProjectTaskOperationsRequest",
                   "description": "Request containing modified status of board task",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/BoardTaskOperationsRequest"
+                     "$ref": "#/definitions/ProjectTaskOperationsRequest"
                   }
                }
             ],
@@ -1083,7 +1775,14 @@
       }
    },
    "parameters": {
-       "Authorization": {
+      "ClientId": {
+         "name": "client-id",
+         "type": "string",
+         "in": "header",
+         "required": true,
+         "description": "Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API."
+      },
+      "Authorization": {
          "name": "authorization",
          "type": "string",
          "in": "header",
@@ -1091,12 +1790,20 @@
          "description": "Mandatory user credentials in bearer http authentication scheme format. Refer to the #/securityDefinitions for more information on this header."
       },
       "BoardId": {
-         "name": "id",
+         "name": "board_id",
          "type": "string",
          "format": "uuid",
          "in": "path",
          "required": true,
          "description": "Unique identifier of Board in a standard UUID format"
+      },
+      "ProjectId": {
+         "name": "project_id",
+         "type": "string",
+         "format": "uuid",
+         "in": "path",
+         "required": true,
+         "description": "Unique identifier of Project in a standard UUID format"
       },
       "TaskId": {
          "name": "task_id",
@@ -1111,9 +1818,9 @@
       "BoardsSummaryResponse": {
          "type": "object",
          "properties": {
-            "offset": {
+            "page": {
                "type": "integer",
-               "description": "offset or position of the fetched boards"
+               "description": "page or position of the fetched boards"
             },
             "limit": {
                "type": "integer",
@@ -1127,19 +1834,19 @@
                "type": "array",
                "items": {
                   "type": "object",
-                  "$ref": "#/definitions/BoardsSummaryType"
+                  "$ref": "#/definitions/BoardSummaryType"
                },
                "description": "List of boards"
             }
          },
          "required": [
-            "offset",
+            "page",
             "limit",
             "total_count",
             "boards"
          ],
          "example": {
-            "offset": 1,
+            "page": 1,
             "limit": 10,
             "total_count": 33,
             "boards": [
@@ -1178,7 +1885,7 @@
             ]
          }
       },
-      "BoardsSummaryType": {
+      "BoardSummaryType": {
          "type": "object",
          "properties": {
             "id": {
@@ -1195,18 +1902,9 @@
                "description": "Name of the board owner",
                "$ref": "#/definitions/BoardOwnerType"
             },
-            "start_date": {
-               "description": "Start date of the board",
-               "$ref": "#/definitions/FullDateType"
-            },
-            "end_date": {
-               "description": "End date of the board",
-               "$ref": "#/definitions/FullDateType"
-            },
-            "workflow": {
-               "type": "object",
-               "description": "Workflow of the Board",
-               "$ref": "#/definitions/BoardWorkflowType"
+            "description": {
+               "type": "string",
+               "description": "Description of the board"
             },
             "status": {
                "$ref": "#/definitions/BoardStatusType"
@@ -1216,26 +1914,18 @@
             "id",
             "name",
             "owner",
-            "start_date",
-            "end_date",
-            "workflow",
             "status"
          ],
          "example": {
             "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
-            "name": "Build Prototype",
+            "name": "Demo Proman",
             "owner": {
                "id": "8d274a25-ca31-45a8-85b4-b06ffc9d5f8f",
                "first_name": "Project",
                "last_name": "Manager"
             },
-            "start_date": "2018-05-07T00:00:00.000Z",
-            "end_date": "2018-05-10T00:00:00.000Z",
-            "workflow": {
-               "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
-               "name": "Kanban"
-            },
-            "status": "ACTIVE"
+            "description": "Demo of the Project Management application",
+            "status": "OPEN"
          }
       },
       "BoardDetailsResponse": {
@@ -1255,58 +1945,41 @@
                "description": "Details of the board owner",
                "$ref": "#/definitions/BoardOwnerDetailsType"
             },
-            "start_date": {
-               "description": "Start date of the board",
-               "$ref": "#/definitions/FullDateType"
-            },
-            "end_date": {
-               "description": "End date of the board",
-               "$ref": "#/definitions/FullDateType"
-            },
-            "workflow": {
-               "type": "object",
-               "description": "Workflow of the Board",
-               "$ref": "#/definitions/BoardWorkflowDetailsType"
+            "description": {
+               "type": "string",
+               "description": "Description of the board"
             },
             "status": {
                "$ref": "#/definitions/BoardStatusType"
             },
-            "total_members": {
+            "total_projects": {
                "type": "integer",
-               "description": "Total number of members (users) in the board"
+               "description": "Total number of projects in the board"
             }
          },
          "required": [
             "id",
             "name",
             "owner",
-            "start_date",
-            "end_date",
-            "workflow",
             "status",
-            "total_members"
+            "total_projects"
          ],
          "example": {
             "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
-            "name": "Build Prototype",
+            "name": "Demo Proman Update",
             "owner": {
                "id": "8d274a25-ca31-45a8-85b4-b06ffc9d5f8f",
-               "first_name": "Project",
+               "first_name": "Program",
                "last_name": "Manager",
-               "email_address": "project.manager@proman.io",
+               "email_address": "program.manager@proman.io",
                "role": {
-                  "id": 200,
-                  "name": "Project Manager"
+                  "id": 201,
+                  "name": "Program Manager"
                }
             },
-            "start_date": "2018-05-07T00:00:00.000Z",
-            "end_date": "2018-05-10T00:00:00.000Z",
-            "workflow": {
-               "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
-               "name": "Kanban"
-            },
+            "description": "Demo of Project Management application",
             "status": "ACTIVE",
-            "total_members": 8
+            "total_projects": 8
          }
       },
       "BoardOwnerType": {
@@ -1381,12 +2054,121 @@
             "name"
          ]
       },
-      "BoardMembersSummaryResponse": {
+      "BoardOperationsRequest": {
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/BoardOperationRequest"
+         }
+      },
+      "BoardOperationRequest": {
          "type": "object",
          "properties": {
-            "offset": {
+            "op": {
+               "type": "string",
+               "description": "Type of operation",
+               "enum": [
+                  "replace"
+               ]
+            },
+            "path": {
+               "type": "string",
+               "description": "Resource path whose state to be modified",
+               "enum": [
+                  "status"
+               ]
+            },
+            "value": {
+               "type": "string",
+               "description": "New state value to be updated to the resource"
+            }
+         },
+         "example": [
+            {
+               "op": "replace",
+               "path": "status",
+               "value": "CLOSED"
+            }
+         ]
+      },
+      "CreateBoardRequest": {
+         "type": "object",
+         "properties": {
+            "name": {
+               "type": "string",
+               "description": "Name of the new board"
+            },
+            "owner_id": {
+               "type": "string",
+               "description": "Owner (user identifier) of the board"
+            },
+            "description": {
+               "type": "string",
+               "description": "Description of the board"
+            }
+         },
+         "required": [
+            "name",
+            "owner_id"
+         ],
+         "example": {
+            "name": "Proman Demo",
+            "description": "Demo of Project Management application",
+            "owner_id": "8d274a25-ca31-45a8-85b4-b06ffc9d5f8f"
+         }
+      },
+      "CreateBoardResponse": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier in a standard UUID format generated by API backend"
+            },
+            "status": {
+               "$ref": "#/definitions/BoardStatusType"
+            }
+         },
+         "required": [
+            "id",
+            "status"
+         ],
+         "example": {
+            "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+            "status": "OPEN"
+         }
+      },
+      "UpdateBoardRequest": {
+         "type": "object",
+         "properties": {
+            "name": {
+               "type": "string",
+               "description": "Name of the new board"
+            },
+            "owner_id": {
+               "type": "string",
+               "description": "Owner (user identifier) of the board"
+            },
+            "description": {
+               "type": "string",
+               "description": "Description of the board"
+            }
+         },
+         "required": [
+            "name",
+            "owner_id"
+         ],
+         "example": {
+            "name": "Demo Proman Update",
+            "owner_id": "8d274a25-ca31-45a8-85b4-b06ffc9d5f8f",
+            "description": "Demo of Project Management application"
+         }
+      },
+      "BoardProjectsSummaryResponse": {
+         "type": "object",
+         "properties": {
+            "page": {
                "type": "integer",
-               "description": "offset or position of the fetched members"
+               "description": "page or position of the fetched members"
             },
             "limit": {
                "type": "integer",
@@ -1394,25 +2176,25 @@
             },
             "total_count": {
                "type": "integer",
-               "description": "total number of members in the database"
+               "description": "total number of projects in the database"
             },
-            "members": {
+            "projects": {
                "type": "array",
                "items": {
                   "type": "object",
-                  "$ref": "#/definitions/BoardMembersResponse"
+                  "$ref": "#/definitions/BoardProjectsResponse"
                },
-               "description": "List of members"
+               "description": "List of projects"
             }
          },
          "required": [
-            "offset",
+            "page",
             "limit",
             "total_count",
-            "members"
+            "projects"
          ],
          "example": {
-            "offset": 1,
+            "page": 1,
             "limit": 10,
             "total_count": 8,
             "members": [
@@ -1441,7 +2223,430 @@
             ]
          }
       },
-      "BoardMembersResponse": {
+      "BoardStatusType": {
+         "type": "string",
+         "enum": [
+            "OPEN",
+            "CLOSED",
+            "DELETED"
+         ],
+         "description": "Status of the board"
+      },
+      "BoardProjectsResponse": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of the board project in a standard UUID format generated by API backend"
+            },
+            "name": {
+               "type": "string",
+               "description": "Name of the project"
+            },
+            "owner": {
+               "type": "object",
+               "description": "Name of the project owner",
+               "$ref": "#/definitions/ProjectOwnerType"
+            },
+            "description": {
+               "type": "string",
+               "description": "Description of the project"
+            },
+            "start_date": {
+               "description": "Start date of the project",
+               "$ref": "#/definitions/FullDateType"
+            },
+            "end_date": {
+               "description": "End date of the project",
+               "$ref": "#/definitions/FullDateType"
+            },
+            "workflow": {
+               "type": "object",
+               "description": "Workflow of the Board",
+               "$ref": "#/definitions/ProjectWorkflowType"
+            },
+            "status": {
+               "$ref": "#/definitions/ProjectStatusType"
+            }
+         },
+         "required": [
+            "id",
+            "name",
+            "owner",
+            "start_date",
+            "end_date",
+            "workflow",
+            "status"
+         ]
+      },
+      "BoardProjectDetailsResponse": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of the project in a standard UUID format"
+            },
+            "name": {
+               "type": "string",
+               "description": "Name of the project"
+            },
+            "description": {
+               "type": "string",
+               "description": "Description of the project"
+            },
+            "owner": {
+               "type": "object",
+               "description": "Details of the project owner",
+               "$ref": "#/definitions/ProjectOwnerDetailsType"
+            },
+            "start_date": {
+               "description": "Start date of the project",
+               "$ref": "#/definitions/FullDateType"
+            },
+            "end_date": {
+               "description": "End date of the project",
+               "$ref": "#/definitions/FullDateType"
+            },
+            "workflow": {
+               "type": "object",
+               "description": "Workflow of the Project",
+               "$ref": "#/definitions/ProjectWorkflowDetailsType"
+            },
+            "status": {
+               "$ref": "#/definitions/ProjectStatusType"
+            },
+            "total_members": {
+               "type": "integer",
+               "description": "Total number of members (users) in the project"
+            }
+         },
+         "required": [
+            "id",
+            "name",
+            "owner",
+            "start_date",
+            "end_date",
+            "workflow",
+            "status",
+            "total_members"
+         ],
+         "example": {
+            "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+            "name": "Build Prototype",
+            "owner": {
+               "id": "8d274a25-ca31-45a8-85b4-b06ffc9d5f8f",
+               "first_name": "Project",
+               "last_name": "Manager",
+               "email_address": "project.manager@proman.io",
+               "role": {
+                  "id": 200,
+                  "name": "Project Manager"
+               }
+            },
+            "start_date": "2018-05-07T00:00:00.000Z",
+            "end_date": "2018-05-10T00:00:00.000Z",
+            "workflow": {
+               "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+               "name": "Kanban"
+            },
+            "status": "ACTIVE",
+            "total_members": 8
+         }
+      },
+      "ProjectOwnerType": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of the owner (user) in a standard UUID format generated by API backend"
+            },
+            "first_name": {
+               "type": "string",
+               "description": "First name of the owner (user)"
+            },
+            "last_name": {
+               "type": "string",
+               "description": "Last name of the owner (user)"
+            }
+         },
+         "required": [
+            "id",
+            "first_name",
+            "last_name"
+         ]
+      },
+      "ProjectOwnerDetailsType": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of the owner (user) in a standard UUID format generated by API backend"
+            },
+            "first_name": {
+               "type": "string",
+               "description": "First name of the owner (user)"
+            },
+            "last_name": {
+               "type": "string",
+               "description": "Last name of the owner (user)"
+            },
+            "email_address": {
+               "type": "string",
+               "description": "Email address of the owner (user)"
+            },
+            "role": {
+               "$ref": "#/definitions/RoleType"
+            }
+         },
+         "required": [
+            "id",
+            "first_name",
+            "last_name",
+            "email_address",
+            "role"
+         ]
+      },
+      "ProjectStatusType": {
+         "type": "string",
+         "enum": [
+            "OPEN",
+            "IN PROGRESS",
+            "ON HOLD",
+            "COMPLETED",
+            "DELETED"
+         ],
+         "description": "Status of the project"
+      },
+      "ProjectWorkflowType": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of the workflow in a standard UUID format generated by API backend"
+            },
+            "name": {
+               "type": "string",
+               "description": "Name of the workflow"
+            }
+         },
+         "required": [
+            "id",
+            "name"
+         ]
+      },
+      "ProjectWorkflowDetailsType": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of the workflow in a standard UUID format generated by API backend"
+            },
+            "name": {
+               "type": "string",
+               "description": "Name of the workflow"
+            },
+            "phases": {
+               "type": "array",
+               "items": {
+                  "type": "object",
+                  "$ref": "#/definitions/ProjectWorkflowPhaseType"
+               },
+               "description": "List of phases that this workflow has"
+            }
+         },
+         "required": [
+            "id",
+            "name",
+            "phases"
+         ]
+      },
+      "ProjectWorkflowPhaseType": {
+         "type": "object",
+         "properties": {
+            "type": {
+               "type": "string",
+               "description": "Name of the workflow phase"
+            },
+            "description": {
+               "type": "string",
+               "description": "Description of the workflow phase"
+            }
+         }
+      },
+      "CreateBoardProjectRequest": {
+         "type": "object",
+         "properties": {
+            "name": {
+               "type": "string",
+               "description": "Name of the new project"
+            },
+            "description": {
+               "type": "string",
+               "description": "Description of the new project"
+            },
+            "owner_id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of the board project owner in a standard UUID format"
+            },
+            "start_date": {
+               "description": "Start date of the project",
+               "$ref": "#/definitions/FullDateType"
+            },
+            "end_date": {
+               "description": "End date of the project",
+               "$ref": "#/definitions/FullDateType"
+            },
+            "workflow_id": {
+               "type": "string",
+               "description": "Workflow reference identifier"
+            }
+         },
+         "required": [
+            "name",
+            "start_date",
+            "end_date",
+            "workflow_id"
+         ],
+         "example": {
+            "name": "Build API Backend for Proman Application",
+            "start_date": "2018-05-07T00:00:00.000Z",
+            "end_date": "2018-05-10T00:00:00.000Z",
+            "owner_id": "4d174a25-da31-55a8-65b4-c06ffc9d5f8a",
+            "workflow_id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f"
+         }
+      },
+      "CreateBoardProjectResponse": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of Project in a standard UUID format generated by API backend"
+            },
+            "status": {
+               "$ref": "#/definitions/ProjectStatusType"
+            }
+         },
+         "required": [
+            "id",
+            "status"
+         ],
+         "example": {
+            "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+            "status": "OPEN"
+         }
+      },
+      "UpdateBoardProjectRequest": {
+         "type": "object",
+         "properties": {
+            "name": {
+               "type": "string",
+               "description": "Name of the new Project"
+            },
+            "description": {
+               "type": "string",
+               "description": "Description of the new project"
+            },
+            "owner_id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of the board project owner in a standard UUID format"
+            },
+            "start_date": {
+               "description": "Start date of the project",
+               "$ref": "#/definitions/FullDateType"
+            },
+            "end_date": {
+               "description": "End date of the project",
+               "$ref": "#/definitions/FullDateType"
+            },
+            "workflow_id": {
+               "type": "string",
+               "description": "Workflow reference identifier"
+            }
+         },
+         "required": [
+            "name",
+            "start_date",
+            "end_date",
+            "workflow_id"
+         ],
+         "example": {
+            "name": "Build API Backend for Proman Application",
+            "start_date": "2018-05-07T00:00:00.000Z",
+            "end_date": "2018-06-10T00:00:00.000Z",
+            "owner_id": "4d174a25-da31-55a8-65b4-c06ffc9d5f8a",
+            "workflow_id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f"
+         }
+      },
+      "ProjectMembersSummaryResponse": {
+         "type": "object",
+         "properties": {
+            "page": {
+               "type": "integer",
+               "description": "page or position of the fetched members"
+            },
+            "limit": {
+               "type": "integer",
+               "description": "number of members fetched per this request"
+            },
+            "total_count": {
+               "type": "integer",
+               "description": "total number of members in the database"
+            },
+            "members": {
+               "type": "array",
+               "items": {
+                  "type": "object",
+                  "$ref": "#/definitions/ProjectMembersResponse"
+               },
+               "description": "List of members"
+            }
+         },
+         "required": [
+            "page",
+            "limit",
+            "total_count",
+            "members"
+         ],
+         "example": {
+            "page": 1,
+            "limit": 10,
+            "total_count": 8,
+            "members": [
+               {
+                  "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+                  "first_name": "Project",
+                  "last_name": "Manager",
+                  "email_address": "project.manager@proman.io",
+                  "role": {
+                     "id": 200,
+                     "name": "Project Manager"
+                  },
+                  "status": "ACTIVE"
+               },
+               {
+                  "id": "8d174a25-da31-55a8-85b4-c06ffc9d5f8f",
+                  "first_name": "Team",
+                  "last_name": "Leader",
+                  "email_address": "team.leader@proman.io",
+                  "role": {
+                     "id": 200,
+                     "name": "Team Leader"
+                  },
+                  "status": "LOCKED"
+               }
+            ]
+         }
+      },
+      "ProjectMembersResponse": {
          "type": "object",
          "properties": {
             "id": {
@@ -1477,112 +2682,12 @@
             "status"
          ]
       },
-      "BoardOperationsRequest": {
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/BoardOperationRequest"
-         }
-      },
-      "BoardOperationRequest": {
+      "ProjectTasksSummaryResponse": {
          "type": "object",
          "properties": {
-            "op": {
-               "type": "string",
-               "description": "Type of operation",
-               "enum": [
-                  "replace",
-                  "add",
-                  "remove"
-               ]
-            },
-            "path": {
-               "type": "string",
-               "description": "Resource path whose state to be modified",
-               "enum": [
-                  "status",
-                  "members"
-               ]
-            },
-            "value": {
-               "type": "string",
-               "description": "New state value to be updated to the resource"
-            }
-         },
-         "example": [
-            {
-               "op": "replace",
-               "path": "status",
-               "value": "COMPLETED"
-            },
-            {
-               "op": "add",
-               "path": "members",
-               "value": "8d274a25-ca31-45a8-85b4-b06ffc9d5f8f"
-            },
-            {
-               "op": "remove",
-               "path": "members",
-               "value": "3d274a27-da31-25a8-55b4-c06ffc9d5f3e"
-            }
-         ]
-      },
-      "BoardTaskOperationsRequest": {
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/BoardTaskOperationRequest"
-         }
-      },
-      "BoardTaskOperationRequest": {
-         "type": "object",
-         "properties": {
-            "op": {
-               "type": "string",
-               "description": "Type of operation",
-               "enum": [
-                  "replace",
-                  "add",
-                  "remove"
-               ]
-            },
-            "path": {
-               "type": "string",
-               "description": "Resource path whose state to be modified",
-               "enum": [
-                  "phase",
-                  "status",
-                  "owner",
-                  "effort"
-               ]
-            },
-            "value": {
-               "type": "string",
-               "description": "New state value to be updated to the resource"
-            }
-         },
-         "example": [
-            {
-               "op": "replace",
-               "path": "phase",
-               "value": "TODO"
-            },
-            {
-               "op": "replace",
-               "path": "status",
-               "value": "REOPENED"
-            },
-            {
-               "op": "add",
-               "path": "effort",
-               "value": 3600
-            }
-         ]
-      },
-      "BoardTasksSummaryResponse": {
-         "type": "object",
-         "properties": {
-            "offset": {
+            "page": {
                "type": "integer",
-               "description": "offset or position of the fetched tasks"
+               "description": "page or position of the fetched tasks"
             },
             "limit": {
                "type": "integer",
@@ -1596,19 +2701,19 @@
                "type": "array",
                "items": {
                   "type": "object",
-                  "$ref": "#/definitions/BoardTasksResponse"
+                  "$ref": "#/definitions/ProjectTasksResponse"
                },
                "description": "List of tasks"
             }
          },
          "required": [
-            "offset",
+            "page",
             "limit",
             "total_count",
             "tasks"
          ],
          "example": {
-            "offset": 1,
+            "page": 1,
             "limit": 10,
             "total_count": 8,
             "tasks": [
@@ -1641,7 +2746,7 @@
             ]
          }
       },
-      "BoardTasksResponse": {
+      "ProjectTasksResponse": {
          "type": "object",
          "properties": {
             "id": {
@@ -1707,7 +2812,7 @@
             "last_name"
          ]
       },
-      "BoardTaskDetailsResponse": {
+      "ProjectTaskDetailsResponse": {
          "type": "object",
          "properties": {
             "id": {
@@ -1867,152 +2972,7 @@
             "description": "List of memeber ids who are the watchers of this task"
          }
       },
-      "BoardWorkflowType": {
-         "type": "object",
-         "properties": {
-            "id": {
-               "type": "string",
-               "format": "uuid",
-               "description": "Unique identifier of the workflow in a standard UUID format generated by API backend"
-            },
-            "name": {
-               "type": "string",
-               "description": "Name of the workflow"
-            }
-         },
-         "required": [
-            "id",
-            "name"
-         ]
-      },
-      "BoardWorkflowDetailsType": {
-         "type": "object",
-         "properties": {
-            "id": {
-               "type": "string",
-               "format": "uuid",
-               "description": "Unique identifier of the workflow in a standard UUID format generated by API backend"
-            },
-            "name": {
-               "type": "string",
-               "description": "Name of the workflow"
-            },
-            "phases": {
-               "type": "array",
-               "items": {
-                  "type": "object",
-                  "$ref": "#/definitions/BoardWorkflowPhaseType"
-               },
-               "description": "List of phases that this workflow has"
-            }
-         },
-         "required": [
-            "id",
-            "name",
-            "phases"
-         ]
-      },
-      "BoardWorkflowPhaseType": {
-         "type": "object",
-         "properties": {
-            "type": {
-               "type": "string",
-               "description": "Name of the workflow phase"
-            },
-            "description": {
-               "type": "string",
-               "description": "Description of the workflow phase"
-            }
-         }
-      },
-      "CreateBoardRequest": {
-         "type": "object",
-         "properties": {
-            "name": {
-               "type": "string",
-               "description": "Name of the new board"
-            },
-            "start_date": {
-               "description": "Start date of the board",
-               "$ref": "#/definitions/FullDateType"
-            },
-            "end_date": {
-               "description": "End date of the board",
-               "$ref": "#/definitions/FullDateType"
-            },
-            "workflow_id": {
-               "type": "string",
-               "description": "Workflow reference identifier"
-            }
-         },
-         "required": [
-            "name",
-            "start_date",
-            "end_date",
-            "workflow_id"
-         ],
-         "example": {
-            "name": "Build Prototype",
-            "start_date": "2018-05-07T00:00:00.000Z",
-            "end_date": "2018-05-10T00:00:00.000Z",
-            "workflow_id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f"
-         }
-      },
-      "CreateBoardResponse": {
-         "type": "object",
-         "properties": {
-            "id": {
-               "type": "string",
-               "format": "uuid",
-               "description": "Unique identifier in a standard UUID format generated by API backend"
-            },
-            "status": {
-               "$ref": "#/definitions/BoardStatusType"
-            }
-         },
-         "required": [
-            "id",
-            "status"
-         ],
-         "example": {
-            "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
-            "status": "OPEN"
-         }
-      },
-      "UpdateBoardRequest": {
-         "type": "object",
-         "properties": {
-            "name": {
-               "type": "string",
-               "description": "Name of the new board"
-            },
-            "start_date": {
-               "description": "Start date of the board",
-               "$ref": "#/definitions/FullDateType"
-            },
-            "end_date": {
-               "description": "End date of the board",
-               "$ref": "#/definitions/FullDateType"
-            },
-            "workflow_id": {
-               "type": "string",
-               "description": "Workflow reference identifier"
-            }
-         },
-         "required": [
-            "name",
-            "start_date",
-            "end_date",
-            "workflow_id"
-         ],
-         "example": {
-            "name": "Build Prototype",
-            "start_date": "2018-05-07T00:00:00.000Z",
-            "end_date": "2018-06-10T00:00:00.000Z",
-            "workflow_id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f"
-         }
-      },
-      "CreateBoardTaskRequest": {
+      "CreateProjectTaskRequest": {
          "type": "object",
          "properties": {
             "name": {
@@ -2072,7 +3032,7 @@
             ]
          }
       },
-      "CreateBoardTaskResponse": {
+      "CreateProjectTaskResponse": {
          "type": "object",
          "properties": {
             "id": {
@@ -2093,7 +3053,7 @@
             "status": "IN PROGRESS"
          }
       },
-      "UpdateBoardTaskRequest": {
+      "UpdateProjectTaskRequest": {
          "type": "object",
          "properties": {
             "name": {
@@ -2131,14 +3091,110 @@
             "original_effort": 10800
          }
       },
-      "BoardStatusType": {
+      "ProjectOperationsRequest": {
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/ProjectOperationRequest"
+         }
+      },
+      "ProjectOperationRequest": {
+         "type": "object",
+         "properties": {
+            "op": {
+               "type": "string",
+               "description": "Type of operation",
+               "enum": [
+                  "replace",
+                  "add",
+                  "remove"
+               ]
+            },
+            "path": {
+               "type": "string",
+               "description": "Resource path whose state to be modified",
+               "enum": [
+                  "status",
+                  "members"
+               ]
+            },
+            "value": {
+               "type": "string",
+               "description": "New state value to be updated to the resource"
+            }
+         },
+         "example": [
+            {
+               "op": "replace",
+               "path": "status",
+               "value": "COMPLETED"
+            },
+            {
+               "op": "add",
+               "path": "members",
+               "value": "8d274a25-ca31-45a8-85b4-b06ffc9d5f8f"
+            },
+            {
+               "op": "remove",
+               "path": "members",
+               "value": "3d274a27-da31-25a8-55b4-c06ffc9d5f3e"
+            }
+         ]
+      },
+      "ProjectTaskOperationsRequest": {
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/ProjectTaskOperationRequest"
+         }
+      },
+      "ProjectTaskOperationRequest": {
+         "type": "object",
+         "properties": {
+            "op": {
+               "type": "string",
+               "description": "Type of operation",
+               "enum": [
+                  "replace",
+                  "add",
+                  "remove"
+               ]
+            },
+            "path": {
+               "type": "string",
+               "description": "Resource path whose state to be modified",
+               "enum": [
+                  "phase",
+                  "status",
+                  "owner",
+                  "effort"
+               ]
+            },
+            "value": {
+               "type": "string",
+               "description": "New state value to be updated to the resource"
+            }
+         },
+         "example": [
+            {
+               "op": "replace",
+               "path": "phase",
+               "value": "TODO"
+            },
+            {
+               "op": "replace",
+               "path": "status",
+               "value": "REOPENED"
+            },
+            {
+               "op": "add",
+               "path": "effort",
+               "value": 3600
+            }
+         ]
+      },
+      "FullDateType": {
          "type": "string",
-         "enum": [
-            "OPEN",
-            "IN PROGRESS",
-            "COMPLETED"
-         ],
-         "description": "Status of the board"
+         "format": "full-date",
+         "description": "Full date format"
       },
       "MemberIdType": {
          "type": "string",
@@ -2154,11 +3210,6 @@
             "LOCKED"
          ],
          "description": "Status of the board"
-      },
-      "FullDateType": {
-         "type": "string",
-         "format": "full-date",
-         "description": "Full date format"
       },
       "TaskStatusType": {
          "type": "string",

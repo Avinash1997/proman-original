@@ -48,4 +48,8 @@ public class BaseDaoImpl<E extends Entity> implements BaseDao<E> {
                 + " e WHERE e.uuid = :uuid", entityClass).setParameter("uuid", uuid).getSingleResult();
     }
 
+    protected int getOffset(final int page, final int limit) {
+        return (page - 1) * limit ;
+    }
+
 }

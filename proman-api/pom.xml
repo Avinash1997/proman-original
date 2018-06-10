@@ -73,6 +73,12 @@
         </dependency>
 
         <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.18</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -130,12 +136,6 @@
                                 <artifactId>swagger-codegen-generators</artifactId>
                                 <version>1.0.0-rc0</version>
                             </dependency>
-                            <dependency>
-                                <groupId>io.swagger</groupId>
-                                <artifactId>swagger-annotations</artifactId>
-                                <version>1.5.18</version>
-                            </dependency>
-
                         </dependencies>
                         <executions>
                             <execution>

@@ -45,6 +45,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity(errorResponse(ex), UNPROCESSABLE_ENTITY);
     }
 
+    @ExceptionHandler(RestException.class)
+    public final ResponseEntity<ErrorResponse> handleRestException(RestException ex, WebRequest request) {
+        return new ResponseEntity(errorResponse(ex), UNPROCESSABLE_ENTITY);
+    }
+
     private ErrorResponse errorResponse(final ApplicationException appExc) {
         return new ErrorResponse(appExc.getErrorCode().getCode(), appExc.getMessage());
     }

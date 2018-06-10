@@ -31,6 +31,7 @@ public class SignupController {
 
         final UserEntity newUserEntity = toEntity(signupUserRequest);
         userService.createUser(newUserEntity);
+        new ResponseEntity<String>(HttpStatus.OK);
         return new ResponseBuilder<SignupUserResponse>(HttpStatus.CREATED).build();
     }
 

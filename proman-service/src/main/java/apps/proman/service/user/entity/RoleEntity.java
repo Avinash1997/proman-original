@@ -49,7 +49,7 @@ public class RoleEntity extends MutableEntity implements Identifier<Integer>, Un
     @Size(max = 200)
     private String description;
 
-    @Column(name = "STATUS")
+    @Column(name = "ACTIVE")
     @NotNull
     private boolean active;
 

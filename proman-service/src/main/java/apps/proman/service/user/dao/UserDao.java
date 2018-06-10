@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 
 import apps.proman.service.common.dao.BaseDao;
 import apps.proman.service.user.entity.UserEntity;
+import apps.proman.service.user.model.SearchResult;
+import apps.proman.service.user.model.UserStatus;
 
 /**
  * DAO abstraction for {@link UserEntity}.
@@ -18,5 +20,9 @@ import apps.proman.service.user.entity.UserEntity;
 public interface UserDao extends BaseDao<UserEntity> {
 
     UserEntity findByEmail(@NotNull String email);
+
+    SearchResult<UserEntity> findUsers(UserStatus userStatus, int offset, int limit);
+
+    SearchResult<UserEntity> findUsers(int offset, int limit);
 
 }

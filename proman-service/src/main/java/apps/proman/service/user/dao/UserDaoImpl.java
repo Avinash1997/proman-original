@@ -7,12 +7,19 @@
  */
 package apps.proman.service.user.dao;
 
+import java.util.List;
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
 import apps.proman.service.common.dao.BaseDaoImpl;
 import apps.proman.service.user.entity.UserEntity;
+import apps.proman.service.user.model.SearchResult;
+import apps.proman.service.user.model.UserStatus;
 
 /**
  * Implementation of {@link UserDao}.
@@ -27,6 +34,26 @@ public class UserDaoImpl extends BaseDaoImpl<UserEntity> implements UserDao {
         } catch (NoResultException noResultExc) {
             return null;
         }
+    }
+
+    @Override
+    public SearchResult<UserEntity> findUsers(int page, int limit) {
+
+        final int totalCount = entityManager.createNamedQuery(UserEntity.COUNT_BY_ALL, Long.class).getSingleResult().intValue();
+        final List<UserEntity> payload = entityManager.createNamedQuery(UserEntity.BY_ALL, UserEntity.class).setFirstResult(getOffset(page, limit)).setMaxResults(limit).getResultList();
+        return new SearchResult(totalCount, payload);
+    }
+
+    @Override
+    public SearchResult<UserEntity> findUsers(UserStatus userStatus, int page, int limit) {
+
+        final int totalCount = entityManager.createNamedQuery(UserEntity.COUNT_BY_STATUS, Long.class)
+                                            .setParameter("status", userStatus.getCode())
+                                            .getSingleResult().intValue();
+        final List<UserEntity> payload = entityManager.createNamedQuery(UserEntity.BY_STATUS, UserEntity.class)
+                                            .setParameter("status", userStatus.getCode())
+                                            .setFirstResult(getOffset(page, limit)).setMaxResults(limit).getResultList();
+        return new SearchResult(totalCount, payload);
     }
 
 }

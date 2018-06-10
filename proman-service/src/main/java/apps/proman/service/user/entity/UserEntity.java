@@ -43,12 +43,22 @@ import apps.proman.service.common.entity.ext.EntityHashCodeBuilder;
  */
 @Entity
 @Table(name = "USERS", schema = SCHEMA)
-@NamedQueries({ @NamedQuery(name = UserEntity.BY_EMAIL, query = "select u from UserEntity u where u.email = :email") })
+@NamedQueries({
+        @NamedQuery(name = UserEntity.COUNT_BY_ALL, query = "select count(u.id) from UserEntity u"),
+        @NamedQuery(name = UserEntity.BY_ALL, query = "select u from UserEntity u"),
+        @NamedQuery(name = UserEntity.BY_EMAIL, query = "select u from UserEntity u where u.email = :email") ,
+        @NamedQuery(name = UserEntity.COUNT_BY_STATUS, query = "select count(u.id) from UserEntity u where u.status = :status"),
+        @NamedQuery(name = UserEntity.BY_STATUS, query = "select u from UserEntity u where u.status = :status")
+    })
 public class UserEntity extends MutableEntity implements Identifier<Long>, UniversalUniqueIdentifier<String>, Serializable {
 
     private static final long serialVersionUID = 7821286494206402080L;
 
+    public static final String COUNT_BY_ALL = "UserEntity.countByAll";
+    public static final String BY_ALL = "UserEntity.byAll";
     public static final String BY_EMAIL = "UserEntity.byEmail";
+    public static final String COUNT_BY_STATUS = "UserEntity.countByStatus";
+    public static final String BY_STATUS = "UserEntity.byStatus";
 
     @Id
     @Column(name = "ID")

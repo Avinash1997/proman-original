@@ -498,7 +498,7 @@ definitions:
       users:
         type: array
         items:
-          $ref: '#/definitions/UsersSummaryType'
+          $ref: '#/definitions/UserSummaryType'
         description: List of users
     required:
       - page
@@ -507,7 +507,7 @@ definitions:
       - users
     example:
 
-  UsersSummaryType:
+  UserSummaryType:
     type: object
     properties:
       id:
@@ -525,7 +525,7 @@ definitions:
       status:
         $ref: '#/definitions/UserStatusType'
       role:
-        $ref: '#/definitions/RoleSummaryType'
+        $ref: '#/definitions/RoleType'
     required:
       - id
       - first_name
@@ -588,7 +588,7 @@ definitions:
           - id: 122
             name: Update User
 
-  RoleSummaryType:
+  RoleType:
     type: object
     properties:
       id:

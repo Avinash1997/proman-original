@@ -39,6 +39,9 @@
             ],
             "parameters": [
                {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
                   "$ref": "#/parameters/Authorization"
                },
                {
@@ -135,11 +138,14 @@
             ],
             "parameters": [
                {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
                   "$ref": "#/parameters/Authorization"
                },
                {
                   "in": "query",
-                  "name": "offset",
+                  "name": "page",
                   "type": "integer",
                   "required": false,
                   "description": "query to set the position of the records to be fetched from"
@@ -266,6 +272,9 @@
                   "$ref": "#/parameters/UserId"
                },
                {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
                   "$ref": "#/parameters/Authorization"
                }
             ],
@@ -350,6 +359,9 @@
             "parameters": [
                {
                   "$ref": "#/parameters/UserId"
+               },
+               {
+                  "$ref": "#/parameters/ClientId"
                },
                {
                   "$ref": "#/parameters/Authorization"
@@ -456,6 +468,9 @@
                   "$ref": "#/parameters/UserId"
                },
                {
+                  "$ref": "#/parameters/ClientId"
+               },
+               {
                   "$ref": "#/parameters/Authorization"
                },
                {
@@ -537,6 +552,13 @@
       }
    },
    "parameters": {
+      "ClientId": {
+         "name": "client-id",
+         "type": "string",
+         "in": "header",
+         "required": true,
+         "description": "Mandatory request header about the caller of this API. Only an authorized clients are allowed to this API."
+      },
       "Authorization": {
          "name": "authorization",
          "type": "string",
@@ -577,7 +599,7 @@
             "users": {
                "type": "array",
                "items": {
-                  "$ref": "#/definitions/UsersSummaryType"
+                  "$ref": "#/definitions/UserSummaryType"
                },
                "description": "List of users"
             }
@@ -590,7 +612,7 @@
          ],
          "example": null
       },
-      "UsersSummaryType": {
+      "UserSummaryType": {
          "type": "object",
          "properties": {
             "id": {
@@ -613,7 +635,7 @@
                "$ref": "#/definitions/UserStatusType"
             },
             "role": {
-               "$ref": "#/definitions/RoleSummaryType"
+               "$ref": "#/definitions/RoleType"
             }
          },
          "required": [
@@ -697,7 +719,7 @@
             }
          }
       },
-      "RoleSummaryType": {
+      "RoleType": {
          "type": "object",
          "properties": {
             "id": {

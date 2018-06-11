@@ -7,17 +7,17 @@ import apps.proman.api.model.CreateUserRequest;
 import apps.proman.api.model.CreateUserResponse;
 import apps.proman.api.model.PermissionsType;
 import apps.proman.api.model.RoleDetailsType;
-import apps.proman.api.model.RoleSummaryType;
+import apps.proman.api.model.RoleType;
 import apps.proman.api.model.SignupUserRequest;
 import apps.proman.api.model.SignupUserResponse;
 import apps.proman.api.model.UserDetailsResponse;
 import apps.proman.api.model.UserStatusType;
+import apps.proman.api.model.UserSummaryType;
 import apps.proman.api.model.UsersSummaryResponse;
-import apps.proman.api.model.UsersSummaryType;
+import apps.proman.service.common.model.SearchResult;
 import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.RolePermissionEntity;
 import apps.proman.service.user.entity.UserEntity;
-import apps.proman.service.common.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;
 
 public final class UserTransformer {
@@ -63,10 +63,10 @@ public final class UserTransformer {
         UsersSummaryResponse usersSummaryResponse = new UsersSummaryResponse().totalCount(searchResult.getTotalCount()).page(page).limit(limit);
 
         for(UserEntity userEntity : searchResult.getPayload()) {
-            UsersSummaryType summaryType = new UsersSummaryType().id(userEntity.getUuid()).firstName(userEntity.getFirstName())
+            UserSummaryType summaryType = new UserSummaryType().id(userEntity.getUuid()).firstName(userEntity.getFirstName())
                     .lastName(userEntity.getLastName()).emailAddress(userEntity.getEmail())
                     .status(toStatus(userEntity.getStatus()))
-                    .role(toRoleSummaryResponse(userEntity.getRole()));
+                    .role(toRole(userEntity.getRole()));
             usersSummaryResponse.addUsersItem(summaryType);
         }
 
@@ -77,11 +77,11 @@ public final class UserTransformer {
         return new RoleDetailsType().id(roleEntity.getUuid()).name(roleEntity.getName());
     }
 
-    private static RoleSummaryType toRoleSummaryResponse(RoleEntity roleEntity) {
+    private static RoleType toRole(RoleEntity roleEntity) {
         if(roleEntity == null) {
             return null;
         }
-        return new RoleSummaryType().id(roleEntity.getUuid()).name(roleEntity.getName());
+        return new RoleType().id(roleEntity.getUuid()).name(roleEntity.getName());
     }
 
     private static List<PermissionsType> toResponse(List<RolePermissionEntity> permissions) {

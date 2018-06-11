@@ -11,6 +11,8 @@ public interface BoardService {
 
     SearchResult<BoardEntity> findBoards(int offset, int limit);
 
+    SearchResult<BoardEntity> findBoards(BoardStatus userStatus, int offset, int limit);
+
     BoardEntity findBoard(@NotNull String boardUuid) throws ApplicationException ;
 
     BoardEntity createBoard(@NotNull BoardEntity newBoard) throws ApplicationException;

@@ -10,6 +10,7 @@ package apps.proman.service.common.dao;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import apps.proman.service.common.entity.Entity;
@@ -43,9 +44,13 @@ public class BaseDaoImpl<E extends Entity> implements BaseDao<E> {
     @Override
     @SuppressWarnings("unchecked")
     public E findByUUID(final Object uuid) {
-        final Class clazz = entityClass();
-        return (E) entityManager.createQuery("SELECT e FROM " + clazz.getSimpleName()
-                + " e WHERE e.uuid = :uuid", clazz).setParameter("uuid", uuid).getSingleResult();
+        try {
+            final Class clazz = entityClass();
+            return (E) entityManager.createQuery("SELECT e FROM " + clazz.getSimpleName()
+                    + " e WHERE e.uuid = :uuid", clazz).setParameter("uuid", uuid).getSingleResult();
+        }catch(NoResultException exc) {
+            return null;
+        }
     }
 
     protected int getOffset(final int page, final int limit) {

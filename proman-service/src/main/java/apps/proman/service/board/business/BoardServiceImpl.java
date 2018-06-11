@@ -22,8 +22,13 @@ public class BoardServiceImpl implements  BoardService {
     private BoardDao boardDao;
 
     @Override
-    public SearchResult<BoardEntity> findBoards(int offset, int limit) {
-        return null;
+    public SearchResult<BoardEntity> findBoards(int page, int limit) {
+        return boardDao.find(page, limit);
+    }
+
+    @Override
+    public SearchResult<BoardEntity> findBoards(BoardStatus boardStatus, int page, int limit) {
+        return boardDao.find(boardStatus, page, limit);
     }
 
     @Override
@@ -45,6 +50,7 @@ public class BoardServiceImpl implements  BoardService {
             throw new ApplicationException(BoardErrorCode.BRD_002, newBoard.getName());
         }
 
+        newBoard.setStatus(BoardStatus.OPEN.getCode());
         return boardDao.create(newBoard);
     }
 

@@ -27,7 +27,7 @@ public class GroupEntity extends ImmutableEntity implements Identifier<Integer>,
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "UUID")

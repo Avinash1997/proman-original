@@ -33,7 +33,7 @@ public class ProjectEntity extends MutableEntity implements Identifier<Integer>,
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "UUID")

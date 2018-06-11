@@ -22,7 +22,7 @@ public class RolePermissionEntity extends ImmutableEntity implements Identifier<
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne

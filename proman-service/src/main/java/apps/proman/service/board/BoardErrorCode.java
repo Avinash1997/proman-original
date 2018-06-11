@@ -19,7 +19,9 @@ public enum BoardErrorCode implements ErrorCode {
 
     BRD_001("BRD-001", "Board with identifier [{0}] does not exist."),
 
-    BRD_002("BRD-002", "Board with name [{0}] already exist.")
+    BRD_002("BRD-002", "Board with name [{0}] already exist."),
+
+    BRD_003("BRD-003", "Not a valid board status. Supported statuses are [{0}]")
     ;
 
     private static final Map<String, BoardErrorCode> LOOKUP = new HashMap<String, BoardErrorCode>();

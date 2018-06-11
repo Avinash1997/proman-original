@@ -24,7 +24,7 @@ public class ProjectMemberEntity extends ImmutableEntity implements Identifier<I
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

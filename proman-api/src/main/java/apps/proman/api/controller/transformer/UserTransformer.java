@@ -58,15 +58,15 @@ public final class UserTransformer {
                 .role(toResponse(userEntity.getRole()).permissions(toResponse(userEntity.getRole().getPermissions())));
     }
 
-    public static UsersSummaryResponse toUsersSummaryResponse(final int offset, final int limit, final SearchResult<UserEntity> searchResult) {
+    public static UsersSummaryResponse toUsersSummaryResponse(final int page, final int limit, final SearchResult<UserEntity> searchResult) {
 
-        UsersSummaryResponse usersSummaryResponse = new UsersSummaryResponse().totalCount(searchResult.getTotalCount()).page(offset).limit(limit);
+        UsersSummaryResponse usersSummaryResponse = new UsersSummaryResponse().totalCount(searchResult.getTotalCount()).page(page).limit(limit);
 
         for(UserEntity userEntity : searchResult.getPayload()) {
             UsersSummaryType summaryType = new UsersSummaryType().id(userEntity.getUuid()).firstName(userEntity.getFirstName())
                     .lastName(userEntity.getLastName()).emailAddress(userEntity.getEmail())
                     .status(toStatus(userEntity.getStatus()))
-                    .role(toRoleSummaryesponse(userEntity.getRole()));
+                    .role(toRoleSummaryResponse(userEntity.getRole()));
             usersSummaryResponse.addUsersItem(summaryType);
         }
 
@@ -77,7 +77,7 @@ public final class UserTransformer {
         return new RoleDetailsType().id(roleEntity.getUuid()).name(roleEntity.getName());
     }
 
-    private static RoleSummaryType toRoleSummaryesponse(RoleEntity roleEntity) {
+    private static RoleSummaryType toRoleSummaryResponse(RoleEntity roleEntity) {
         if(roleEntity == null) {
             return null;
         }

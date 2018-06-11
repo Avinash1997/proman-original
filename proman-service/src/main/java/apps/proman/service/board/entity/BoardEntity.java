@@ -31,15 +31,23 @@ import apps.proman.service.user.entity.UserEntity;
 @Entity
 @Table(name = "BOARDS", schema = SCHEMA)
 @NamedQueries({
-        @NamedQuery(name = BoardEntity.BY_NAME, query = "select b from BoardEntity b where b.name = :name")
+        @NamedQuery(name = BoardEntity.COUNT_BY_ALL, query = "select count(b.id) from BoardEntity b"),
+        @NamedQuery(name = BoardEntity.BY_ALL, query = "select b from BoardEntity b"),
+        @NamedQuery(name = BoardEntity.BY_NAME, query = "select b from BoardEntity b where b.name = :name"),
+        @NamedQuery(name = BoardEntity.COUNT_BY_STATUS, query = "select count(b.id) from BoardEntity b where b.status = :status"),
+        @NamedQuery(name = BoardEntity.BY_STATUS, query = "select b from BoardEntity b where b.status = :status")
 })
 public class BoardEntity extends MutableEntity implements Identifier<Integer>, UniversalUniqueIdentifier<String>, Serializable {
 
+    public static final String COUNT_BY_ALL = "BoardEntity.countByAll";
+    public static final String BY_ALL = "BoardEntity.byAll";
     public static final String BY_NAME = "BoardEntity.byName";
+    public static final String COUNT_BY_STATUS = "BoardEntity.countByStatus";
+    public static final String BY_STATUS = "BoardEntity.byStatus";
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "UUID")

@@ -19,9 +19,9 @@ import apps.proman.service.user.model.UserStatus;
  */
 public interface UserService {
 
-    SearchResult<UserEntity> findUsers(int offset, int limit);
+    SearchResult<UserEntity> findUsers(int page, int limit);
 
-    SearchResult<UserEntity> findUsers(UserStatus userStatus, int offset, int limit);
+    SearchResult<UserEntity> findUsers(UserStatus userStatus, int page, int limit);
 
     UserEntity findUserByEmail(@NotNull String emailAddress) throws ApplicationException;
 

@@ -10,6 +10,7 @@ import apps.proman.api.model.RoleDetailsType;
 import apps.proman.api.model.RoleType;
 import apps.proman.api.model.SignupUserRequest;
 import apps.proman.api.model.SignupUserResponse;
+import apps.proman.api.model.UpdateUserRequest;
 import apps.proman.api.model.UserDetailsResponse;
 import apps.proman.api.model.UserStatusType;
 import apps.proman.api.model.UserSummaryType;
@@ -32,6 +33,15 @@ public final class UserTransformer {
     }
 
     public static UserEntity toEntity(CreateUserRequest userRequest) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setFirstName(userRequest.getFirstName());
+        userEntity.setLastName(userRequest.getLastName());
+        userEntity.setEmail(userRequest.getEmailAddress());
+        userEntity.setMobilePhone(userRequest.getMobileNumber());
+        return userEntity;
+    }
+
+    public static UserEntity toEntity(UpdateUserRequest userRequest) {
         UserEntity userEntity = new UserEntity();
         userEntity.setFirstName(userRequest.getFirstName());
         userEntity.setLastName(userRequest.getLastName());

@@ -33,6 +33,8 @@ public interface UserService {
 
     void updateUser(@NotNull String userUuid, @NotNull UserEntity updatedUser) throws ApplicationException;
 
-    void updateUserStatus(@NotNull String userUuid, @NotNull UserStatus newUserStatus) throws ApplicationException;
+    void changeUserStatus(@NotNull String userUuid, @NotNull UserStatus newUserStatus) throws ApplicationException;
+
+    void deleteUser(@NotNull String userUuid) throws ApplicationException;
 
 }

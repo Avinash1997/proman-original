@@ -2,6 +2,7 @@ package apps.proman.service.board.business;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,12 +35,13 @@ public class BoardServiceImpl implements  BoardService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public BoardEntity findBoard(@NotNull String boardUuid) throws ApplicationException {
-        BoardEntity boardEntity = boardDao.findByUUID(boardUuid);
-        if(boardEntity == null) {
+
+        final BoardEntity existingBoard = boardDao.findByUUID(boardUuid);
+        if(existingBoard == null) {
             throw new EntityNotFoundException(BoardErrorCode.BRD_001, boardUuid);
         }
 
-        return boardEntity;
+        return existingBoard;
     }
 
     @Override
@@ -56,17 +58,58 @@ public class BoardServiceImpl implements  BoardService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateBoard(@NotNull BoardEntity updatedBoard) throws ApplicationException {
+    public void updateBoard(final String boardUuid, final BoardEntity updatedBoard) throws ApplicationException {
 
+        final BoardEntity existingBoard = boardDao.findByUUID(boardUuid);
+        if(existingBoard == null) {
+            throw new EntityNotFoundException(BoardErrorCode.BRD_001, boardUuid);
+        }
+
+        if(!existingBoard.getName().equalsIgnoreCase(updatedBoard.getName()) && boardDao.findByName(updatedBoard.getName()) != null) {
+            throw new ApplicationException(BoardErrorCode.BRD_002, updatedBoard.getName());
+        }
+
+        if(StringUtils.isNotEmpty(updatedBoard.getName())) {
+            existingBoard.setName(updatedBoard.getName());
+        }
+
+        if(StringUtils.isNotEmpty(updatedBoard.getDescription())) {
+            existingBoard.setDescription(updatedBoard.getDescription());
+        }
+
+        if(updatedBoard.getOwner() != null) {
+            existingBoard.setOwner(updatedBoard.getOwner());
+        }
+
+        boardDao.update(existingBoard);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteBoard(@NotNull String boardUuid) throws ApplicationException {
 
+        final BoardEntity existingBoard = boardDao.findByUUID(boardUuid);
+        if(existingBoard == null) {
+            throw new EntityNotFoundException(BoardErrorCode.BRD_001, boardUuid);
+        }
+
+        existingBoard.setStatus(BoardStatus.DELETED.getCode());
+        boardDao.update(existingBoard);
     }
 
     @Override
-    public void changeBoardStatus(@NotNull String boardUuid, @NotNull BoardStatus newBoardStatus) {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void changeBoardStatus(@NotNull String boardUuid, @NotNull BoardStatus newBoardStatus) throws ApplicationException {
 
+        final BoardEntity existingBoard = boardDao.findByUUID(boardUuid);
+        if(existingBoard == null) {
+            throw new EntityNotFoundException(BoardErrorCode.BRD_001, boardUuid);
+        }
+
+        if(existingBoard.getStatus() != newBoardStatus.getCode()) {
+            existingBoard.setStatus(newBoardStatus.getCode());
+            boardDao.update(existingBoard);
+        }
     }
+
 }

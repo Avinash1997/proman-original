@@ -37,7 +37,7 @@ public class SignupController {
         newUserEntity.setStatus(UserStatus.REGISTERED.getCode());
 
         final UserEntity registeredUser = userService.createUser(newUserEntity);
-        return new ResponseBuilder<SignupUserResponse>(HttpStatus.CREATED).payload(toSignupResponse(registeredUser)).build();
+        return ResponseBuilder.created().payload(toSignupResponse(registeredUser)).build();
     }
 
 }

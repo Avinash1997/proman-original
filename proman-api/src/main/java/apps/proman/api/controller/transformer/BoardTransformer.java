@@ -32,7 +32,6 @@ public final class BoardTransformer {
 
     public static BoardEntity toEntity(final UpdateBoardRequest boardRequest) {
         BoardEntity boardEntity = new BoardEntity();
-        boardEntity.setUuid(boardRequest.getId().toString());
         boardEntity.setName(boardRequest.getName());
         boardEntity.setDescription(boardRequest.getDescription());
         return boardEntity;

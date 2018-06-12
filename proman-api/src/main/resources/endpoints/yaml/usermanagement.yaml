@@ -369,7 +369,7 @@ paths:
           - Authorization: []
         summary: User Administration - Partial update of an existing user
         description: >
-            API to partial update of an existing user in the board of Proman application
+            API to partial update of an existing user of Proman application
         consumes:
           - application/json
         produces:
@@ -424,6 +424,69 @@ paths:
           '422':
             description: >-
               UNPROCESSABLE ENTITY - request was well-formed but server unable to process due to semantic errors
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '500':
+            description: >-
+              INTERNAL SERVER ERROR - server encountered an unexpected condition
+              that prevented it from fulfilling the request.
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+
+     delete:
+        operationId: deleteUser
+        tags:
+          - 'API#003 Users'
+        security:
+          - Authorization: []
+        summary: User Administration - Remove an existing user
+        description: >
+            API to remove an existing user
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        parameters:
+          - $ref: '#/parameters/UserId'
+          - $ref: '#/parameters/ClientId'
+          - $ref: '#/parameters/Authorization'
+        responses:
+          '200':
+            description: OK - User status has been set to DELETED
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '400':
+            description: >-
+              BAD REQUEST - server cannot or will not process the request due to
+              something that is perceived to be a client error (e.g., malformed
+              request syntax, mandatory elements are missing)
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '401':
+            description: UNAUTHORIZED - user has provided wrong credentials
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '403':
+            description: >-
+              FORBIDDEN - request has not been applied because client application
+              has no permission to perform action
+            headers:
+              request-id:
+                type: string
+                description: Used as correlation id while tracing for the request in the backend
+          '404':
+            description: >-
+              NOT FOUND - User (resource) does not exist
             headers:
               request-id:
                 type: string
@@ -711,12 +774,6 @@ definitions:
         description: Modified mobile number of an existing user
       role:
         $ref: '#/definitions/RoleRequest'
-    required:
-      - first_name
-      - last_name
-      - email_address
-      - mobile_number
-      - role
     example:
       first_name: Proman
       last_name: Administrator
@@ -755,7 +812,7 @@ definitions:
 
   UserStatusType:
     type: string
-    enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED]
+    enum: [REGISTERED, ACTIVE, INACTIVE, LOCKED, DELETED]
     description: Status of the User
 
   ErrorResponse:

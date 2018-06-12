@@ -9,6 +9,7 @@
 package apps.proman.api.controller.ext;
 
 import static apps.proman.api.data.ResourceConstants.HEADER_ACCESS_TOKEN;
+import static apps.proman.api.data.ResourceConstants.HEADER_LOCATION;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,16 @@ public class ResponseBuilder<T> {
     private final HttpHeaders headers = new HttpHeaders();
     private T payload;
 
-    public ResponseBuilder(final HttpStatus status) {
+    private ResponseBuilder(final HttpStatus status) {
         this.status = status;
+    }
+
+    public static <T> ResponseBuilder ok() {
+        return new ResponseBuilder<T>(HttpStatus.OK);
+    }
+
+    public static <T> ResponseBuilder created() {
+        return new ResponseBuilder<T>(HttpStatus.CREATED);
     }
 
     public ResponseBuilder<T> payload(T payload) {
@@ -38,7 +47,7 @@ public class ResponseBuilder<T> {
     }
 
     public ResponseBuilder<T> location(final String value) {
-        this.headers.add(HEADER_ACCESS_TOKEN, value);
+        this.headers.add(HEADER_LOCATION, value);
         return this;
     }
 

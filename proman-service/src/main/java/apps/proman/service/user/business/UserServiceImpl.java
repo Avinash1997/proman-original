@@ -9,6 +9,9 @@ package apps.proman.service.user.business;
 
 import static apps.proman.service.user.UserErrorCode.*;
 
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.common.exception.EntityNotFoundException;
+import apps.proman.service.user.UserErrorCode;
 import apps.proman.service.user.dao.UserDao;
+import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.UserEntity;
 import apps.proman.service.common.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;
@@ -78,8 +83,8 @@ public class UserServiceImpl implements UserService {
             throw new ApplicationException(USR_009, newUser.getEmail());
         }
 
-        setDefaultPassword(newUser);
         newUser.setRole(roleService.findRoleByUuid(roleUuid));
+        setDefaultPassword(newUser);
 
         return userDao.create(newUser);
     }
@@ -102,32 +107,63 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateUser(final String userUuid, final UserEntity updatedUser) throws ApplicationException {
 
-        final UserEntity existingUserEntity = userDao.findByUUID(userUuid);
-        if (existingUserEntity == null) {
+        final UserEntity existingUser = userDao.findByUUID(userUuid);
+        if (existingUser == null) {
             throw new EntityNotFoundException(USR_001, userUuid);
         }
 
-        if(!existingUserEntity.getEmail().equalsIgnoreCase(updatedUser.getEmail()) && userDao.findByEmail(updatedUser.getEmail()) != null) {
-            throw new ApplicationException(USR_008, updatedUser.getEmail());
+        if(!UserStatus.ACTIVE.equals(UserStatus.get(existingUser.getStatus()))) {
+            throw new ApplicationException(UserErrorCode.USR_008, UserStatus.get(existingUser.getStatus()));
         }
 
-        userDao.update(updatedUser);
+        if(!existingUser.getEmail().equalsIgnoreCase(updatedUser.getEmail()) && userDao.findByEmail(updatedUser.getEmail()) != null) {
+            throw new ApplicationException(USR_009, updatedUser.getEmail());
+        }
+
+        if(StringUtils.isNotEmpty(updatedUser.getFirstName())) {
+            existingUser.setFirstName(updatedUser.getFirstName());
+        }
+        if(StringUtils.isNotEmpty(updatedUser.getLastName())) {
+            existingUser.setLastName(updatedUser.getLastName());
+        }
+        if(StringUtils.isNotEmpty(updatedUser.getEmail())) {
+            existingUser.setEmail(updatedUser.getEmail());
+        }
+        if(StringUtils.isNotEmpty(updatedUser.getMobilePhone())) {
+            existingUser.setMobilePhone(updatedUser.getMobilePhone());
+        }
+        if(updatedUser.getRole() != null) {
+            existingUser.setRole(updatedUser.getRole());
+        }
+
+        userDao.update(existingUser);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateUserStatus(final String userUuid, final UserStatus newUserStatus) throws ApplicationException {
+    public void changeUserStatus(final String userUuid, final UserStatus newUserStatus) throws ApplicationException {
 
-        final UserEntity existingUserEntity = userDao.findByUUID(userUuid);
-        if (existingUserEntity == null) {
+        final UserEntity existingUser = userDao.findByUUID(userUuid);
+        if (existingUser == null) {
             throw new EntityNotFoundException(USR_001, userUuid);
         }
 
-        final UserStatus existingUserStatus = UserStatus.get(existingUserEntity.getStatus());
-        if(existingUserStatus != newUserStatus) {
-            existingUserEntity.setStatus(newUserStatus.getCode());
-            userDao.update(existingUserEntity);
+        if(existingUser.getStatus() != newUserStatus.getCode()) {
+            existingUser.setStatus(newUserStatus.getCode());
+            userDao.update(existingUser);
         }
+    }
+
+    @Override
+    public void deleteUser(final String userUuid) throws ApplicationException {
+
+        final UserEntity existingUser = userDao.findByUUID(userUuid);
+        if(existingUser == null) {
+            throw new EntityNotFoundException(USR_001, userUuid);
+        }
+
+        existingUser.setStatus(UserStatus.DELETED.getCode());
+        userDao.update(existingUser);
     }
 
     private void setDefaultPassword(final UserEntity newUser) {

@@ -17,10 +17,10 @@ public interface BoardService {
 
     BoardEntity createBoard(@NotNull BoardEntity newBoard) throws ApplicationException;
 
-    void updateBoard(@NotNull BoardEntity updatedBoard) throws ApplicationException;
+    void updateBoard(@NotNull String boardUuid, @NotNull BoardEntity updatedBoard) throws ApplicationException;
 
     void deleteBoard(@NotNull String boardUuid) throws ApplicationException;
 
-    void changeBoardStatus(@NotNull String boardUuid, @NotNull BoardStatus newBoardStatus) ;
+    void changeBoardStatus(@NotNull String boardUuid, @NotNull BoardStatus newBoardStatus) throws ApplicationException ;
 
 }

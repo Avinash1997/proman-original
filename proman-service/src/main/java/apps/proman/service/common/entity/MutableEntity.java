@@ -45,13 +45,13 @@ public class MutableEntity implements Entity {
 
     @PrePersist
     public void prePersist() {
-        this.createdBy = "test-user";
+        this.createdBy = "api-backend";
         this.createdAt = ZonedDateTime.now();
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.modifiedBy = "test-user";
+        this.modifiedBy = "api-backend";
         this.modifiedAt = ZonedDateTime.now();
     }
 

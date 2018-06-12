@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import apps.proman.api.controller.ext.ResponseBuilder;
 import apps.proman.api.exception.RestException;
 import apps.proman.api.model.BoardDetailsResponse;
+import apps.proman.api.model.BoardOperationRequest;
+import apps.proman.api.model.BoardOperationsRequest;
 import apps.proman.api.model.BoardStatusType;
 import apps.proman.api.model.BoardsSummaryResponse;
 import apps.proman.api.model.CreateBoardRequest;
@@ -54,24 +56,17 @@ public class BoardAdminController {
             searchResult = boardService.findBoards(page, limit);
         }
         else {
-            try{
-                final BoardStatusType statusType = BoardStatusType.valueOf(status);
-                searchResult = boardService.findBoards(BoardStatus.valueOf(statusType.name()), page, limit);
-            }catch(IllegalArgumentException exc) {
-                throw new RestException(BoardErrorCode.BRD_003, StringUtils.join(BoardStatusType.values(),","));
-            }
+            searchResult = boardService.findBoards(BoardStatus.valueOf(toEnum(status).name()), page, limit);
         }
-
-        return new ResponseBuilder<BoardsSummaryResponse>(HttpStatus.OK).payload(toBoardsSummaryResponse(page, limit, searchResult)).build();
+        return ResponseBuilder.ok().payload(toBoardsSummaryResponse(page, limit, searchResult)).build();
     }
 
     @RequestMapping(method = GET, path = "/boards/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<BoardDetailsResponse> getBoard(@PathVariable("id") final String userUuid)
+    public ResponseEntity<BoardDetailsResponse> getBoard(@PathVariable("id") final String boardUuid)
             throws ApplicationException {
 
-        final BoardEntity boardEntity = boardService.findBoard(userUuid);
-        return new ResponseBuilder<BoardDetailsResponse>(HttpStatus.OK)
-                .payload(toBoardDetailsResponse(boardEntity)).build();
+        final BoardEntity boardEntity = boardService.findBoard(boardUuid);
+        return ResponseBuilder.ok().payload(toBoardDetailsResponse(boardEntity)).build();
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/boards", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
@@ -81,33 +76,58 @@ public class BoardAdminController {
         if(userEntity == null) {
             throw new ApplicationException(UserErrorCode.USR_001, createBoardRequest.getOwnerId());
         }
-        else if(UserStatus.INACTIVE.equals(UserStatus.get(userEntity.getStatus()))) {
-            throw new ApplicationException(UserErrorCode.USR_008);
+        else if(!UserStatus.ACTIVE.equals(UserStatus.get(userEntity.getStatus()))) {
+            throw new ApplicationException(UserErrorCode.USR_008, UserStatus.get(userEntity.getStatus()));
         }
 
         final BoardEntity boardEntity = toEntity(createBoardRequest);
         boardEntity.setOwner(userEntity);
 
         final BoardEntity createdBoard = boardService.createBoard(boardEntity);
-        return new ResponseBuilder(HttpStatus.CREATED).payload(toResponse(createdBoard)).build();
+        return ResponseBuilder.created().payload(toResponse(createdBoard)).build();
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/boards/{id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity updateBoard(@RequestBody final UpdateBoardRequest updateBoardRequest) throws ApplicationException {
+    public ResponseEntity updateBoard(@PathVariable("id") final String boardUuid, @RequestBody final UpdateBoardRequest updatedBoardRequest) throws ApplicationException {
 
-        UserEntity userEntity = userService.findUserByUuid(updateBoardRequest.getOwnerId());
-        if(userEntity == null) {
-            throw new ApplicationException(UserErrorCode.USR_001, updateBoardRequest.getOwnerId());
+        final BoardEntity boardEntity = toEntity(updatedBoardRequest);
+        if(StringUtils.isNotEmpty(updatedBoardRequest.getOwnerId())) {
+            UserEntity userEntity = userService.findUserByUuid(updatedBoardRequest.getOwnerId());
+            if (userEntity == null) {
+                throw new ApplicationException(UserErrorCode.USR_001, updatedBoardRequest.getOwnerId());
+            } else if (UserStatus.INACTIVE.equals(UserStatus.get(userEntity.getStatus()))) {
+                throw new ApplicationException(UserErrorCode.USR_008);
+            }
+
+            boardEntity.setOwner(userEntity);
         }
-        else if(UserStatus.INACTIVE.equals(UserStatus.get(userEntity.getStatus()))) {
-            throw new ApplicationException(UserErrorCode.USR_008);
+
+        boardService.updateBoard(boardUuid, boardEntity);
+        return ResponseBuilder.ok().build();
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, path = "/boards/{id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity patchBoard(@PathVariable("id") final String boardUuid, @RequestBody final BoardOperationsRequest boardOperationsRequest) throws ApplicationException {
+
+        for(BoardOperationRequest boardOperationRequest : boardOperationsRequest) {
+            boardService.changeBoardStatus(boardUuid, BoardStatus.valueOf(toEnum(boardOperationRequest.getValue()).name()));
         }
 
-        final BoardEntity boardEntity = toEntity(updateBoardRequest);
-        boardEntity.setOwner(userEntity);
-        boardService.updateBoard(boardEntity);
+        return ResponseBuilder.ok().build();
+    }
 
-        return new ResponseBuilder(HttpStatus.OK).build();
+    @RequestMapping(method = RequestMethod.DELETE, path = "/boards/{id}")
+    public ResponseEntity deleteBoard(@PathVariable("id") final String boardUuid) throws ApplicationException {
+        boardService.deleteBoard(boardUuid);
+        return ResponseBuilder.ok().build();
+    }
+
+    private BoardStatusType toEnum(final String status) {
+        try{
+            return BoardStatusType.valueOf(status);
+        }catch(IllegalArgumentException exc) {
+            throw new RestException(BoardErrorCode.BRD_003, StringUtils.join(BoardStatusType.values(),","));
+        }
     }
 
 }

@@ -46,7 +46,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthorizedUserResponse> login(@RequestHeader final String authorization) throws ApplicationException {
         final BasicAuthDecoder basicAuthDecoder = new BasicAuthDecoder(authorization);
         final AuthorizedUser authorizedUser = authenticationService.authenticate(basicAuthDecoder.getUsername(), basicAuthDecoder.getPassword());
-        return new ResponseBuilder<AuthorizedUserResponse>(HttpStatus.OK).payload(authorizedUserTransform.apply(authorizedUser))
+        return ResponseBuilder.ok().payload(authorizedUserTransform.apply(authorizedUser))
                 .accessToken(authorizedUser.getAccessToken()).build();
     }
 

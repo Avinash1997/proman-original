@@ -58,7 +58,8 @@ public final class BoardTransformer {
     public static BoardDetailsResponse toBoardDetailsResponse(BoardEntity entity) {
         return new BoardDetailsResponse().id(UUID.fromString(entity.getUuid()))
                 .name(entity.getName()).description(entity.getDescription()).owner(toOwnerDetails(entity.getOwner()))
-                .status(toStatus(entity.getStatus()));
+                .status(toStatus(entity.getStatus()))
+                .totalProjects(entity.getProjects().size());
     }
 
     private static BoardOwnerType toOwner(final UserEntity owner) {

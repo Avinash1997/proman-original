@@ -18,6 +18,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import apps.proman.service.common.data.DateTimeProvider;
+
 /**
  * Base class for all mutable entities to inherit the default behavior.
  */
@@ -46,13 +48,13 @@ public class MutableEntity implements Entity {
     @PrePersist
     public void prePersist() {
         this.createdBy = "api-backend";
-        this.createdAt = ZonedDateTime.now();
+        this.createdAt = DateTimeProvider.currentSystemTime();
     }
 
     @PreUpdate
     public void preUpdate() {
         this.modifiedBy = "api-backend";
-        this.modifiedAt = ZonedDateTime.now();
+        this.modifiedAt = DateTimeProvider.currentSystemTime();
     }
 
     public String getCreatedBy() {

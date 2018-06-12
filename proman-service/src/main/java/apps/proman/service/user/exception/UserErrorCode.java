@@ -5,7 +5,7 @@
  * Date: May 5, 2018
  * Author: Thribhuvan Krishnamurthy
  */
-package apps.proman.service.user;
+package apps.proman.service.user.exception;
 
 import java.util.HashMap;
 import java.util.Map;

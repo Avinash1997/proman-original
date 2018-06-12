@@ -8,7 +8,7 @@
 package apps.proman.service.user.business;
 
 
-import static apps.proman.service.user.UserErrorCode.*;
+import static apps.proman.service.user.exception.UserErrorCode.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

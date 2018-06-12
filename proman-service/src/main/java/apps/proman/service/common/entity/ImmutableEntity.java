@@ -15,6 +15,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotNull;
 
+import apps.proman.service.common.data.DateTimeProvider;
+
 /**
  * Base class for all immutable entities to inherit the default behavior.
  */
@@ -32,8 +34,8 @@ public class ImmutableEntity implements Entity {
 
     @PrePersist
     public void prePersist() {
-        this.createdBy = "test-user";
-        this.createdAt = ZonedDateTime.now();
+        this.createdBy = "api-backend";
+        this.createdAt = DateTimeProvider.currentSystemTime();
     }
 
     public String getCreatedBy() {

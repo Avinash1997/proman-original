@@ -7,8 +7,8 @@
  */
 package apps.proman.service.user.business;
 
-import static apps.proman.service.user.UserErrorCode.USR_005;
-import static apps.proman.service.user.UserErrorCode.USR_006;
+import static apps.proman.service.user.exception.UserErrorCode.USR_005;
+import static apps.proman.service.user.exception.UserErrorCode.USR_006;
 
 import java.time.ZonedDateTime;
 

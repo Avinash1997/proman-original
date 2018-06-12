@@ -9,9 +9,9 @@ import apps.proman.service.common.model.SearchResult;
 
 public interface BoardDao extends BaseDao<BoardEntity> {
 
-    SearchResult<BoardEntity> find(int page, int limit);
+    SearchResult<BoardEntity> find(@NotNull Integer page, @NotNull Integer limit);
 
-    SearchResult<BoardEntity> find(BoardStatus boardStatus, int page, int limit);
+    SearchResult<BoardEntity> find(@NotNull BoardStatus boardStatus, @NotNull Integer page, @NotNull Integer limit);
 
     BoardEntity findByName(@NotNull String boardName);
 

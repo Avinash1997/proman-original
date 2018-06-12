@@ -7,9 +7,7 @@
  */
 package apps.proman.service.user.business;
 
-import static apps.proman.service.user.UserErrorCode.*;
-
-import javax.validation.constraints.NotNull;
+import static apps.proman.service.user.exception.UserErrorCode.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.common.exception.EntityNotFoundException;
-import apps.proman.service.user.UserErrorCode;
+import apps.proman.service.user.exception.UserErrorCode;
 import apps.proman.service.user.dao.UserDao;
-import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.UserEntity;
 import apps.proman.service.common.model.SearchResult;
 import apps.proman.service.user.model.UserStatus;

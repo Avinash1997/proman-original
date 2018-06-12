@@ -7,6 +7,8 @@
  */
 package apps.proman.service.user.business;
 
+import static apps.proman.service.common.data.DateTimeProvider.currentProgramTime;
+
 import java.time.ZonedDateTime;
 
 import apps.proman.service.common.data.DateTimeProvider;
@@ -38,7 +40,7 @@ public final class UserAuthTokenVerifier {
     }
 
     private boolean isExpired(final UserAuthTokenEntity userAuthToken) {
-        final ZonedDateTime now = DateTimeProvider.getInstance().currentProgramTime();
+        final ZonedDateTime now = currentProgramTime();
         return userAuthToken.getExpiresAt().isBefore(now) || userAuthToken.getExpiresAt().isEqual(now);
     }
 

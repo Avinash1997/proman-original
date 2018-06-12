@@ -4,7 +4,9 @@ import static apps.proman.service.common.entity.Entity.SCHEMA;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -25,11 +30,27 @@ import apps.proman.service.common.entity.MutableEntity;
 import apps.proman.service.common.entity.UniversalUniqueIdentifier;
 import apps.proman.service.common.entity.ext.EntityEqualsBuilder;
 import apps.proman.service.common.entity.ext.EntityHashCodeBuilder;
+import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.UserEntity;
 
 @Entity
 @Table(name = "PROJECTS", schema = SCHEMA)
+@NamedQueries({
+        @NamedQuery(name = ProjectEntity.COUNT_BY_ALL, query = "select count(p.id) from ProjectEntity p where p.board.uuid = :boardUuid"),
+        @NamedQuery(name = ProjectEntity.BY_ALL, query = "select p from ProjectEntity p where p.board.uuid = :boardUuid"),
+        @NamedQuery(name = ProjectEntity.BY_NAME, query = "select p from ProjectEntity p where p.name = :name"),
+        @NamedQuery(name = ProjectEntity.COUNT_BY_STATUS, query = "select count(p.id) from ProjectEntity p  where p.board.uuid = :boardUuid and p.status = :status"),
+        @NamedQuery(name = ProjectEntity.BY_STATUS, query = "select p from ProjectEntity p  where p.board.uuid = :boardUuid and p.status = :status"),
+        @NamedQuery(name = ProjectEntity.BY_BOARD_AND_PROJECT, query = "select p from ProjectEntity p  where p.board.uuid = :boardUuid and p.uuid = :projectUuid")
+})
 public class ProjectEntity extends MutableEntity implements Identifier<Integer>, UniversalUniqueIdentifier<String>, Serializable {
+
+    public static final String COUNT_BY_ALL = "ProjectEntity.countByAll";
+    public static final String BY_ALL = "ProjectEntity.byAll";
+    public static final String BY_NAME = "ProjectEntity.byName";
+    public static final String COUNT_BY_STATUS = "ProjectEntity.countByStatus";
+    public static final String BY_STATUS = "ProjectEntity.byStatus";
+    public static final String BY_BOARD_AND_PROJECT = "ProjectEntity.byBoardAndProject";
 
     @Id
     @Column(name = "ID")
@@ -39,6 +60,14 @@ public class ProjectEntity extends MutableEntity implements Identifier<Integer>,
     @Column(name = "UUID")
     @NotNull
     private String uuid;
+
+    @ManyToOne
+    @JoinColumn(name = "BOARD_ID")
+    private BoardEntity board;
+
+    @ManyToOne
+    @JoinColumn(name = "OWNER_ID")
+    private UserEntity owner;
 
     @Column(name = "NAME")
     @NotNull
@@ -55,13 +84,15 @@ public class ProjectEntity extends MutableEntity implements Identifier<Integer>,
     @Column(name = "END_AT")
     private ZonedDateTime endAt;
 
-    @ManyToOne
-    @JoinColumn(name = "OWNER_ID")
-    private UserEntity owner;
-
     @Column(name = "STATUS")
     @NotNull
     private Integer status;
+
+    @OneToMany(mappedBy = "project")
+    private List<ProjectMemberEntity> members;
+
+    @OneToMany(mappedBy = "project")
+    private List<TaskEntity> tasks;
 
     @Override
     public Integer getId() {
@@ -71,6 +102,22 @@ public class ProjectEntity extends MutableEntity implements Identifier<Integer>,
     @Override
     public String getUuid() {
         return uuid;
+    }
+
+    public BoardEntity getBoard() {
+        return board;
+    }
+
+    public void setBoard(BoardEntity board) {
+        this.board = board;
+    }
+
+    public UserEntity getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserEntity owner) {
+        this.owner = owner;
     }
 
     public String getName() {
@@ -87,14 +134,6 @@ public class ProjectEntity extends MutableEntity implements Identifier<Integer>,
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public UserEntity getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserEntity owner) {
-        this.owner = owner;
     }
 
     public ZonedDateTime getStartAt() {
@@ -119,6 +158,14 @@ public class ProjectEntity extends MutableEntity implements Identifier<Integer>,
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<ProjectMemberEntity> getMembers() {
+        return members;
+    }
+
+    public List<TaskEntity> getTasks() {
+        return tasks;
     }
 
     @Override

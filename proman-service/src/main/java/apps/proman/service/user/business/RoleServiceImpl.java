@@ -1,6 +1,6 @@
 package apps.proman.service.user.business;
 
-import static apps.proman.service.user.UserErrorCode.USR_011;
+import static apps.proman.service.user.exception.UserErrorCode.USR_011;
 
 import javax.validation.constraints.NotNull;
 

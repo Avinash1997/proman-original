@@ -9,9 +9,9 @@ import apps.proman.service.common.model.SearchResult;
 
 public interface BoardService {
 
-    SearchResult<BoardEntity> findBoards(int offset, int limit);
+    SearchResult<BoardEntity> findBoards(@NotNull Integer offset, @NotNull Integer limit);
 
-    SearchResult<BoardEntity> findBoards(BoardStatus userStatus, int offset, int limit);
+    SearchResult<BoardEntity> findBoards(@NotNull BoardStatus boardStatus, @NotNull Integer offset, @NotNull Integer limit);
 
     BoardEntity findBoard(@NotNull String boardUuid) throws ApplicationException ;
 

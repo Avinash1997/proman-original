@@ -40,6 +40,14 @@ public class TaskEntity extends MutableEntity implements Identifier<Integer>, Un
     @NotNull
     private String uuid;
 
+    @ManyToOne
+    @JoinColumn(name = "PROJECT_MEMBER_ID")
+    private ProjectMemberEntity owner;
+
+    @ManyToOne
+    @JoinColumn(name = "PROJECT_ID")
+    private ProjectEntity project;
+
     @Column(name = "NAME")
     @NotNull
     @Size(max = 300)
@@ -64,10 +72,6 @@ public class TaskEntity extends MutableEntity implements Identifier<Integer>, Un
     @Column(name = "REMAINING_EFFORT")
     private Integer remainingEffort;
 
-    @ManyToOne
-    @JoinColumn(name = "PROJECT_MEMBER_ID")
-    private ProjectMemberEntity owner;
-
     @Column(name = "STATUS")
     @NotNull
     private Integer status;
@@ -80,6 +84,22 @@ public class TaskEntity extends MutableEntity implements Identifier<Integer>, Un
     @Override
     public String getUuid() {
         return uuid;
+    }
+
+    public ProjectMemberEntity getOwner() {
+        return owner;
+    }
+
+    public void setOwner(ProjectMemberEntity owner) {
+        this.owner = owner;
+    }
+
+    public ProjectEntity getProject() {
+        return project;
+    }
+
+    public void setProject(ProjectEntity project) {
+        this.project = project;
     }
 
     public String getName() {
@@ -96,14 +116,6 @@ public class TaskEntity extends MutableEntity implements Identifier<Integer>, Un
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public ProjectMemberEntity getOwner() {
-        return owner;
-    }
-
-    public void setOwner(ProjectMemberEntity owner) {
-        this.owner = owner;
     }
 
     public ZonedDateTime getStartAt() {

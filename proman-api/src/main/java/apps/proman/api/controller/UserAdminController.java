@@ -7,11 +7,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-import java.util.UUID;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import apps.proman.api.controller.ext.ResponseBuilder;
 import apps.proman.api.exception.RestException;
-import apps.proman.api.model.BoardOperationRequest;
-import apps.proman.api.model.BoardOperationsRequest;
 import apps.proman.api.model.CreateUserRequest;
 import apps.proman.api.model.CreateUserResponse;
 import apps.proman.api.model.UpdateUserRequest;
@@ -32,9 +27,8 @@ import apps.proman.api.model.UserOperationRequest;
 import apps.proman.api.model.UserOperationsRequest;
 import apps.proman.api.model.UserStatusType;
 import apps.proman.api.model.UsersSummaryResponse;
-import apps.proman.service.board.model.BoardStatus;
 import apps.proman.service.common.exception.ApplicationException;
-import apps.proman.service.user.UserErrorCode;
+import apps.proman.service.user.exception.UserErrorCode;
 import apps.proman.service.user.business.RoleService;
 import apps.proman.service.user.business.UserService;
 import apps.proman.service.user.entity.RoleEntity;

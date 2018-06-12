@@ -1064,6 +1064,10 @@
         "message": {
           "type": "string",
           "description": "Error message stating the reason"
+        },
+        "root_cause": {
+          "type": "string",
+          "description": "Root cause of the Error"
         }
       },
       "required": [

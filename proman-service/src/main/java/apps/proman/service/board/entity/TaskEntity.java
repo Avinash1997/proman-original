@@ -4,6 +4,7 @@ import static apps.proman.service.common.entity.Entity.SCHEMA;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -25,11 +29,23 @@ import apps.proman.service.common.entity.MutableEntity;
 import apps.proman.service.common.entity.UniversalUniqueIdentifier;
 import apps.proman.service.common.entity.ext.EntityEqualsBuilder;
 import apps.proman.service.common.entity.ext.EntityHashCodeBuilder;
-import apps.proman.service.user.entity.UserEntity;
 
 @Entity
 @Table(name = "TASKS", schema = SCHEMA)
+@NamedQueries({
+        @NamedQuery(name = TaskEntity.COUNT_BY_ALL, query = "select count(t.id) from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid"),
+        @NamedQuery(name = TaskEntity.BY_ALL, query = "select t from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid"),
+        @NamedQuery(name = TaskEntity.COUNT_BY_STATUS, query = "select count(t.id) from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid and t.status = :status"),
+        @NamedQuery(name = TaskEntity.BY_STATUS, query = "select t from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid and t.status = :status"),
+        @NamedQuery(name = TaskEntity.BY_BOARD_AND_PROJECT_AND_TASK, query = "select t from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid")
+})
 public class TaskEntity extends MutableEntity implements Identifier<Integer>, UniversalUniqueIdentifier<String>, Serializable {
+
+    public static final String COUNT_BY_ALL = "TaskEntity.countByAll";
+    public static final String BY_ALL = "TaskEntity.byAll";
+    public static final String COUNT_BY_STATUS = "TaskEntity.countByStatus";
+    public static final String BY_STATUS = "TaskEntity.byStatus";
+    public static final String BY_BOARD_AND_PROJECT_AND_TASK = "TaskEntity.byBoardAndProjectAndTask";
 
     @Id
     @Column(name = "ID")
@@ -75,6 +91,9 @@ public class TaskEntity extends MutableEntity implements Identifier<Integer>, Un
     @Column(name = "STATUS")
     @NotNull
     private Integer status;
+
+    @OneToMany(mappedBy = "task")
+    private List<TaskWatcherEntity> watchers;
 
     @Override
     public Integer getId() {
@@ -164,6 +183,10 @@ public class TaskEntity extends MutableEntity implements Identifier<Integer>, Un
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<TaskWatcherEntity> getWatchers() {
+        return watchers;
     }
 
     @Override

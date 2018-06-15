@@ -3,7 +3,7 @@
    "info": {
       "title": "Board Management API",
       "version": "1.0.0",
-      "description": "## API of Board Management Services\n\nThis specification describes the endpoints, request/response model of the Board Management API. This API provides REST resources to manage project boards of Proman application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```\n  https://proman.io/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Proman.\n\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Proman reserves the right to add new parameters without further notice (in request and response).\n  * Proman reserves the right to add new error codes without further notice. Proman will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Proman reserves the right to enhance enumerations by new values.\n  * Proman reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nBoard Management APIs can only be called by authorized users who has rights with required permissions to manage boards. These APIs can be used to create new board, modify an existing board, map team to the board, add members (users) to the board, remove members (users) from the board, map workflow, mark board as completed, . The users once mapped to the board will have an access to board and tasks assigned to them.\n## Release Notes \n### 1.0.0\n* Initial version\n"
+      "description": "## API of Board Management Services\n\nThis specification describes the endpoints, request/response model of the Board Management API. This API provides REST resources to manage project boards of Proman application.\n\nThe resources should only be used over HTTPS (SSL) and can be accessed via the following base URL:\n\n```  https://proman.io/api/v1/\n```\n\n## API usage guidelines\n\nThis section describes general rules and guidelines for using REST based services offered by Proman.\n  * All resources can only be accessed via HTTPS and a respective HTTP Basic Authentication header is also required.\n  * Proman reserves the right to add new parameters without further notice (in request and response).\n  * Proman reserves the right to add new error codes without further notice. Proman will thereby stick to the HTTP STATUS CODES as defined by W3C.\n  * Proman reserves the right to enhance enumerations by new values.\n  * Proman reserves the right to increase the \"maxItem\" settings of arrays without further notice.\n  \nEach consumer needs to tolerant about changes to the API as much as possible ([see Tolerant Reader Pattern](http://martinfowler.com/bliki/TolerantReader.html))\n\n## Business definitions\nBoard Management APIs can only be called by authorized users who has rights with required permissions to manage boards. These APIs can be used to create new board, modify an existing board, map team to the board, add members (users) to the board, remove members (users) from the board, map workflow, mark board as completed, . The users once mapped to the board will have an access to board and tasks assigned to them.\n## Release Notes\n### 1.0.0\n* Initial version\n"
    },
    "host": "proman.io",
    "schemes": [
@@ -26,9 +26,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Create new Board",
@@ -130,9 +128,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Get all Boards",
@@ -245,9 +241,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Get an existing Board",
@@ -333,9 +327,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Update an existing Board",
@@ -439,9 +431,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Partial update of an existing Board",
@@ -542,9 +532,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Remove an existing Board",
@@ -626,9 +614,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Create new Project in the Board",
@@ -733,9 +719,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - List of projects belonging to the Board",
@@ -814,9 +798,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Get an existing project details of the Board",
@@ -905,9 +887,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Update an existing Project in the Board",
@@ -1014,9 +994,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Partial update of an existing Board",
@@ -1120,9 +1098,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Remove an existing Project from the Board",
@@ -1207,9 +1183,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - List of Project members belonging to the Board",
@@ -1291,9 +1265,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - List of Project tasks belonging to the Board",
@@ -1373,9 +1345,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Add task to the Project",
@@ -1485,9 +1455,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Task details belonging to the Board",
@@ -1579,9 +1547,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Update an existing task in the project",
@@ -1694,9 +1660,7 @@
             ],
             "security": [
                {
-                  "Authorization": [
-
-                  ]
+                  "Authorization": []
                }
             ],
             "summary": "Board Management - Partial update of an existing task belonging to the Project",
@@ -2247,7 +2211,10 @@
                      "id": 200,
                      "name": "Team Leader"
                   },
-                  "status": "LOCKED"
+                  "status": "LOCKED",
+                  "total_members": 8,
+                  "total_effort": 10800,
+                  "remaining_effort": 7200
                }
             ]
          }
@@ -2301,6 +2268,14 @@
             "total_members": {
                "type": "integer",
                "description": "Total members in the project"
+            },
+            "total_effort": {
+               "type": "integer",
+               "description": "Total estimated effort (in seconds) of all tasks belonging to this Project"
+            },
+            "remaining_effort": {
+               "type": "integer",
+               "description": "Total remaining effort (in seconds) of all tasks belonging to this Project"
             }
          },
          "required": [
@@ -2309,7 +2284,10 @@
             "owner",
             "start_date",
             "end_date",
-            "status"
+            "status",
+            "total_members",
+            "total_effort",
+            "remaining_effort"
          ]
       },
       "ProjectDetailsResponse": {
@@ -2352,6 +2330,14 @@
             "total_members": {
                "type": "integer",
                "description": "Total number of members (users) in the project"
+            },
+            "total_effort": {
+               "type": "integer",
+               "description": "Total estimated effort (in seconds) of all tasks belonging to this Project"
+            },
+            "remaining_effort": {
+               "type": "integer",
+               "description": "Total remaining effort (in seconds) of all tasks belonging to this Project"
             }
          },
          "required": [
@@ -2361,7 +2347,9 @@
             "start_date",
             "end_date",
             "status",
-            "total_members"
+            "total_members",
+            "total_effort",
+            "remaining_effort"
          ],
          "example": {
             "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
@@ -2376,10 +2364,12 @@
                   "name": "Project Manager"
                }
             },
-            "start_date": "2018-05-07",
-            "end_date": "2018-05-10",
+            "start_date": "2018-05-07T00:00:00.000Z",
+            "end_date": "2018-05-10T00:00:00.000Z",
             "status": "ACTIVE",
-            "total_members": 8
+            "total_members": 8,
+            "total_effort": 10800,
+            "remaining_effort": 7200
          }
       },
       "ProjectBoardSummaryType": {
@@ -2502,8 +2492,8 @@
          ],
          "example": {
             "name": "Build API Backend for Proman Application",
-            "start_date": "2018-05-07",
-            "end_date": "2018-05-10",
+            "start_date": "2018-05-07T00:00:00.000Z",
+            "end_date": "2018-05-10T00:00:00.000Z",
             "owner_id": "4d174a25-da31-55a8-65b4-c06ffc9d5f8a"
          }
       },
@@ -2560,22 +2550,14 @@
          ],
          "example": {
             "name": "Build API Backend for Proman Application",
-            "start_date": "2018-05-07",
-            "end_date": "2018-06-10",
+            "start_date": "2018-05-07T00:00:00.000Z",
+            "end_date": "2018-06-10T00:00:00.000Z",
             "owner_id": "4d174a25-da31-55a8-65b4-c06ffc9d5f8a"
          }
       },
       "ProjectMembersSummaryResponse": {
          "type": "object",
          "properties": {
-            "page": {
-               "type": "integer",
-               "description": "page or position of the fetched members"
-            },
-            "limit": {
-               "type": "integer",
-               "description": "number of members fetched per this request"
-            },
             "total_count": {
                "type": "integer",
                "description": "total number of members in the database"
@@ -2735,6 +2717,11 @@
                "format": "uuid",
                "description": "Unique identifier of the board member in a standard UUID format generated by API backend"
             },
+            "project": {
+               "type": "object",
+               "description": "Project that this task belongs to",
+               "$ref": "#/definitions/TaskProjectSummaryType"
+            },
             "name": {
                "type": "string",
                "description": "Name of the task"
@@ -2775,6 +2762,28 @@
             "status"
          ]
       },
+      "TaskProjectSummaryType": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "string",
+               "format": "uuid",
+               "description": "Unique identifier of the project in a standard UUID format"
+            },
+            "name": {
+               "type": "string",
+               "description": "Name of the project"
+            }
+         },
+         "required": [
+            "id",
+            "name"
+         ],
+         "example": {
+            "id": "7d174a25-ba31-45a8-85b4-b06ffc9d5f8f",
+            "name": "API Backend Project"
+         }
+      },
       "TaskOwnerType": {
          "type": "object",
          "properties": {
@@ -2805,6 +2814,11 @@
                "type": "string",
                "format": "uuid",
                "description": "Unique identifier of the board task in a standard UUID format generated by API backend"
+            },
+            "project": {
+               "type": "object",
+               "description": "Project that this task belongs to",
+               "$ref": "#/definitions/TaskProjectSummaryType"
             },
             "name": {
                "type": "string",
@@ -2845,7 +2859,7 @@
             "watchers": {
                "type": "array",
                "description": "List of watchers of this task",
-               "$ref": "#/definitions/TaskWatcherType"
+               "$ref": "#/definitions/TaskWatchersType"
             }
          },
          "required": [
@@ -2871,8 +2885,8 @@
                "email_address": "technical.lead@proman.io"
             },
             "status": "IN PROGRESS",
-            "start_date": "2018-05-07",
-            "end_date": "2018-05-10",
+            "start_date": "2018-05-07T00:00:00.000Z",
+            "end_date": "2018-05-10T00:00:00.000Z",
             "original_effort": 10800,
             "logged_effort": 7200,
             "remaining_effort": 3600,
@@ -2922,21 +2936,28 @@
             "role"
          ]
       },
+      "TaskWatchersType": {
+         "type": "array",
+         "items": {
+            "type": "object",
+            "$ref": "#/definitions/TaskWatcherType"
+         }
+      },
       "TaskWatcherType": {
          "type": "object",
          "properties": {
             "id": {
                "type": "string",
                "format": "uuid",
-               "description": "Unique identifier of the owner (user) in a standard UUID format generated by API backend"
+               "description": "Unique identifier of the watcher (user) in a standard UUID format generated by API backend"
             },
             "first_name": {
                "type": "string",
-               "description": "First name of the owner (user)"
+               "description": "First name of the watcher (user)"
             },
             "last_name": {
                "type": "string",
-               "description": "Last name of the owner (user)"
+               "description": "Last name of the watcher (user)"
             }
          },
          "required": [
@@ -2944,13 +2965,6 @@
             "first_name",
             "last_name"
          ]
-      },
-      "TaskWatchersType": {
-         "type": "array",
-         "items": {
-            "type": "string",
-            "description": "List of memeber ids who are the watchers of this task"
-         }
       },
       "CreateProjectTaskRequest": {
          "type": "object",
@@ -2995,8 +3009,8 @@
             "description": "Analyse on the technical feasibility and work on design spec",
             "owner_id": "d274a25-ca31-45a8-85b4-b06ffc9d5f8f",
             "status": "IN PROGRESS",
-            "start_date": "2018-05-07",
-            "end_date": "2018-05-10",
+            "start_date": "2018-05-07T00:00:00.000Z",
+            "end_date": "2018-05-10T00:00:00.000Z",
             "original_effort": 10800,
             "logged_effort": 7200,
             "remaining_effort": 3600,
@@ -3060,8 +3074,8 @@
             "name": "Analysis and Design",
             "description": "Analyse on the technical feasibility and work on design spec",
             "owner_id": "d274a25-ca31-45a8-85b4-b06ffc9d5f8f",
-            "start_date": "2018-05-07",
-            "end_date": "2018-05-10",
+            "start_date": "2018-05-07T00:00:00.000Z",
+            "end_date": "2018-05-10T00:00:00.000Z",
             "original_effort": 10800
          }
       },
@@ -3138,7 +3152,8 @@
                "enum": [
                   "status",
                   "owner",
-                  "effort"
+                  "effort",
+                  "watcher"
                ]
             },
             "value": {
@@ -3156,6 +3171,11 @@
                "op": "add",
                "path": "effort",
                "value": 3600
+            },
+            {
+               "op": "remove",
+               "path": "watcher",
+               "value": "3d274a27-da31-25a8-55b4-c06ffc9d5f3e"
             }
          ]
       },

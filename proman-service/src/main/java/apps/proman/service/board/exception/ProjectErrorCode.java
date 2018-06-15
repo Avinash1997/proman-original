@@ -13,7 +13,7 @@ import java.util.Map;
 import apps.proman.service.common.exception.ErrorCode;
 
 /**
- * Error code for BOARDS module.
+ * Error code for PROJECTS module.
  */
 public enum ProjectErrorCode implements ErrorCode {
 
@@ -23,7 +23,11 @@ public enum ProjectErrorCode implements ErrorCode {
 
     PRJ_003("PRJ-003", "Not a valid project status. Supported statuses are [{0}]"),
 
-    PRJ_004("PRJ-004", "Project with identifier [{0}] does not belong to the board [{1}]")
+    PRJ_004("PRJ-004", "Project with identifier [{0}] does not belong to the specified board [{1}]"),
+
+    PRJ_005("PRJ-005", "Member with identifier [{0}] does not belong to the specified project [{1}]"),
+
+    PRJ_006("PRJ-006", "Task cannot be added to a project which is in [{0}] status."),
     ;
 
     private static final Map<String, ProjectErrorCode> LOOKUP = new HashMap<String, ProjectErrorCode>();

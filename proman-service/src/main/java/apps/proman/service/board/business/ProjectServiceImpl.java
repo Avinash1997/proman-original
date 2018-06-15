@@ -1,9 +1,9 @@
 package apps.proman.service.board.business;
 
-import static apps.proman.service.board.exception.ProjectErrorCode.PRJ_001;
 import static apps.proman.service.board.exception.ProjectErrorCode.PRJ_002;
 import static apps.proman.service.board.exception.ProjectErrorCode.PRJ_004;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
@@ -127,6 +127,23 @@ public class ProjectServiceImpl implements ProjectService {
             projectDao.update(existingProject);
         }
 
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public SearchResult<ProjectMemberEntity> getProjectMembers(String boardUuid, String projectUuid) throws ApplicationException {
+        final ProjectEntity existingProject = projectDao.findByUUID(boardUuid, projectUuid);
+        if (existingProject == null) {
+            throw new EntityNotFoundException(PRJ_004, projectUuid, boardUuid);
+        }
+
+        final List<ProjectMemberEntity> projectMembers = existingProject.getMembers();
+        return new SearchResult(projectMembers.size(), projectMembers);
+    }
+
+    @Override
+    public ProjectMemberEntity findMember(String projectUuid, String memberUuid) {
+        return projectDao.findMember(projectUuid, memberUuid);
     }
 
     @Override

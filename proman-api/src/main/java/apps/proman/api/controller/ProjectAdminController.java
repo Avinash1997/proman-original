@@ -36,6 +36,7 @@ import apps.proman.service.board.business.BoardService;
 import apps.proman.service.board.business.ProjectService;
 import apps.proman.service.board.entity.BoardEntity;
 import apps.proman.service.board.entity.ProjectEntity;
+import apps.proman.service.board.entity.ProjectMemberEntity;
 import apps.proman.service.board.model.BoardStatus;
 import apps.proman.service.board.model.ProjectStatus;
 import apps.proman.service.common.exception.ApplicationException;
@@ -158,6 +159,14 @@ public class ProjectAdminController {
 
         projectService.deleteProject(boardUuid, projectUuid);
         return ResponseBuilder.ok().build();
+    }
+
+    @RequestMapping(method = GET, path = "/boards/{board_id}/projects/{project_id}/members", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<ProjectsSummaryResponse> getProjectMembers(@PathVariable("board_id") final String boardUuid,
+                                                                     @PathVariable("project_id") final String projectUuid) throws ApplicationException {
+
+        final SearchResult<ProjectMemberEntity> searchResult = projectService.getProjectMembers(boardUuid, projectUuid);
+        return ResponseBuilder.ok().payload(toProjectMembers(searchResult)).build();
     }
 
     private ProjectStatusType toEnum(final String status) {

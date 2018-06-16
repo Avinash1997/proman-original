@@ -137,12 +137,20 @@ public class TaskAdminController {
                 taskService.changeTaskOwner(boardUuid, projectUuid, taskUuid, taskOperationRequest.getValue());
             }
             else if(ProjectTaskOperationRequest.OpEnum.ADD.equals(taskOperationRequest.getOp()) &&
+                    ProjectTaskOperationRequest.PathEnum.EFFORT.equals(taskOperationRequest.getPath())) {
+                taskService.addEffort(boardUuid, projectUuid, taskUuid, Integer.valueOf(taskOperationRequest.getValue()));
+            }
+            else if(ProjectTaskOperationRequest.OpEnum.ADD.equals(taskOperationRequest.getOp()) &&
                     ProjectTaskOperationRequest.PathEnum.WATCHER.equals(taskOperationRequest.getPath())) {
                 addedWatchers.add(taskOperationRequest.getValue());
             }
             else if(ProjectTaskOperationRequest.OpEnum.REMOVE.equals(taskOperationRequest.getOp()) &&
                     ProjectTaskOperationRequest.PathEnum.WATCHER.equals(taskOperationRequest.getPath())) {
                 removedWatchers.add(taskOperationRequest.getValue());
+            }
+            else if(ProjectTaskOperationRequest.OpEnum.REMOVE.equals(taskOperationRequest.getOp()) &&
+                    ProjectTaskOperationRequest.PathEnum.EFFORT.equals(taskOperationRequest.getPath())) {
+                taskService.removeEffort(boardUuid, projectUuid, taskUuid, Integer.valueOf(taskOperationRequest.getValue()));
             }
         }
         if(!addedWatchers.isEmpty()) {

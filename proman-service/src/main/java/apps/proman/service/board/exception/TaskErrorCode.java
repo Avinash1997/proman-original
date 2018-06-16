@@ -21,7 +21,9 @@ public enum TaskErrorCode implements ErrorCode {
 
     TSK_002("TSK-002", "Not a valid task status. Supported statuses are [{0}]"),
 
-    TSK_003("TSK-003", "Task with identifier [{0}] does not belong to the specified board [{1}] and project [{2}]")
+    TSK_003("TSK-003", "Task with identifier [{0}] does not belong to the specified board [{1}] and project [{2}]"),
+
+    TSK_004("TSK-004", "Task with identifier [{0}] is in DELETED status")
     ;
 
     private static final Map<String, TaskErrorCode> LOOKUP = new HashMap<String, TaskErrorCode>();

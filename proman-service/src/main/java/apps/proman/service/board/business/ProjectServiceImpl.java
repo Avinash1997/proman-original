@@ -1,12 +1,9 @@
 package apps.proman.service.board.business;
 
-import static apps.proman.service.board.exception.ProjectErrorCode.PRJ_002;
-import static apps.proman.service.board.exception.ProjectErrorCode.PRJ_004;
+import static apps.proman.service.board.exception.ProjectErrorCode.*;
 
 import java.util.List;
 import java.util.Set;
-
-import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import apps.proman.service.board.dao.ProjectDao;
 import apps.proman.service.board.entity.ProjectEntity;
 import apps.proman.service.board.entity.ProjectMemberEntity;
+import apps.proman.service.board.exception.ProjectErrorCode;
 import apps.proman.service.board.model.ProjectStatus;
 import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.common.exception.EntityNotFoundException;
@@ -46,12 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public ProjectEntity findProject(String boardUuid, String projectUuid) throws ApplicationException {
-
-        final ProjectEntity existingProject = projectDao.findByUUID(boardUuid, projectUuid);
-        if (existingProject == null) {
-            throw new EntityNotFoundException(PRJ_004, projectUuid, boardUuid);
-        }
-        return existingProject;
+        return findExistingProject(boardUuid, projectUuid);
     }
 
     @Override
@@ -70,10 +63,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateProject(String boardUuid, String projectUuid, ProjectEntity updatedProject) throws ApplicationException {
 
-        final ProjectEntity existingProject = projectDao.findByUUID(boardUuid, projectUuid);
-        if (existingProject == null) {
-            throw new EntityNotFoundException(PRJ_004, projectUuid, boardUuid);
-        }
+        final ProjectEntity existingProject = findNonDeletedExistingProject(boardUuid, projectUuid);
 
         if (StringUtils.isNotEmpty(updatedProject.getName())) {
             if (!existingProject.getName().equalsIgnoreCase(updatedProject.getName())
@@ -103,11 +93,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteProject(String boardUuid, String projectUuid) throws ApplicationException {
 
-        final ProjectEntity existingProject = projectDao.findByUUID(boardUuid, projectUuid);
-        if (existingProject == null) {
-            throw new EntityNotFoundException(PRJ_004, projectUuid, boardUuid);
-        }
-
+        final ProjectEntity existingProject = findNonDeletedExistingProject(boardUuid, projectUuid);
         existingProject.setStatus(ProjectStatus.DELETED.getCode());
         projectDao.update(existingProject);
 
@@ -117,7 +103,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void changeProjectStatus(String boardUuid, String projectUuid, ProjectStatus newProjectStatus) throws ApplicationException {
 
-        final ProjectEntity existingProject = projectDao.findByUUID(boardUuid, projectUuid);
+        final ProjectEntity existingProject = findExistingProject(boardUuid, projectUuid);
         if (existingProject == null) {
             throw new EntityNotFoundException(PRJ_004, projectUuid, boardUuid);
         }
@@ -142,18 +128,20 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectMemberEntity findMember(String projectUuid, String memberUuid) {
-        return projectDao.findMember(projectUuid, memberUuid);
+    public ProjectMemberEntity findMember(String projectUuid, String memberUuid) throws ApplicationException {
+
+        final ProjectMemberEntity projectMember = projectDao.findMember(projectUuid, memberUuid);
+        if (projectMember == null) {
+            throw new EntityNotFoundException(ProjectErrorCode.PRJ_005, memberUuid, projectUuid);
+        }
+        return projectMember;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void addMembers(String boardUuid, String projectUuid, Set<String> memberUuids) throws ApplicationException {
 
-        final ProjectEntity existingProject = projectDao.findByUUID(boardUuid, projectUuid);
-        if (existingProject == null) {
-            throw new EntityNotFoundException(PRJ_004, projectUuid, boardUuid);
-        }
+        final ProjectEntity existingProject = findNonDeletedExistingProject(boardUuid, projectUuid);
 
         for (final String memberUuid : memberUuids) {
             final UserEntity existingMember = userDao.findByUUID(memberUuid);
@@ -171,10 +159,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void removeMembers(String boardUuid, String projectUuid, Set<String> memberUuids) throws ApplicationException {
 
-        final ProjectEntity existingProject = projectDao.findByUUID(boardUuid, projectUuid);
-        if (existingProject == null) {
-            throw new EntityNotFoundException(PRJ_004, projectUuid, boardUuid);
-        }
+        findNonDeletedExistingProject(boardUuid, projectUuid); //cannot modify state of deleted project
 
         for (final String memberUuid : memberUuids) {
             ProjectMemberEntity existingProjectMember = projectDao.findMember(projectUuid, memberUuid);
@@ -182,6 +167,25 @@ public class ProjectServiceImpl implements ProjectService {
                 projectDao.removeMember(existingProjectMember);
             }
         }
+    }
+
+    private ProjectEntity findExistingProject(String boardUuid, String projectUuid) throws ApplicationException {
+
+        final ProjectEntity existingProject = projectDao.findByUUID(boardUuid, projectUuid);
+        if (existingProject == null) {
+            throw new EntityNotFoundException(PRJ_004, projectUuid, boardUuid);
+        }
+
+        return existingProject;
+    }
+
+    private ProjectEntity findNonDeletedExistingProject(String boardUuid, String projectUuid) throws ApplicationException {
+
+        final ProjectEntity existingProject = findExistingProject(boardUuid, projectUuid);
+        if (ProjectStatus.DELETED.getCode() == existingProject.getStatus()) {
+            throw new ApplicationException(PRJ_007, projectUuid);
+        }
+        return existingProject;
     }
 
 }

@@ -56,14 +56,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ErrorResponse errorResponse(final ApplicationException exc) {
+        exc.printStackTrace();
         return new ErrorResponse().code(exc.getErrorCode().getCode()).message(exc.getMessage());
     }
 
     private ErrorResponse errorResponse(final RestException exc) {
+        exc.printStackTrace();
         return new ErrorResponse().code(exc.getErrorCode().getCode()).message(exc.getMessage());
     }
 
     private ErrorResponse errorResponse(final RuntimeException exc) {
+        exc.printStackTrace();
         return new ErrorResponse().code(GenericErrorCode.GEN_001.getCode()).message(exc.getMessage()).rootCause(exc.toString());
     }
 

@@ -27,7 +27,9 @@ public enum ProjectErrorCode implements ErrorCode {
 
     PRJ_005("PRJ-005", "Member with identifier [{0}] does not belong to the specified project [{1}]"),
 
-    PRJ_006("PRJ-006", "Task cannot be added to a project which is in [{0}] status."),
+    PRJ_006("PRJ-006", "Task cannot be added to a project which is in [{0}] status"),
+
+    PRJ_007("PRJ-007", "Project with identifier [{0}] is in DELETED status"),
     ;
 
     private static final Map<String, ProjectErrorCode> LOOKUP = new HashMap<String, ProjectErrorCode>();

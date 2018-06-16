@@ -30,6 +30,10 @@ public interface TaskService {
 
     void changeTaskStatus(@NotNull String boardUuid, @NotNull String projectUuid, @NotNull String taskUuid, @NotNull TaskStatus newTaskStatus) throws ApplicationException;
 
+    void addEffort(@NotNull String boardUuid, @NotNull String projectUuid, @NotNull String taskUuid, @NotNull Integer loggedEffort) throws ApplicationException ;
+
+    void removeEffort(@NotNull String boardUuid, @NotNull String projectUuid, @NotNull String taskUuid, @NotNull Integer loggedEffort) throws ApplicationException ;
+
     SearchResult<TaskWatcherEntity> getWatchers(@NotNull String boardUuid, @NotNull String projectUuid, @NotNull String taskUuid) throws ApplicationException;
 
     void addWatchers(@NotNull String boardUuid, @NotNull String projectUuid, @NotNull String taskUuid, @NotNull Set<String> watcherUuids) throws ApplicationException;

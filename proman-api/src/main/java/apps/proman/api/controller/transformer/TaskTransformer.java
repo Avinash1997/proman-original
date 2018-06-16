@@ -34,8 +34,12 @@ public final class TaskTransformer {
         TaskEntity projectEntity = new TaskEntity();
         projectEntity.setName(boardProjectRequest.getName());
         projectEntity.setDescription(boardProjectRequest.getDescription());
-        projectEntity.setStartAt(DateTimeProvider.parse(boardProjectRequest.getStartDate()));
-        projectEntity.setEndAt(DateTimeProvider.parse(boardProjectRequest.getEndDate()));
+        if(boardProjectRequest.getStartDate() != null) {
+            projectEntity.setStartAt(DateTimeProvider.parse(boardProjectRequest.getStartDate()));
+        }
+        if(boardProjectRequest.getEndDate() != null) {
+            projectEntity.setEndAt(DateTimeProvider.parse(boardProjectRequest.getEndDate()));
+        }
         projectEntity.setOriginalEffort(boardProjectRequest.getOriginalEffort());
         return projectEntity;
     }
@@ -50,6 +54,7 @@ public final class TaskTransformer {
         if(updateProjectTaskRequest.getEndDate() != null) {
             taskEntity.setEndAt(DateTimeProvider.parse(updateProjectTaskRequest.getEndDate()));
         }
+        taskEntity.setOriginalEffort(updateProjectTaskRequest.getOriginalEffort());
         return taskEntity;
     }
 
@@ -68,25 +73,35 @@ public final class TaskTransformer {
                     .name(entity.getName()).description(entity.getDescription())
                     .project(toProject(entity.getProject()))
                     .owner(toOwner(entity.getOwner().getMember()))
-                    .status(toStatus(entity.getStatus()));
+                    .status(toStatus(entity.getStatus()))
+                    .originalEffort(entity.getOriginalEffort())
+                    .loggedEffort(entity.getLoggedEffort())
+                    .remainingEffort(entity.getRemainingEffort());
             projectsSummaryResponse.addTasksItem(summaryType);
         }
         return projectsSummaryResponse;
     }
 
     public static ProjectTaskDetailsResponse toTaskDetailsResponse(TaskEntity entity) {
-        return new ProjectTaskDetailsResponse().id(UUID.fromString(entity.getUuid()))
+
+        final ProjectTaskDetailsResponse taskDetailsResponse = new ProjectTaskDetailsResponse().id(UUID.fromString(entity.getUuid()))
                 .name(entity.getName()).description(entity.getDescription())
                 .project(toProject(entity.getProject()))
                 .owner(toOwnerDetails(entity.getOwner().getMember()))
                 .status(toStatus(entity.getStatus()))
-                .startDate(DateTimeProvider.format(entity.getStartAt()))
-                .endDate(DateTimeProvider.format(entity.getEndAt()))
                 .status(toStatus(entity.getStatus()))
                 .originalEffort(entity.getOriginalEffort())
                 .loggedEffort(entity.getLoggedEffort())
                 .remainingEffort(entity.getRemainingEffort())
                 .watchers(watchers(entity.getWatchers()));
+        if(entity.getStartAt() != null) {
+            taskDetailsResponse.startDate(DateTimeProvider.format(entity.getStartAt()));
+        }
+        if(entity.getEndAt() != null) {
+            taskDetailsResponse.endDate(DateTimeProvider.format(entity.getEndAt()));
+        }
+
+        return taskDetailsResponse;
     }
 
     private static TaskProjectSummaryType toProject(final ProjectEntity projectEntity) {

@@ -1,13 +1,18 @@
 package apps.proman.service.board.business;
 
 import static apps.proman.service.board.exception.TaskErrorCode.TSK_003;
+import static apps.proman.service.board.exception.TaskErrorCode.TSK_004;
 
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import apps.proman.service.board.dao.ProjectDao;
 import apps.proman.service.board.dao.TaskDao;
@@ -45,20 +50,28 @@ public class TaskServiceImpl implements  TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public TaskEntity findTask(String boardUuid, String projectUuid, String taskUuid) throws ApplicationException {
         return findExistingTask(boardUuid, projectUuid, taskUuid);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public TaskEntity createTask(TaskEntity newTask) throws ApplicationException {
+
+        if(newTask.getOriginalEffort() != null && newTask.getRemainingEffort() == null) {
+            newTask.setRemainingEffort(newTask.getOriginalEffort());
+        }
         newTask.setStatus(TaskStatus.OPEN.getCode());
         return taskDao.create(newTask);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateTask(String boardUuid, String projectUuid, String taskUuid, TaskEntity updatedTask) throws ApplicationException {
 
-        final TaskEntity existingTask = findExistingTask(boardUuid, projectUuid, taskUuid);
+        final TaskEntity existingTask = findNonDeletedExistingTask(boardUuid, projectUuid, taskUuid);
+
         if (StringUtils.isNotEmpty(updatedTask.getName())) {
             existingTask.setName(updatedTask.getName());
         }
@@ -84,21 +97,27 @@ public class TaskServiceImpl implements  TaskService {
             existingTask.setRemainingEffort(updatedTask.getRemainingEffort());
         }
 
+        if(updatedTask.getOriginalEffort() != null && updatedTask.getRemainingEffort() == null) {
+            existingTask.setRemainingEffort(updatedTask.getOriginalEffort());
+        }
+
         taskDao.update(existingTask);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteTask(String boardUuid, String projectUuid, String taskUuid) throws ApplicationException {
 
-        final TaskEntity existingTask = findExistingTask(boardUuid, projectUuid, taskUuid);
+        final TaskEntity existingTask = findNonDeletedExistingTask(boardUuid, projectUuid, taskUuid);
         existingTask.setStatus(TaskStatus.DELETED.getCode());
         taskDao.update(existingTask);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void changeTaskOwner(String boardUuid, String projectUuid, String taskUuid, String ownerUuid) throws ApplicationException {
 
-        final TaskEntity existingTask = findExistingTask(boardUuid, projectUuid, taskUuid);
+        final TaskEntity existingTask = findNonDeletedExistingTask(boardUuid, projectUuid, taskUuid);
         if(!existingTask.getOwner().getMember().getUuid().equals(ownerUuid)) {
             final ProjectMemberEntity newOwner = projectDao.findMember(projectUuid, ownerUuid);
             if(newOwner == null) {
@@ -110,6 +129,7 @@ public class TaskServiceImpl implements  TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void changeTaskStatus(String boardUuid, String projectUuid, String taskUuid, TaskStatus newTaskStatus) throws ApplicationException {
 
         final TaskEntity existingTask = findExistingTask(boardUuid, projectUuid, taskUuid);
@@ -117,6 +137,42 @@ public class TaskServiceImpl implements  TaskService {
             existingTask.setStatus(newTaskStatus.getCode());
             taskDao.update(existingTask);
         }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void addEffort(@NotNull String boardUuid, @NotNull String projectUuid, @NotNull String taskUuid, @NotNull Integer effortLogged) throws ApplicationException {
+
+        final TaskEntity existingTask = findNonDeletedExistingTask(boardUuid, projectUuid, taskUuid);
+
+        final Integer loggedEffort = existingTask.getLoggedEffort() == null ? 0 : existingTask.getLoggedEffort();
+        existingTask.setLoggedEffort(loggedEffort + effortLogged);
+
+        final Integer remainingEffort = existingTask.getRemainingEffort();
+        if(remainingEffort != null && remainingEffort > 0) {
+            existingTask.setRemainingEffort(remainingEffort - effortLogged);
+        }
+
+        taskDao.update(existingTask);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void removeEffort(@NotNull String boardUuid, @NotNull String projectUuid, @NotNull String taskUuid, @NotNull Integer effortRemoved) throws ApplicationException {
+
+        final TaskEntity existingTask = findNonDeletedExistingTask(boardUuid, projectUuid, taskUuid);
+
+        final Integer loggedEffort = existingTask.getLoggedEffort();
+        if(loggedEffort != null && loggedEffort > 0) {
+            existingTask.setLoggedEffort(loggedEffort - effortRemoved);
+        }
+
+        final Integer remainingEffort = existingTask.getRemainingEffort();
+        if(remainingEffort != null) {
+            existingTask.setRemainingEffort(remainingEffort + effortRemoved);
+        }
+
+        taskDao.update(existingTask);
     }
 
     @Override
@@ -128,9 +184,10 @@ public class TaskServiceImpl implements  TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void addWatchers(String boardUuid, String projectUuid, String taskUuid, Set<String> watcherUuids) throws ApplicationException {
 
-        final TaskEntity existingTask = findExistingTask(boardUuid, projectUuid, taskUuid);
+        final TaskEntity existingTask = findNonDeletedExistingTask(boardUuid, projectUuid, taskUuid);
         for (final String watcherUuid : watcherUuids) {
             final UserEntity existingWatcher = userDao.findByUUID(watcherUuid);
             if (existingWatcher != null && taskDao.findWatcher(taskUuid, watcherUuid) == null) {
@@ -143,12 +200,10 @@ public class TaskServiceImpl implements  TaskService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void removeWatchers(String boardUuid, String projectUuid, String taskUuid, Set<String> watcherUuids) throws ApplicationException {
 
-        final TaskEntity existingTask = taskDao.findByUUID(boardUuid, projectUuid, taskUuid);
-        if (existingTask == null) {
-            throw new EntityNotFoundException(TSK_003, projectUuid, boardUuid);
-        }
+        findNonDeletedExistingTask(boardUuid, projectUuid, taskUuid); //cannot modify state of deleted task
         for (final String watcherUuid : watcherUuids) {
             TaskWatcherEntity existingTaskWatcher = taskDao.findWatcher(taskUuid, watcherUuid);
             if (existingTaskWatcher != null) {
@@ -158,10 +213,20 @@ public class TaskServiceImpl implements  TaskService {
 
     }
 
-    private TaskEntity findExistingTask(String boardUuid, String projectUuid, String taskUuid) throws EntityNotFoundException {
+    private TaskEntity findExistingTask(String boardUuid, String projectUuid, String taskUuid) throws ApplicationException {
+
         final TaskEntity existingTask = taskDao.findByUUID(boardUuid, projectUuid, taskUuid);
         if (existingTask == null) {
             throw new EntityNotFoundException(TSK_003, projectUuid, boardUuid);
+        }
+        return existingTask;
+    }
+
+    private TaskEntity findNonDeletedExistingTask(String boardUuid, String projectUuid, String taskUuid) throws ApplicationException {
+
+        final TaskEntity existingTask = findExistingTask(boardUuid, projectUuid, taskUuid);
+        if(TaskStatus.DELETED.getCode() == existingTask.getStatus()) {
+            throw new ApplicationException(TSK_004, taskUuid);
         }
         return existingTask;
     }

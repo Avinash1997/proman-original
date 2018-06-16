@@ -37,7 +37,7 @@ import apps.proman.service.common.entity.ext.EntityHashCodeBuilder;
         @NamedQuery(name = TaskEntity.BY_ALL, query = "select t from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid"),
         @NamedQuery(name = TaskEntity.COUNT_BY_STATUS, query = "select count(t.id) from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid and t.status = :status"),
         @NamedQuery(name = TaskEntity.BY_STATUS, query = "select t from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid and t.status = :status"),
-        @NamedQuery(name = TaskEntity.BY_BOARD_AND_PROJECT_AND_TASK, query = "select t from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid")
+        @NamedQuery(name = TaskEntity.BY_BOARD_AND_PROJECT_AND_TASK, query = "select t from TaskEntity t where t.project.board.uuid = :boardUuid and t.project.uuid = :projectUuid and t.uuid = :taskUuid")
 })
 public class TaskEntity extends MutableEntity implements Identifier<Integer>, UniversalUniqueIdentifier<String>, Serializable {
 

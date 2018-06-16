@@ -27,7 +27,7 @@ public interface ProjectService {
 
     SearchResult<ProjectMemberEntity> getProjectMembers(@NotNull String boardUuid, @NotNull String projectUuid) throws ApplicationException;
 
-    ProjectMemberEntity findMember(@NotNull String projectUuid, @NotNull String memberUuid);
+    ProjectMemberEntity findMember(@NotNull String projectUuid, @NotNull String memberUuid) throws ApplicationException ;
 
     void addMembers(@NotNull String boardUuid, @NotNull String projectUuid, @NotNull Set<String> memberUuids) throws ApplicationException;
 

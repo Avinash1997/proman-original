@@ -1,9 +1,6 @@
 package apps.proman.service.board.business;
 
-import static apps.proman.service.board.exception.BoardErrorCode.BRD_001;
-import static apps.proman.service.board.exception.BoardErrorCode.BRD_002;
-
-import javax.validation.constraints.NotNull;
+import static apps.proman.service.board.exception.BoardErrorCode.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +34,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public BoardEntity findBoard(String boardUuid) throws ApplicationException {
-
-        final BoardEntity existingBoard = boardDao.findByUUID(boardUuid);
-        if (existingBoard == null) {
-            throw new EntityNotFoundException(BRD_001, boardUuid);
-        }
-
-        return existingBoard;
+        return findExistingBoard(boardUuid);
     }
 
     @Override
@@ -62,17 +53,13 @@ public class BoardServiceImpl implements BoardService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateBoard(final String boardUuid, final BoardEntity updatedBoard) throws ApplicationException {
 
-        final BoardEntity existingBoard = boardDao.findByUUID(boardUuid);
-        if (existingBoard == null) {
-            throw new EntityNotFoundException(BRD_001, boardUuid);
-        }
+        final BoardEntity existingBoard = findNonDeletedExistingBoard(boardUuid);
 
         if (StringUtils.isNotEmpty(updatedBoard.getName())) {
             if (!existingBoard.getName().equalsIgnoreCase(updatedBoard.getName())
                     && boardDao.findByName(updatedBoard.getName()) != null) {
                 throw new ApplicationException(BRD_002, updatedBoard.getName());
             }
-
             existingBoard.setName(updatedBoard.getName());
         }
 
@@ -91,11 +78,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteBoard(String boardUuid) throws ApplicationException {
 
-        final BoardEntity existingBoard = boardDao.findByUUID(boardUuid);
-        if (existingBoard == null) {
-            throw new EntityNotFoundException(BRD_001, boardUuid);
-        }
-
+        final BoardEntity existingBoard = findNonDeletedExistingBoard(boardUuid);
         existingBoard.setStatus(BoardStatus.DELETED.getCode());
         boardDao.update(existingBoard);
     }
@@ -104,15 +87,31 @@ public class BoardServiceImpl implements BoardService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void changeBoardStatus(String boardUuid, BoardStatus newBoardStatus) throws ApplicationException {
 
-        final BoardEntity existingBoard = boardDao.findByUUID(boardUuid);
-        if (existingBoard == null) {
-            throw new EntityNotFoundException(BRD_001, boardUuid);
-        }
+        final BoardEntity existingBoard = findExistingBoard(boardUuid);
 
         if (existingBoard.getStatus() != newBoardStatus.getCode()) {
             existingBoard.setStatus(newBoardStatus.getCode());
             boardDao.update(existingBoard);
         }
+    }
+
+    private BoardEntity findExistingBoard(String boardUuid) throws ApplicationException {
+
+        final BoardEntity existingBoard = boardDao.findByUUID(boardUuid);
+        if (existingBoard == null) {
+            throw new EntityNotFoundException(BRD_001, boardUuid);
+        }
+
+        return existingBoard;
+    }
+
+    private BoardEntity findNonDeletedExistingBoard(String boardUuid) throws ApplicationException {
+
+        final BoardEntity existingBoard = findExistingBoard(boardUuid);
+        if (BoardStatus.DELETED.getCode() == existingBoard.getStatus()) {
+            throw new ApplicationException(BRD_005, boardUuid);
+        }
+        return existingBoard;
     }
 
 }

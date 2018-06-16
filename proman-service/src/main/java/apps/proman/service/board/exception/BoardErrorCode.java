@@ -24,6 +24,8 @@ public enum BoardErrorCode implements ErrorCode {
     BRD_003("BRD-003", "Not a valid board status. Supported statuses are [{0}]"),
 
     BRD_004("BRD-004", "Board is not in OPEN status. Current status is {0}"),
+
+    BRD_005("BRD-005", "Board with identifier [{0}] is in DELETED status"),
     ;
 
     private static final Map<String, BoardErrorCode> LOOKUP = new HashMap<String, BoardErrorCode>();

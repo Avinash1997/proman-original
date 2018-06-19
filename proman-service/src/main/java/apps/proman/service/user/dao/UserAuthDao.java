@@ -19,4 +19,6 @@ public interface UserAuthDao extends BaseDao<UserAuthTokenEntity> {
 
     UserAuthTokenEntity findToken(@NotNull String accessToken);
 
+    UserAuthTokenEntity findByUser(@NotNull long userId);
+
 }

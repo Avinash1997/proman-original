@@ -2,6 +2,10 @@ package apps.proman.api.handler;
 
 import static org.springframework.http.HttpStatus.*;
 
+import java.io.BufferedOutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -67,7 +71,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ErrorResponse errorResponse(final RuntimeException exc) {
         exc.printStackTrace();
-        return new ErrorResponse().code(GenericErrorCode.GEN_001.getCode()).message(exc.getMessage()).rootCause(exc.toString());
+
+        final StringWriter stringWriter = new StringWriter();
+        exc.printStackTrace(new PrintWriter(stringWriter));
+
+        String message = exc.getMessage();
+        if(message == null) {
+            message = GenericErrorCode.GEN_001.getDefaultMessage();
+        }
+        return new ErrorResponse().code(GenericErrorCode.GEN_001.getCode()).message(message).rootCause(stringWriter.getBuffer().toString());
     }
 
 }

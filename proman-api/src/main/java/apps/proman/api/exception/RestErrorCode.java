@@ -7,9 +7,13 @@ import apps.proman.service.common.exception.ErrorCode;
 
 public enum RestErrorCode implements ErrorCode  {
 
-    ATH_001("ATH-001", "Authorization header is missing."),
+    ATH_001("ATH-001", "Authorization header is missing"),
 
-    ATH_002("ATH-002", "Only basic or bearer authentication is supported.");
+    ATH_002("ATH-002", "Only BASIC authentication is supported"),
+
+    ATH_003("ATH-003", "Only BEARER auth token is supported"),
+
+    ATH_004("ATH-004", "Bearer auth token is missing");
 
     private static final Map<String, RestErrorCode> LOOKUP = new HashMap<>();
 

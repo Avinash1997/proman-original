@@ -16,7 +16,6 @@ import apps.proman.api.model.ProjectSummaryType;
 import apps.proman.api.model.ProjectTaskSummaryType;
 import apps.proman.api.model.ProjectTasksSummaryResponse;
 import apps.proman.api.model.ProjectsSummaryResponse;
-import apps.proman.api.model.RoleType;
 import apps.proman.api.model.UpdateBoardProjectRequest;
 import apps.proman.service.board.entity.BoardEntity;
 import apps.proman.service.board.entity.ProjectEntity;
@@ -25,7 +24,6 @@ import apps.proman.service.board.entity.TaskEntity;
 import apps.proman.service.board.model.ProjectStatus;
 import apps.proman.service.common.data.DateTimeProvider;
 import apps.proman.service.common.model.SearchResult;
-import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.UserEntity;
 import apps.proman.service.user.model.UserStatus;
 
@@ -127,14 +125,14 @@ public final class ProjectTransformer {
     private static ProjectOwnerDetailsType toOwnerDetails(final UserEntity owner) {
         return new ProjectOwnerDetailsType().id(UUID.fromString(owner.getUuid())).firstName(owner.getFirstName())
                 .lastName(owner.getLastName()).emailAddress(owner.getEmail())
-                .role(toRole(owner.getRole()));
+                .role(RoleTransformer.toRoleType(owner.getRole()));
     }
 
     private static ProjectMemberSummaryType toProjectMember(final UserEntity userEntity) {
         return new ProjectMemberSummaryType().id(UUID.fromString(userEntity.getUuid()))
                 .firstName(userEntity.getFirstName()).lastName(userEntity.getLastName())
                 .emailAddress(userEntity.getEmail()).status(toMemberStatus(userEntity.getStatus()))
-                .role(toRole(userEntity.getRole()));
+                .role(RoleTransformer.toRoleType(userEntity.getRole()));
     }
 
     private static ProjectTaskSummaryType toProjectTask(final TaskEntity taskEntity) {
@@ -145,10 +143,6 @@ public final class ProjectTransformer {
                 .loggedEffort(taskEntity.getLoggedEffort())
                 .remainingEffort(taskEntity.getRemainingEffort())
                 .status(TaskTransformer.toStatus(taskEntity.getStatus()));
-    }
-
-    private static RoleType toRole(RoleEntity roleEntity) {
-        return new RoleType().id(roleEntity.getUuid()).name(roleEntity.getName());
     }
 
     private static MemberStatusType toMemberStatus(final int statusCode) {

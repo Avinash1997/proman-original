@@ -8,7 +8,6 @@ import apps.proman.api.model.CreateProjectTaskResponse;
 import apps.proman.api.model.ProjectTaskDetailsResponse;
 import apps.proman.api.model.ProjectTaskSummaryType;
 import apps.proman.api.model.ProjectTasksSummaryResponse;
-import apps.proman.api.model.RoleType;
 import apps.proman.api.model.TaskOwnerDetailsType;
 import apps.proman.api.model.TaskOwnerType;
 import apps.proman.api.model.TaskProjectSummaryType;
@@ -22,7 +21,6 @@ import apps.proman.service.board.entity.TaskWatcherEntity;
 import apps.proman.service.board.model.TaskStatus;
 import apps.proman.service.common.data.DateTimeProvider;
 import apps.proman.service.common.model.SearchResult;
-import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.UserEntity;
 
 public final class TaskTransformer {
@@ -119,11 +117,7 @@ public final class TaskTransformer {
     private static TaskOwnerDetailsType toOwnerDetails(final UserEntity owner) {
         return new TaskOwnerDetailsType().id(UUID.fromString(owner.getUuid())).firstName(owner.getFirstName())
                 .lastName(owner.getLastName()).emailAddress(owner.getEmail())
-                .role(toRole(owner.getRole()));
-    }
-
-    private static RoleType toRole(RoleEntity roleEntity) {
-        return new RoleType().id(roleEntity.getUuid()).name(roleEntity.getName());
+                .role(RoleTransformer.toRoleType(owner.getRole()));
     }
 
     private static TaskWatchersType watchers(final List<TaskWatcherEntity> watchers) {

@@ -35,17 +35,33 @@ public final class UserAuthTokenVerifier {
         }
     }
 
+    public boolean isActive() {
+        return UserAuthTokenStatus.ACTIVE == status;
+    }
+
+    public boolean hasExpired() {
+        return UserAuthTokenStatus.EXPIRED == status;
+    }
+
+    public boolean hasLoggedOut() {
+        return UserAuthTokenStatus.LOGGED_OUT == status;
+    }
+
+    public boolean isNotFound() {
+        return UserAuthTokenStatus.NOT_FOUND == status;
+    }
+
     public UserAuthTokenStatus getStatus() {
         return status;
     }
 
     private boolean isExpired(final UserAuthTokenEntity userAuthToken) {
         final ZonedDateTime now = currentProgramTime();
-        return userAuthToken.getExpiresAt().isBefore(now) || userAuthToken.getExpiresAt().isEqual(now);
+        return userAuthToken != null && (userAuthToken.getExpiresAt().isBefore(now) || userAuthToken.getExpiresAt().isEqual(now));
     }
 
     private boolean isLoggedOut(final UserAuthTokenEntity userAuthToken) {
-        return userAuthToken.getLogoutAt() != null;
+        return userAuthToken != null && userAuthToken.getLogoutAt() != null;
     }
 
 }

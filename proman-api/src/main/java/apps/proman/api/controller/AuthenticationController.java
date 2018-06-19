@@ -46,7 +46,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthorizedUserResponse> login(@RequestHeader final String authorization) throws ApplicationException {
         final BasicAuthDecoder basicAuthDecoder = new BasicAuthDecoder(authorization);
         final AuthorizedUser authorizedUser = authenticationService.authenticate(basicAuthDecoder.getUsername(), basicAuthDecoder.getPassword());
-        return ResponseBuilder.ok().payload(authorizedUserTransform.apply(authorizedUser))
+        return ResponseBuilder.ok().payload(toResponse(authorizedUser))
                 .accessToken(authorizedUser.getAccessToken()).build();
     }
 
@@ -56,14 +56,18 @@ public class AuthenticationController {
         authTokenService.invalidateToken(authDecoder.getAccessToken());
     }
 
-    private Function<AuthorizedUser, AuthorizedUserResponse> authorizedUserTransform =
-            authorizedUser ->
-                    new AuthorizedUserResponse()
-                            .id(UUID.fromString(authorizedUser.getId()))
-                            .firstName(authorizedUser.getFirstName()).lastName(authorizedUser.getLastName())
-                            .emailAddress(authorizedUser.getEmailAddress()).mobilePhone(authorizedUser.getMobilePhoneNumber())
-                            .lastLoginTime(authorizedUser.getLastLoginTime())
-                            .status(authorizedUser.getStatus().name())
-                            .role(new RoleDetailsType().id(authorizedUser.getRole().getUuid()).name(authorizedUser.getRole().getName()));
+    private AuthorizedUserResponse toResponse(final AuthorizedUser authorizedUser) {
+
+        final AuthorizedUserResponse authorizedUserResponse = new AuthorizedUserResponse()
+                .id(UUID.fromString(authorizedUser.getId()))
+                .firstName(authorizedUser.getFirstName()).lastName(authorizedUser.getLastName())
+                .emailAddress(authorizedUser.getEmailAddress()).mobilePhone(authorizedUser.getMobilePhoneNumber())
+                .lastLoginTime(authorizedUser.getLastLoginTime())
+                .status(authorizedUser.getStatus().name());
+        if (authorizedUser.getRole() != null) {
+            authorizedUserResponse.role(new RoleDetailsType().id(authorizedUser.getRole().getUuid()).name(authorizedUser.getRole().getName()));
+        }
+        return authorizedUserResponse;
+    }
 
 }

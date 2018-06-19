@@ -33,8 +33,8 @@ public interface ResourceConstants {
 
     String REQUEST_ATTR_REQUEST_CONTEXT = "request-context";
 
-    String BASIC_AUTH_PREFIX = "Basic";
+    String BASIC_AUTH_PREFIX = "Basic ";
 
-    String BEARER_AUTH_PREFIX = "Bearer";
+    String BEARER_AUTH_PREFIX = "Bearer ";
 
 }

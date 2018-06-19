@@ -28,6 +28,7 @@ public final class UserTransformer {
         userEntity.setFirstName(userRequest.getFirstName());
         userEntity.setLastName(userRequest.getLastName());
         userEntity.setEmail(userRequest.getEmailAddress());
+        userEntity.setPassword(userRequest.getPassword());
         userEntity.setMobilePhone(userRequest.getMobileNumber());
         return userEntity;
     }
@@ -65,7 +66,7 @@ public final class UserTransformer {
                 .emailAddress(userEntity.getEmail())
                 .mobileNumber(userEntity.getMobilePhone())
                 .status(toStatus(userEntity.getStatus()))
-                .role(toResponse(userEntity.getRole()).permissions(toResponse(userEntity.getRole().getPermissions())));
+                .role(RoleTransformer.toRoleDetailsType(userEntity.getRole()));
     }
 
     public static UsersSummaryResponse toUsersSummaryResponse(final int page, final int limit, final SearchResult<UserEntity> searchResult) {
@@ -76,28 +77,11 @@ public final class UserTransformer {
             UserSummaryType summaryType = new UserSummaryType().id(userEntity.getUuid()).firstName(userEntity.getFirstName())
                     .lastName(userEntity.getLastName()).emailAddress(userEntity.getEmail())
                     .status(toStatus(userEntity.getStatus()))
-                    .role(toRole(userEntity.getRole()));
+                    .role(RoleTransformer.toRoleType(userEntity.getRole()));
             usersSummaryResponse.addUsersItem(summaryType);
         }
 
         return usersSummaryResponse;
-    }
-
-    private static RoleDetailsType toResponse(RoleEntity roleEntity) {
-        return new RoleDetailsType().id(roleEntity.getUuid()).name(roleEntity.getName());
-    }
-
-    private static RoleType toRole(RoleEntity roleEntity) {
-        if(roleEntity == null) {
-            return null;
-        }
-        return new RoleType().id(roleEntity.getUuid()).name(roleEntity.getName());
-    }
-
-    private static List<PermissionsType> toResponse(List<RolePermissionEntity> permissions) {
-        return permissions.stream().map(rolePermissionEntity -> {
-            return new PermissionsType().id(rolePermissionEntity.getPermissionEntity().getUuid()).name(rolePermissionEntity.getPermissionEntity().getName());
-        }).collect(Collectors.toList());
     }
 
     private static UserStatusType toStatus(final int statusCode) {

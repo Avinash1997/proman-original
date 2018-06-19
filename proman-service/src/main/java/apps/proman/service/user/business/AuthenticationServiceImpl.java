@@ -97,7 +97,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authorizedUser.setLastLoginTime(userEntity.getLastLoginAt());
         authorizedUser.setStatus(UserStatus.get(userEntity.getStatus()));
         authorizedUser.setAccessToken(userAuthToken.getAccessToken());
-        authorizedUser.setRole(new UserRole(userEntity.getRole().getUuid(), userEntity.getRole().getName()));
+        if(userEntity.getRole() != null) {
+            authorizedUser.setRole(new UserRole(userEntity.getRole().getUuid(), userEntity.getRole().getName()));
+        }
         return authorizedUser;
     }
 

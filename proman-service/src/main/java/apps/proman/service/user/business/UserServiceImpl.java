@@ -79,9 +79,8 @@ public class UserServiceImpl implements UserService {
         if(existingUser != null) {
             throw new ApplicationException(USR_009, newUser.getEmail());
         }
-
         newUser.setRole(roleService.findRoleByUuid(roleUuid));
-        setDefaultPassword(newUser);
+        encryptPassword(newUser);
 
         return userDao.create(newUser);
     }
@@ -94,8 +93,7 @@ public class UserServiceImpl implements UserService {
         if(userEntity != null) {
             throw new ApplicationException(USR_009, newUser.getEmail());
         }
-
-        setDefaultPassword(newUser);
+        encryptPassword(newUser);
 
         return userDao.create(newUser);
     }
@@ -163,11 +161,13 @@ public class UserServiceImpl implements UserService {
         userDao.update(existingUser);
     }
 
-    private void setDefaultPassword(final UserEntity newUser) {
+    private void encryptPassword(final UserEntity newUser) {
+
         String password = newUser.getPassword();
         if(password == null) {
             password = "proman@123";
         }
+
         final String[] encryptedData = passwordCryptographyProvider.encrypt(password);
         newUser.setSalt(encryptedData[0]);
         newUser.setPassword(encryptedData[1]);

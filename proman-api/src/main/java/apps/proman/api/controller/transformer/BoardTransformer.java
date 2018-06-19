@@ -10,12 +10,10 @@ import apps.proman.api.model.BoardSummaryType;
 import apps.proman.api.model.BoardsSummaryResponse;
 import apps.proman.api.model.CreateBoardRequest;
 import apps.proman.api.model.CreateBoardResponse;
-import apps.proman.api.model.RoleType;
 import apps.proman.api.model.UpdateBoardRequest;
 import apps.proman.service.board.entity.BoardEntity;
 import apps.proman.service.board.model.BoardStatus;
 import apps.proman.service.common.model.SearchResult;
-import apps.proman.service.user.entity.RoleEntity;
 import apps.proman.service.user.entity.UserEntity;
 
 public final class BoardTransformer {
@@ -69,11 +67,7 @@ public final class BoardTransformer {
     private static BoardOwnerDetailsType toOwnerDetails(final UserEntity owner) {
         return new BoardOwnerDetailsType().id(UUID.fromString(owner.getUuid())).firstName(owner.getFirstName())
                     .lastName(owner.getLastName()).emailAddress(owner.getEmail())
-                    .role(toRole(owner.getRole()));
-    }
-
-    private static RoleType toRole(RoleEntity roleEntity) {
-        return new RoleType().id(roleEntity.getUuid()).name(roleEntity.getName());
+                    .role(RoleTransformer.toRoleType(owner.getRole()));
     }
 
     private static BoardStatusType toStatus(final int statusCode) {

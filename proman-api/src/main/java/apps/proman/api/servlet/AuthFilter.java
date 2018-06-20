@@ -29,7 +29,7 @@ public class AuthFilter extends ApiFilter {
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         final String pathInfo = servletRequest.getRequestURI();
-        if (!pathInfo.contains("signup")) {
+        if (!pathInfo.contains("signup") && !pathInfo.contains("swagger-ui.html")) {
             final String authorization = servletRequest.getHeader(HEADER_AUTHORIZATION);
             if (StringUtils.isEmpty(authorization)) {
                 throw new UnauthorizedException(RestErrorCode.ATH_001);

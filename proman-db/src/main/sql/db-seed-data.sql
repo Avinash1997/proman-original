@@ -39,8 +39,7 @@ INSERT INTO proman.ROLES (ID, UUID, NAME, DESCRIPTION, ACTIVE, CREATED_BY)
 		(2, 102, 'Project Manager', 'Project Manager', true, CURRENT_USER),
 		(3, 103, 'Architect', 'Technical Architect', true, CURRENT_USER),
 		(4, 104, 'Team Leader', 'Team Leader', true, CURRENT_USER),
-		(5, 105, 'Developer', 'Developer', true, CURRENT_USER),
-		(6, 106, 'Tester', 'Tester', true, CURRENT_USER);
+		(5, 105, 'Team Member', 'Team Member', true, CURRENT_USER);
 
 INSERT INTO proman.ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID, CREATED_BY)
 		VALUES 
@@ -53,7 +52,6 @@ INSERT INTO proman.ROLE_PERMISSIONS (ROLE_ID, PERMISSION_ID, CREATED_BY)
         (3,9, CURRENT_USER), (3,10, CURRENT_USER), (3,11, CURRENT_USER), (3,12, CURRENT_USER), (3,13, CURRENT_USER), (3,14, CURRENT_USER),
         (3,15, CURRENT_USER),(3,16, CURRENT_USER),
         (4,12, CURRENT_USER), (4,13, CURRENT_USER), (4,14, CURRENT_USER), (4,15, CURRENT_USER), (4,16, CURRENT_USER), (4,17, CURRENT_USER),
-        (5,15, CURRENT_USER), (5,16, CURRENT_USER),
-        (6,15, CURRENT_USER), (6,16, CURRENT_USER);
+        (5,14, CURRENT_USER), (5,15, CURRENT_USER), (5,16, CURRENT_USER);
 
 -- ********** End of Roles and Permissions setup **********

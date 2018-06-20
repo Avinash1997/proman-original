@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,7 +57,8 @@ public class TaskAdminController {
     private ProjectService projectService;
 
     @RequestMapping(method = GET, path = "/boards/{board_id}/projects/{project_id}/tasks", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProjectTasksSummaryResponse> getTasks(@PathVariable("board_id") final String boardUuid,
+    public ResponseEntity<ProjectTasksSummaryResponse> getTasks(@RequestHeader("authorization") String accessToken,
+                                                                @PathVariable("board_id") final String boardUuid,
                                                                 @PathVariable("project_id") final String projectUuid,
                                                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                                 @RequestParam(value = "limit", required = false, defaultValue = "10") int limit,
@@ -71,7 +73,8 @@ public class TaskAdminController {
     }
 
     @RequestMapping(method = GET, path = "/boards/{board_id}/{projects}/{project_id}/tasks/{task_id}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProjectTaskDetailsResponse> getTask(@PathVariable("board_id") final String boardUuid,
+    public ResponseEntity<ProjectTaskDetailsResponse> getTask(@RequestHeader("authorization") String accessToken,
+                                                              @PathVariable("board_id") final String boardUuid,
                                                               @PathVariable("project_id") final String projectUuid,
                                                               @PathVariable("task_id") final String taskUuid)
             throws ApplicationException {
@@ -81,7 +84,8 @@ public class TaskAdminController {
     }
 
     @RequestMapping(method = POST, path = "/boards/{board_id}/projects/{project_id}/tasks", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<CreateProjectTaskResponse> createTask(@PathVariable("board_id") final String boardUuid,
+    public ResponseEntity<CreateProjectTaskResponse> createTask(@RequestHeader("authorization") String accessToken,
+                                                                @PathVariable("board_id") final String boardUuid,
                                                                 @PathVariable("project_id") final String projectUuid,
                                                                 @RequestBody final CreateProjectTaskRequest createProjectTaskRequest) throws ApplicationException {
 
@@ -102,10 +106,11 @@ public class TaskAdminController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/boards/{board_id}/{projects}/{project_id}/tasks/{task_id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity updateTask(@PathVariable("board_id") final String boardUuid,
-                                        @PathVariable("project_id") final String projectUuid,
-                                        @PathVariable("task_id") final String taskUuid,
-                                        @RequestBody final UpdateProjectTaskRequest updateProjectTaskRequest) throws ApplicationException {
+    public ResponseEntity updateTask(@RequestHeader("authorization") String accessToken,
+                                     @PathVariable("board_id") final String boardUuid,
+                                     @PathVariable("project_id") final String projectUuid,
+                                     @PathVariable("task_id") final String taskUuid,
+                                     @RequestBody final UpdateProjectTaskRequest updateProjectTaskRequest) throws ApplicationException {
 
         final TaskEntity taskEntity = TaskTransformer.toEntity(updateProjectTaskRequest);
 
@@ -119,44 +124,40 @@ public class TaskAdminController {
     }
 
     @RequestMapping(method = RequestMethod.PATCH, path = "/boards/{board_id}/{projects}/{project_id}/tasks/{task_id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity patchTask(@PathVariable("board_id") final String boardUuid,
-                                       @PathVariable("project_id") final String projectUuid,
-                                       @PathVariable("task_id") final String taskUuid,
-                                       @RequestBody final ProjectTaskOperationsRequest taskOperationsRequest) throws ApplicationException {
+    public ResponseEntity patchTask(@RequestHeader("authorization") String accessToken,
+                                    @PathVariable("board_id") final String boardUuid,
+                                    @PathVariable("project_id") final String projectUuid,
+                                    @PathVariable("task_id") final String taskUuid,
+                                    @RequestBody final ProjectTaskOperationsRequest taskOperationsRequest) throws ApplicationException {
 
         final Set<String> addedWatchers = new HashSet<>();
         final Set<String> removedWatchers = new HashSet<>();
 
         for (ProjectTaskOperationRequest taskOperationRequest : taskOperationsRequest) {
-            if(ProjectTaskOperationRequest.OpEnum.REPLACE.equals(taskOperationRequest.getOp()) &&
+            if (ProjectTaskOperationRequest.OpEnum.REPLACE.equals(taskOperationRequest.getOp()) &&
                     ProjectTaskOperationRequest.PathEnum.STATUS.equals(taskOperationRequest.getPath())) {
                 taskService.changeTaskStatus(boardUuid, projectUuid, taskUuid, TaskStatus.valueOf(toEnum(taskOperationRequest.getValue()).name()));
-            }
-            else if(ProjectTaskOperationRequest.OpEnum.REPLACE.equals(taskOperationRequest.getOp()) &&
+            } else if (ProjectTaskOperationRequest.OpEnum.REPLACE.equals(taskOperationRequest.getOp()) &&
                     ProjectTaskOperationRequest.PathEnum.OWNER.equals(taskOperationRequest.getPath())) {
                 taskService.changeTaskOwner(boardUuid, projectUuid, taskUuid, taskOperationRequest.getValue());
-            }
-            else if(ProjectTaskOperationRequest.OpEnum.ADD.equals(taskOperationRequest.getOp()) &&
+            } else if (ProjectTaskOperationRequest.OpEnum.ADD.equals(taskOperationRequest.getOp()) &&
                     ProjectTaskOperationRequest.PathEnum.EFFORT.equals(taskOperationRequest.getPath())) {
                 taskService.addEffort(boardUuid, projectUuid, taskUuid, Integer.valueOf(taskOperationRequest.getValue()));
-            }
-            else if(ProjectTaskOperationRequest.OpEnum.ADD.equals(taskOperationRequest.getOp()) &&
+            } else if (ProjectTaskOperationRequest.OpEnum.ADD.equals(taskOperationRequest.getOp()) &&
                     ProjectTaskOperationRequest.PathEnum.WATCHER.equals(taskOperationRequest.getPath())) {
                 addedWatchers.add(taskOperationRequest.getValue());
-            }
-            else if(ProjectTaskOperationRequest.OpEnum.REMOVE.equals(taskOperationRequest.getOp()) &&
+            } else if (ProjectTaskOperationRequest.OpEnum.REMOVE.equals(taskOperationRequest.getOp()) &&
                     ProjectTaskOperationRequest.PathEnum.WATCHER.equals(taskOperationRequest.getPath())) {
                 removedWatchers.add(taskOperationRequest.getValue());
-            }
-            else if(ProjectTaskOperationRequest.OpEnum.REMOVE.equals(taskOperationRequest.getOp()) &&
+            } else if (ProjectTaskOperationRequest.OpEnum.REMOVE.equals(taskOperationRequest.getOp()) &&
                     ProjectTaskOperationRequest.PathEnum.EFFORT.equals(taskOperationRequest.getPath())) {
                 taskService.removeEffort(boardUuid, projectUuid, taskUuid, Integer.valueOf(taskOperationRequest.getValue()));
             }
         }
-        if(!addedWatchers.isEmpty()) {
+        if (!addedWatchers.isEmpty()) {
             taskService.addWatchers(boardUuid, projectUuid, taskUuid, addedWatchers);
         }
-        if(!removedWatchers.isEmpty()) {
+        if (!removedWatchers.isEmpty()) {
             taskService.removeWatchers(boardUuid, projectUuid, taskUuid, removedWatchers);
         }
 
@@ -164,8 +165,9 @@ public class TaskAdminController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/boards/{board_id}/{projects}/{project_id}/tasks/{task_id}")
-    public ResponseEntity deleteTask(@PathVariable("board_id") final String boardUuid,
-                                      @PathVariable("project_id") final String projectUuid,
+    public ResponseEntity deleteTask(@RequestHeader("authorization") String accessToken,
+                                     @PathVariable("board_id") final String boardUuid,
+                                     @PathVariable("project_id") final String projectUuid,
                                      @PathVariable("task_id") final String taskUuid) throws ApplicationException {
 
         taskService.deleteTask(boardUuid, projectUuid, taskUuid);

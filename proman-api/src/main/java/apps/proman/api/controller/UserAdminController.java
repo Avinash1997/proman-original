@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,22 +49,23 @@ public class UserAdminController {
 
 
     @RequestMapping(method = GET, path = "/users", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UsersSummaryResponse> getUsers(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+    public ResponseEntity<UsersSummaryResponse> getUsers(@RequestHeader("authorization") String accessToken,
+                                                         @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                          @RequestParam(value = "limit", required = false, defaultValue = "10") int limit,
-                                                         @RequestParam(value  ="status", required = false) String status) {
+                                                         @RequestParam(value = "status", required = false) String status) {
 
         final SearchResult<UserEntity> searchResult;
-        if(StringUtils.isEmpty(status)) {
+        if (StringUtils.isEmpty(status)) {
             searchResult = userService.findUsers(page, limit);
-        }
-        else {
+        } else {
             searchResult = userService.findUsers(UserStatus.valueOf(toEnum(status).name()), page, limit);
         }
         return ResponseBuilder.ok().payload(toUsersSummaryResponse(page, limit, searchResult)).build();
     }
 
     @RequestMapping(method = GET, path = "/users/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UserDetailsResponse> getUser(@PathVariable("id") final String userUuid)
+    public ResponseEntity<UserDetailsResponse> getUser(@RequestHeader("authorization") String accessToken,
+                                                       @PathVariable("id") final String userUuid)
             throws ApplicationException {
 
         final UserEntity userEntity = userService.findUserByUuid(userUuid);
@@ -71,7 +73,8 @@ public class UserAdminController {
     }
 
     @RequestMapping(method = POST, path = "/users", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<CreateUserResponse> createUser(@RequestBody final CreateUserRequest newUserRequest) throws ApplicationException {
+    public ResponseEntity<CreateUserResponse> createUser(@RequestHeader("authorization") String accessToken,
+                                                         @RequestBody final CreateUserRequest newUserRequest) throws ApplicationException {
 
         final UserEntity newUserEntity = toEntity(newUserRequest);
         newUserEntity.setStatus(UserStatus.ACTIVE.getCode());
@@ -81,7 +84,9 @@ public class UserAdminController {
     }
 
     @RequestMapping(method = PUT, path = "/users/{id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity updateUser(@PathVariable("id") final String userUuid, @RequestBody final UpdateUserRequest updatedUserRequest) throws ApplicationException {
+    public ResponseEntity updateUser(@RequestHeader("authorization") String accessToken,
+                                     @PathVariable("id") final String userUuid,
+                                     @RequestBody final UpdateUserRequest updatedUserRequest) throws ApplicationException {
 
         final UserEntity updatedUserEntity = toEntity(updatedUserRequest);
 
@@ -93,9 +98,11 @@ public class UserAdminController {
     }
 
     @RequestMapping(method = RequestMethod.PATCH, path = "/users/{id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity patchBoard(@PathVariable("id") final String boardUuid, @RequestBody final UserOperationsRequest userOperationsRequest) throws ApplicationException {
+    public ResponseEntity patchBoard(@RequestHeader("authorization") String accessToken,
+                                     @PathVariable("id") final String boardUuid,
+                                     @RequestBody final UserOperationsRequest userOperationsRequest) throws ApplicationException {
 
-        for(UserOperationRequest userOperationRequest : userOperationsRequest) {
+        for (UserOperationRequest userOperationRequest : userOperationsRequest) {
             userService.changeUserStatus(boardUuid, UserStatus.valueOf(toEnum(userOperationRequest.getValue()).name()));
         }
 
@@ -103,17 +110,18 @@ public class UserAdminController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/users/{id}")
-    public ResponseEntity deleteBoard(@PathVariable("id") final String userUuid) throws ApplicationException {
+    public ResponseEntity deleteBoard(@RequestHeader("authorization") String accessToken,
+                                      @PathVariable("id") final String userUuid) throws ApplicationException {
         userService.deleteUser(userUuid);
         return ResponseBuilder.ok().build();
     }
 
 
     private UserStatusType toEnum(final String status) {
-        try{
+        try {
             return UserStatusType.valueOf(status);
-        }catch(IllegalArgumentException exc) {
-            throw new RestException(UserErrorCode.USR_010, StringUtils.join(UserStatusType.values(),","));
+        } catch (IllegalArgumentException exc) {
+            throw new RestException(UserErrorCode.USR_010, StringUtils.join(UserStatusType.values(), ","));
         }
     }
 

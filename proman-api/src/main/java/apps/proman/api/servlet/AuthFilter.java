@@ -3,7 +3,10 @@ package apps.proman.api.servlet;
 import static apps.proman.api.data.ResourceConstants.*;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +32,7 @@ public class AuthFilter extends ApiFilter {
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         final String pathInfo = servletRequest.getRequestURI();
-        if (!pathInfo.contains("signup") && !pathInfo.contains("swagger-ui.html")) {
+        if (!pathInfo.contains("signup") && !pathInfo.contains("swagger-ui") && !pathInfo.contains("v2/api-docs") && !pathInfo.contains("swagger-resources")) {
             final String authorization = servletRequest.getHeader(HEADER_AUTHORIZATION);
             if (StringUtils.isEmpty(authorization)) {
                 throw new UnauthorizedException(RestErrorCode.ATH_001);

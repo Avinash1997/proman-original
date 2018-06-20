@@ -1,6 +1,5 @@
 package apps.proman.api.controller;
 
-import static apps.proman.api.controller.transformer.UserTransformer.toCreateUserResponse;
 import static apps.proman.api.controller.transformer.UserTransformer.toEntity;
 import static apps.proman.api.controller.transformer.UserTransformer.toSignupResponse;
 import static apps.proman.api.data.ResourceConstants.BASE_URL;
@@ -8,9 +7,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +18,7 @@ import apps.proman.api.model.SignupUserResponse;
 import apps.proman.service.common.exception.ApplicationException;
 import apps.proman.service.user.business.UserService;
 import apps.proman.service.user.entity.UserEntity;
+import apps.proman.service.user.model.RoleType;
 import apps.proman.service.user.model.UserStatus;
 
 @RestController
@@ -36,7 +34,7 @@ public class SignupController {
         final UserEntity newUserEntity = toEntity(signupUserRequest);
         newUserEntity.setStatus(UserStatus.REGISTERED.getCode());
 
-        final UserEntity registeredUser = userService.createUser(newUserEntity);
+        final UserEntity registeredUser = userService.createUser(newUserEntity, RoleType.TEAM_MEMBER.getCode());
         return ResponseBuilder.created().payload(toSignupResponse(registeredUser)).build();
     }
 

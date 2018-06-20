@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,7 +49,8 @@ public class BoardAdminController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/boards", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<BoardsSummaryResponse> getBoards(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+    public ResponseEntity<BoardsSummaryResponse> getBoards(@RequestHeader("authorization") String accessToken,
+                                                           @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                            @RequestParam(value = "limit", required = false, defaultValue = "10") int limit,
                                                            @RequestParam(value = "status", required = false) String status) {
         final SearchResult<BoardEntity> searchResult;
@@ -61,7 +63,8 @@ public class BoardAdminController {
     }
 
     @RequestMapping(method = GET, path = "/boards/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<BoardDetailsResponse> getBoard(@PathVariable("id") final String boardUuid)
+    public ResponseEntity<BoardDetailsResponse> getBoard(@RequestHeader("authorization") String accessToken,
+                                                         @PathVariable("id") final String boardUuid)
             throws ApplicationException {
 
         final BoardEntity boardEntity = boardService.findBoard(boardUuid);
@@ -69,7 +72,8 @@ public class BoardAdminController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/boards", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<CreateBoardResponse> createBoard(@RequestBody final CreateBoardRequest createBoardRequest) throws ApplicationException {
+    public ResponseEntity<CreateBoardResponse> createBoard(@RequestHeader("authorization") String accessToken,
+                                                           @RequestBody final CreateBoardRequest createBoardRequest) throws ApplicationException {
 
         UserEntity userEntity = userService.findUserByUuid(createBoardRequest.getOwnerId().toString());
         if (userEntity == null) {
@@ -86,7 +90,9 @@ public class BoardAdminController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/boards/{id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity updateBoard(@PathVariable("id") final String boardUuid, @RequestBody final UpdateBoardRequest updatedBoardRequest) throws ApplicationException {
+    public ResponseEntity updateBoard(@RequestHeader("authorization") String accessToken,
+                                      @PathVariable("id") final String boardUuid,
+                                      @RequestBody final UpdateBoardRequest updatedBoardRequest) throws ApplicationException {
 
         final BoardEntity boardEntity = toEntity(updatedBoardRequest);
         if (updatedBoardRequest.getOwnerId() != null) {
@@ -102,7 +108,9 @@ public class BoardAdminController {
     }
 
     @RequestMapping(method = RequestMethod.PATCH, path = "/boards/{id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity patchBoard(@PathVariable("id") final String boardUuid, @RequestBody final BoardOperationsRequest boardOperationsRequest) throws ApplicationException {
+    public ResponseEntity patchBoard(@RequestHeader("authorization") String accessToken,
+                                     @PathVariable("id") final String boardUuid,
+                                     @RequestBody final BoardOperationsRequest boardOperationsRequest) throws ApplicationException {
 
         for (BoardOperationRequest boardOperationRequest : boardOperationsRequest) {
             boardService.changeBoardStatus(boardUuid, BoardStatus.valueOf(toEnum(boardOperationRequest.getValue()).name()));
@@ -112,7 +120,8 @@ public class BoardAdminController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/boards/{id}")
-    public ResponseEntity deleteBoard(@PathVariable("id") final String boardUuid) throws ApplicationException {
+    public ResponseEntity deleteBoard(@RequestHeader("authorization") String accessToken,
+                                      @PathVariable("id") final String boardUuid) throws ApplicationException {
         boardService.deleteBoard(boardUuid);
         return ResponseBuilder.ok().build();
     }

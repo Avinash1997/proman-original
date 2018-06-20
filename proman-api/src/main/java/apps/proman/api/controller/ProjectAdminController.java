@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,7 +60,8 @@ public class ProjectAdminController {
     private UserService userService;
 
     @RequestMapping(method = GET, path = "/boards/{board_id}/projects", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProjectsSummaryResponse> getProjects(@PathVariable("board_id") final String boardUuid,
+    public ResponseEntity<ProjectsSummaryResponse> getProjects(@RequestHeader("authorization") String accessToken,
+                                                               @PathVariable("board_id") final String boardUuid,
                                                                @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                                @RequestParam(value = "limit", required = false, defaultValue = "10") int limit,
                                                                @RequestParam(value = "status", required = false) String status) {
@@ -73,8 +75,9 @@ public class ProjectAdminController {
     }
 
     @RequestMapping(method = GET, path = "/boards/{board_id}/{projects}/{project_id}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProjectDetailsResponse> getProject(@PathVariable("board_id") final String boardUuid,
-                                                           @PathVariable("project_id") final String projectUuid)
+    public ResponseEntity<ProjectDetailsResponse> getProject(@RequestHeader("authorization") String accessToken,
+                                                             @PathVariable("board_id") final String boardUuid,
+                                                             @PathVariable("project_id") final String projectUuid)
             throws ApplicationException {
 
         final ProjectEntity projectEntity = projectService.findProject(boardUuid, projectUuid);
@@ -82,7 +85,8 @@ public class ProjectAdminController {
     }
 
     @RequestMapping(method = POST, path = "/boards/{board_id}/projects", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<CreateBoardProjectResponse> createProject(@PathVariable("board_id") final String boardUuid,
+    public ResponseEntity<CreateBoardProjectResponse> createProject(@RequestHeader("authorization") String accessToken,
+                                                                    @PathVariable("board_id") final String boardUuid,
                                                                     @RequestBody final CreateBoardProjectRequest createBoardProjectRequest) throws ApplicationException {
 
         final UserEntity existingUser = userService.findUserByUuid(createBoardProjectRequest.getOwnerId().toString());
@@ -104,7 +108,8 @@ public class ProjectAdminController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/boards/{board_id}/{projects}/{project_id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity updateProject(@PathVariable("board_id") final String boardUuid,
+    public ResponseEntity updateProject(@RequestHeader("authorization") String accessToken,
+                                        @PathVariable("board_id") final String boardUuid,
                                         @PathVariable("project_id") final String projectUuid,
                                         @RequestBody final UpdateBoardProjectRequest updatedBoardRequest) throws ApplicationException {
 
@@ -123,30 +128,29 @@ public class ProjectAdminController {
     }
 
     @RequestMapping(method = RequestMethod.PATCH, path = "/boards/{board_id}/{projects}/{project_id}", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity patchProject(@PathVariable("board_id") final String boardUuid,
-                                     @PathVariable("project_id") final String projectUuid,
-                                     @RequestBody final ProjectOperationsRequest projectOperationsRequest) throws ApplicationException {
+    public ResponseEntity patchProject(@RequestHeader("authorization") String accessToken,
+                                       @PathVariable("board_id") final String boardUuid,
+                                       @PathVariable("project_id") final String projectUuid,
+                                       @RequestBody final ProjectOperationsRequest projectOperationsRequest) throws ApplicationException {
 
         final Set<String> addedMembers = new HashSet<>();
         final Set<String> removedMembers = new HashSet<>();
 
         for (ProjectOperationRequest projectOperationRequest : projectOperationsRequest) {
-            if(ProjectOperationRequest.PathEnum.STATUS.equals(projectOperationRequest.getPath())) {
+            if (ProjectOperationRequest.PathEnum.STATUS.equals(projectOperationRequest.getPath())) {
                 projectService.changeProjectStatus(boardUuid, projectUuid, ProjectStatus.valueOf(toEnum(projectOperationRequest.getValue()).name()));
-            }
-            else if(ProjectOperationRequest.OpEnum.ADD.equals(projectOperationRequest.getOp()) &&
+            } else if (ProjectOperationRequest.OpEnum.ADD.equals(projectOperationRequest.getOp()) &&
                     ProjectOperationRequest.PathEnum.MEMBER.equals(projectOperationRequest.getPath())) {
                 addedMembers.add(projectOperationRequest.getValue());
-            }
-            else if(ProjectOperationRequest.OpEnum.REMOVE.equals(projectOperationRequest.getOp()) &&
+            } else if (ProjectOperationRequest.OpEnum.REMOVE.equals(projectOperationRequest.getOp()) &&
                     ProjectOperationRequest.PathEnum.MEMBER.equals(projectOperationRequest.getPath())) {
                 removedMembers.add(projectOperationRequest.getValue());
             }
         }
-        if(!addedMembers.isEmpty()) {
+        if (!addedMembers.isEmpty()) {
             projectService.addMembers(boardUuid, projectUuid, addedMembers);
         }
-        if(!removedMembers.isEmpty()) {
+        if (!removedMembers.isEmpty()) {
             projectService.removeMembers(boardUuid, projectUuid, removedMembers);
         }
 
@@ -154,15 +158,17 @@ public class ProjectAdminController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/boards/{board_id}/{projects}/{project_id}")
-    public ResponseEntity deleteProject(@PathVariable("board_id") final String boardUuid,
-                                      @PathVariable("project_id") final String projectUuid) throws ApplicationException {
+    public ResponseEntity deleteProject(@RequestHeader("authorization") String accessToken,
+                                        @PathVariable("board_id") final String boardUuid,
+                                        @PathVariable("project_id") final String projectUuid) throws ApplicationException {
 
         projectService.deleteProject(boardUuid, projectUuid);
         return ResponseBuilder.ok().build();
     }
 
     @RequestMapping(method = GET, path = "/boards/{board_id}/projects/{project_id}/members", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProjectsSummaryResponse> getProjectMembers(@PathVariable("board_id") final String boardUuid,
+    public ResponseEntity<ProjectsSummaryResponse> getProjectMembers(@RequestHeader("authorization") String accessToken,
+                                                                     @PathVariable("board_id") final String boardUuid,
                                                                      @PathVariable("project_id") final String projectUuid) throws ApplicationException {
 
         final SearchResult<ProjectMemberEntity> searchResult = projectService.getProjectMembers(boardUuid, projectUuid);

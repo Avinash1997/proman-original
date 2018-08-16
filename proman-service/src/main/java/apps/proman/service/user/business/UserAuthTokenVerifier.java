@@ -11,7 +11,6 @@ import static apps.proman.service.common.data.DateTimeProvider.currentProgramTim
 
 import java.time.ZonedDateTime;
 
-import apps.proman.service.common.data.DateTimeProvider;
 import apps.proman.service.user.entity.UserAuthTokenEntity;
 import apps.proman.service.user.model.UserAuthTokenStatus;
 

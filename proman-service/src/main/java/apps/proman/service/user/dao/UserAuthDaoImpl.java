@@ -7,6 +7,7 @@
  */
 package apps.proman.service.user.dao;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -33,10 +34,11 @@ public class UserAuthDaoImpl extends BaseDaoImpl<UserAuthTokenEntity> implements
     }
 
     @Override
-    public UserAuthTokenEntity findByUser(final long userId) {
+    public UserAuthTokenEntity findActiveTokenByUser(final long userId, final ZonedDateTime currentAt) {
         try {
             return entityManager.createNamedQuery(UserAuthTokenEntity.BY_USER, UserAuthTokenEntity.class)
                     .setParameter("userId", userId)
+                    .setParameter("currentAt", currentAt)
                     .getSingleResult();
         } catch (NoResultException nre) {
             return null;

@@ -19,13 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import apps.proman.service.common.data.DateTimeProvider;
 import apps.proman.service.common.exception.AuthorizationFailedException;
 import apps.proman.service.user.dao.UserAuthDao;
 import apps.proman.service.user.dao.UserDao;
 import apps.proman.service.user.entity.UserAuthTokenEntity;
 import apps.proman.service.user.entity.UserEntity;
-import apps.proman.service.user.model.LogoutAction;
-import apps.proman.service.user.model.UserAuthTokenStatus;
 import apps.proman.service.user.provider.token.JwtTokenProvider;
 
 /**
@@ -45,7 +44,9 @@ public class AuthTokenServiceImpl implements AuthTokenService {
     @Transactional(propagation = Propagation.MANDATORY)
     public UserAuthTokenEntity issueToken(final UserEntity userEntity) {
 
-        final UserAuthTokenEntity userAuthToken = userAuthDao.findByUser(userEntity.getId());
+        final ZonedDateTime now = DateTimeProvider.currentProgramTime();
+
+        final UserAuthTokenEntity userAuthToken = userAuthDao.findActiveTokenByUser(userEntity.getId(), now);
         final UserAuthTokenVerifier tokenVerifier = new UserAuthTokenVerifier(userAuthToken);
         if(tokenVerifier.isActive()) {
             return userAuthToken;
@@ -53,7 +54,6 @@ public class AuthTokenServiceImpl implements AuthTokenService {
 
         final JwtTokenProvider tokenProvider = new JwtTokenProvider(userEntity.getPassword());
 
-        final ZonedDateTime now = ZonedDateTime.now();
         final ZonedDateTime expiresAt = now.plusHours(8);
 
         final String authToken = tokenProvider.generateToken(userEntity.getUuid(), now, expiresAt);
@@ -86,7 +86,6 @@ public class AuthTokenServiceImpl implements AuthTokenService {
         }
 
         userAuthToken.setLogoutAt(ZonedDateTime.now());
-        userAuthToken.setLogoutAction(LogoutAction.USER.getCode());
         userAuthDao.update(userAuthToken);
     }
 

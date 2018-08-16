@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Date;
+import java.util.UUID;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -43,6 +44,7 @@ public class JwtTokenProvider {
         final Date expiresAt = new Date(expiresDateTime.getLong(ChronoField.INSTANT_SECONDS));
 
         return JWT.create().withIssuer(TOKEN_ISSUER) //
+                .withKeyId(UUID.randomUUID().toString())
                 .withAudience(userUuid) //
                 .withIssuedAt(issuedAt).withExpiresAt(expiresAt).sign(algorithm);
     }

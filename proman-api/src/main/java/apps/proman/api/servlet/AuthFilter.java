@@ -3,10 +3,7 @@ package apps.proman.api.servlet;
 import static apps.proman.api.data.ResourceConstants.*;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +20,7 @@ import apps.proman.service.common.exception.AuthorizationFailedException;
 import apps.proman.service.user.business.AuthTokenService;
 
 @WebFilter(filterName = "AuthFilter", urlPatterns = BASE_URL_PATTERN)
+//@Component
 public class AuthFilter extends ApiFilter {
 
     @Autowired

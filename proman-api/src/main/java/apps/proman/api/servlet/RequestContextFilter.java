@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebFilter(filterName = "RequestContextFilter", urlPatterns = BASE_URL_PATTERN)
+//@Component
 public class RequestContextFilter extends ApiFilter {
 
     @Override

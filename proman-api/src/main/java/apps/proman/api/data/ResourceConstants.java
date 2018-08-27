@@ -13,9 +13,9 @@ package apps.proman.api.data;
  */
 public interface ResourceConstants {
 
-    String BASE_URL_PATTERN = "/*";
-
     String BASE_URL = "/v1";
+
+    String BASE_URL_PATTERN = BASE_URL + "/*";
 
     String BASE_URL_AUTH = BASE_URL + "/auth";
 

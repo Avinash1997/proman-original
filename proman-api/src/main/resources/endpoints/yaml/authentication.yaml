@@ -281,6 +281,9 @@ definitions:
       last_login_time:
         description: The last login time of authorized user (time in milliseconds)
         type: object
+      access_token:
+        description: Access token of successfully authenticated user
+        type: string
       role:
         $ref: '#/definitions/RoleDetailsType'
     required:

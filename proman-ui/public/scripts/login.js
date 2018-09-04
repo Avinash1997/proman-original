@@ -11,9 +11,19 @@ function login(email, password) {
 
 
 function sendRequest() {
-  if(xhr.readyState == 4) {
-   sessionStorage.setItem('user-detail', xhr.responseText);
-   sessionStorage.setItem('access-token', xhr.getResponseHeader('access-token'));
-   window.location.href = "./home.html";
-  }
+    if(xhr.status == 200){
+        if(xhr.readyState == 4) {
+            var jsonResponse = JSON.parse(xhr.responseText);
+            sessionStorage.setItem('user-detail', JSON.stringify(jsonResponse));
+            sessionStorage.setItem('access-token', jsonResponse.access_token);
+            window.location.href = "./home.html";
+        }
+    }
+    else if(xhr.status == 401) {
+        console.error(xhr.responseText);
+        window.alert("Authentication failed");
+    }
+    else {
+        console.error("Something went wrong. Response code is "+xhr.status);
+    }
 }

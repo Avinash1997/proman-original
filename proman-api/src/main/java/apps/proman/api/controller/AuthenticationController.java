@@ -63,7 +63,8 @@ public class AuthenticationController {
                 .firstName(authorizedUser.getFirstName()).lastName(authorizedUser.getLastName())
                 .emailAddress(authorizedUser.getEmailAddress()).mobilePhone(authorizedUser.getMobilePhoneNumber())
                 .lastLoginTime(authorizedUser.getLastLoginTime())
-                .status(authorizedUser.getStatus().name());
+                .status(authorizedUser.getStatus().name())
+                .accessToken(authorizedUser.getAccessToken());
         if (authorizedUser.getRole() != null) {
             authorizedUserResponse.role(new RoleDetailsType().id(authorizedUser.getRole().getUuid()).name(authorizedUser.getRole().getName()));
         }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 import apps.proman.api.controller.provider.BearerAuthDecoder;
@@ -28,6 +29,11 @@ public class AuthFilter extends ApiFilter {
 
     @Override
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+        if (servletRequest.getMethod().equalsIgnoreCase(HttpMethod.OPTIONS.name())) {
+            servletResponse.setStatus(HttpServletResponse.SC_ACCEPTED);
+            return;
+        }
 
         final String pathInfo = servletRequest.getRequestURI();
         if (!pathInfo.contains("signup") && !pathInfo.contains("swagger-ui") && !pathInfo.contains("v2/api-docs") && !pathInfo.contains("swagger-resources")) {
